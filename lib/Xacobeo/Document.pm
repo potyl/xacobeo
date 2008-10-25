@@ -33,7 +33,6 @@ use strict;
 use warnings;
 
 use XML::LibXML;
-use UNIVERSAL qw(isa);
 
 use Data::Dumper;
 use Carp;
