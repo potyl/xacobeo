@@ -7,8 +7,9 @@ use 5.006;
 use inc::Module::Install;
 
 name           'Xacobeo',
+license        'perl',
 all_from       'bin/xacobeo';
-abstract       "XPath (XML Path Language) visualizer.";
+abstract       "Graphical interface for running XPath queries.";
 
 requires       'Pod::Usage';
 requires       'Getopt::Long';
