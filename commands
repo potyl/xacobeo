@@ -1,0 +1,59 @@
+#!/usr/bin/make -f
+
+# Local installation place
+DEST=target
+
+# Default test file
+FILE=tests/SVG.svg
+
+SVN_REPO=$(shell svn info | grep -E '^URL: ' | cut -f2 -d' ' | sed -e 's%/trunk%%')
+VERSION=$(shell perl -le "print `grep VERSION bin/xacobeo`")
+PACKAGE=Xacobeo
+
+
+.PHONY: info
+info:
+	@echo "SVN     ${SVN_REPO}"
+	@echo "VERSION ${VERSION}"
+
+
+.PHONY: install
+install: ${DEST}/local/bin/xacobeo
+${DEST}/local/bin/xacobeo:
+	rm -rf ${DEST} || true
+	perl Makefile.PL && make && make install PREFIX=${DEST}
+
+
+.PHONY: run
+run: install
+	PERL5LIB=${DEST}/local/share/perl/5.8.8 ${DEST}/local/bin/xacobeo ${FILE}
+
+
+.PHONY: dist
+dist: ${PACKAGE}-${VERSION}.tar.gz
+${PACKAGE}-${VERSION}.tar.gz:
+	perl Makefile.PL && make && make dist
+
+
+.PHONY: distcheck
+distcheck:
+	perl Makefile.PL && make && make distcheck
+
+
+.PHONY: tag
+tag:
+	sh -c 'if svn ls "${SVN_REPO}/tags/${VERSION}" > /dev/null 2>&1 ; then echo "SVN TAG ${VERSION} exists already"; exit 1; else exit 0 ; fi';
+	svn cp -m "Tag for version ${VERSION}" ${SVN_REPO}/trunk ${SVN_REPO}/tags/${VERSION}
+
+
+.PHONY: upload
+upload: dist
+	cpan-upload --verbose --user potyl "${PACKAGE}-${VERSION}.tar.gz"
+
+
+.PHONY: clean
+clean:
+	-make clean || true
+	-rm -rf ${PACKAGE}-*/ || true
+	-rm ${PACKAGE}-*.tar.gz || true
+	-rm Makefile.old || true

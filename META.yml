@@ -1,0 +1,29 @@
+--- 
+abstract: XPath (XML Path Language) visualizer.
+author: 
+  - Emmanuel Rodriguez <potyl@cpan.org>.
+build_requires: 
+  ExtUtils::MakeMaker: 6.11
+distribution_type: module
+generated_by: Module::Install version 0.68
+license: perl
+meta-spec: 
+  url: http://module-build.sourceforge.net/META-spec-v1.3.html
+  version: 1.3
+name: Xacobeo
+no_index: 
+  directory: 
+    - inc
+    - t
+requires: 
+  Class::Accessor::Fast: 0
+  File::ShareDir: 0
+  Getopt::Long: 0
+  Glib: 0
+  Gtk2: 0
+  Gtk2::GladeXML: 0
+  Pod::Usage: 0
+  Time::HiRes: 0
+  XML::LibXML: 0
+  perl: 5.6.0
+version: 0.01

@@ -1,0 +1,466 @@
+#!/usr/bin/perl
+
+=head1 NAME
+
+xacobeo - Graphical interface for running XPath queries.
+
+=head1 SYNOPSIS
+
+xacobeo [OPTION]... file [xpath]
+
+Options:
+
+   -h, --help            brief help message
+
+Where I<file> is a valid XML document and I<xpath> a valid XPath query.
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<--help>
+
+Print a brief help message and exits.
+
+=back
+
+=head1 DESCRIPTION
+
+This program provides a simple graphical user interface (GUI) for executing
+XPath queries and seeing their results.
+
+The GUI tries to provide all the elements that are needed in order to write,
+test and execute XPath queries without too many troubles. It displays the
+Document Object Model (DOM) and the namespaces used. The program registers the
+namespaces automatically and each element is displayed with it's associated
+namespaces. All is performed with the idea of being able of running an XPath
+query as soon as possible without having to fight with the document's namespaces
+and by seeing automatically under which namespace each element is.
+
+This program is not an XML editor, at least not at this point, it's meant to be
+used for constructing and executing XPath queries.
+
+=head1 RATIONALE
+
+The main idea behind this application is to provide a simple way for building
+XPath queries that will be latter integrated in to a program or XSLT
+transformation paths. Therefore, this program goal is to load an XML document
+and to display it as an XML parser sees it. Thus each node element is prefixed
+with it's namespace.
+
+=head1 IMPLEMENTATION
+
+This program uses L<XML::LibXML> (libxml2) for all XML manipulations and L<Gtk2>
+for the graphical interface.
+
+=head1 LIMITATIONS
+
+For the moment, the program focuses only XPath and doesn't allow the XML
+document to be edited.
+
+=head1 AUTHOR
+
+Emmanuel Rodriguez E<lt>potyl@cpan.orgE<gt>.
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2008 by Emmanuel Rodriguez.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.8 or,
+at your option, any later version of Perl 5 you may have available.
+
+=cut
+
+use strict;
+use warnings;
+use 5.006;
+
+our $VERSION = '0.01';
+
+use Glib qw(TRUE FALSE);
+use Gtk2 qw(-init);
+use Gtk2::GladeXML;
+use Gtk2::SimpleList;
+
+use Pod::Usage;
+use Getopt::Long qw(:config auto_help);
+use Data::Dumper;
+use Time::HiRes qw(time);
+use XML::LibXML;
+use File::ShareDir qw(module_file);
+
+use Xacobeo;
+use Xacobeo::DomModel;
+use Xacobeo::Document;
+
+use base qw(Class::Accessor::Fast);
+__PACKAGE__->mk_accessors(
+	qw(
+		glade 
+		document 
+		statusbar_context_id
+		namespaces_view
+	)
+);
+
+
+# Main entry point
+exit main();
+
+
+#
+# Creates a new instance of the application
+#
+sub new {
+	# Arguments
+	my $class = shift;
+	
+	# Create an instance
+	my $self = bless {}, ref($class) || $class;
+	
+	# Create the GUI
+	$self->construct_gui();
+	
+	# Return the new instances
+	return $self;
+}
+
+
+#
+# This method constructs the GUI
+#
+sub construct_gui {
+	# Arguments
+	my $self = shift;
+
+  my $glade = Gtk2::GladeXML->new(module_file('Xacobeo', "xacobeo.glade"));
+	$self->glade($glade);
+	
+	# Connect the signals to the callbacks, make sure that self is the first argument passed
+	foreach my $handle qw(callback_run_xpath callback_window_close callback_xpath_entry_changed) {
+		$glade->signal_autoconnect_all($handle => sub { $self->$handle(@_) });
+	}
+	
+	# Status bar context id
+	my $statusbar = $self->glade->get_widget('statusbar');
+	$self->statusbar_context_id(
+		$statusbar->get_context_id('xpath-results')
+	);
+	
+	# Create the tree model for the DOM view
+	# See http://www.mail-archive.com/gtk-perl-list@gnome.org/msg03647.html	
+	# and http://gtk2-perl.sourceforge.net/doc/pod/Gtk2/TreeViewColumn.html#_tree_column_set_cel
+	$self->contruct_dom_tree_view();
+	
+	# Create the list model for the Namespace view
+	$self->contruct_namespaces_view();
+}
+
+
+#
+# Creates the DOM tree view
+#
+sub contruct_dom_tree_view {
+	# Arguments
+	my $self = shift;
+
+	# Create the model
+	my $model = Xacobeo::DomModel::create_model();
+	
+	# Create the view
+	my $treeview = $self->glade->get_widget('dom-tree-view');
+	$treeview->set_model($model);
+	
+	Xacobeo::DomModel::add_columns($treeview);
+	$treeview->signal_connect(row_activated =>
+		sub {
+			my ($treeview, $path, $column) = @_;
+			#my $iter = $namespaces_view->get_iter($path);
+			my $iter = $model->get_iter($path);
+			#$model->set($iter, 0, $new_text);
+			my $node = $model->get($iter, $Xacobeo::DomModel::NODE_DATA);
+			print "Column $column\n";
+			printf "Item %s = %s\n", $path->to_string, $node->localname;
+		},
+	);
+}
+
+
+#
+# Creates the Namespaces view
+#
+sub contruct_namespaces_view {
+	# Arguments
+	my $self = shift;
+
+	my $treeview = $self->glade->get_widget('namepsaces-view');
+	my $namespaces_view = Gtk2::SimpleList->new_from_treeview(
+		$treeview,
+		'Prefix' => 'text',
+		'URI'    => 'text',
+	);
+	
+	
+	# Try to get a handle on the celleditor for the namespaces
+	$namespaces_view->set_column_editable(0, TRUE);
+	my ($editor) = $namespaces_view->get_column(0)->get_cell_renderers();
+	$editor->signal_connect(edited => 
+		sub {
+			my ($cell, $text_path, $new_text) = @_;
+			printf "New text $text_path $new_text\n";
+			my $path = Gtk2::TreePath->new_from_string($text_path);
+			#my $iter = $namespaces_view->get_iter($path);
+			#$namespaces_view->set($iter, 0, $new_text);
+			printf "OLD[$text_path]  %s of $new_text\n", @{ $namespaces_view->{data}[$text_path] };
+			return FALSE;
+		}
+	);
+	
+	$self->namespaces_view($namespaces_view);
+}
+
+
+#
+# Main entry point of the program
+#
+sub main {
+
+	die "Usage: file [xpath]" unless @ARGV;
+
+	# Parse the command line options
+	parse_options();
+	
+	# Create a new instance of this application
+	my $self = __PACKAGE__->new();
+
+	my ($source, $xpath) = @ARGV;
+	$self->load_file($source);
+	$self->glade->get_widget('xpath-entry')->set_text($xpath) if defined $xpath;
+	
+	# Start the main loop
+	Gtk2->main;
+	
+	return 0;
+}
+
+
+#
+# Parses the command line options
+#
+sub parse_options {
+	# Parse the options
+	GetOptions() or pod2usage(2);
+}
+
+
+#
+# Loads a file.
+# This implies that the text widget showing the document
+# will be reloaded with the contents of the file. 
+#
+sub load_file { 
+	# Arguments
+	my $self = shift;
+	my ($file) = @_;
+	
+	# Parse the content
+	my $start = time;
+	my $document = Xacobeo::Document->new($file);
+	$self->document($document);
+
+
+	# Update the text widget
+	my $glade = $self->glade;
+	
+	my $buffer = $glade->get_widget('xml-document')->get_buffer();
+#	$buffer->set_text($document->xml->toString());
+	add_xml_into_buffer($buffer, $document->xml);
+
+	# Populate the DOM view tree
+	my $treeview = $self->glade->get_widget('dom-tree-view');
+	my $model = $treeview->get_model();
+	my $namespaces = {};
+	my @namespaces = ();
+	while (my ($prefix, $uri) = each %{ $self->document->namespaces }) {
+		push @namespaces, [$prefix, $uri];
+		$namespaces->{$uri} ||= $prefix;
+	}
+	Xacobeo::DomModel::populate($model, $document->xml, $namespaces);
+	my $end = time;
+	
+	# Populate the Namespaces view
+	@{ $self->namespaces_view->{data} } = @namespaces;
+
+	$self->display_statusbar_message(
+		sprintf "Document loaded in %.3f s", ($end - $start)
+	);
+}
+
+
+#
+# Adds the contents of the XML document to the text buffer. Ideally this 
+# function will tag the elements, this way it will be possible to jump to the
+# elements from the DomViewer.
+#
+sub add_xml_into_buffer {
+	my ($buffer, $node) = @_;
+
+	# Evil shortcut - This method is not implemented yet
+	if ($node->isa('XML::LibXML::Document')) {
+		$buffer->set_text($node->toString());
+		return;
+	}
+
+	# Add the current node if it's an 'Element'
+	# NOTE: the first time we could get a 'Document'
+	if ($node->isa('XML::LibXML::Element')) {
+		#my $uri = $node->namespaceURI();
+		#printf "%s\n", $node->localname();
+		
+		# Find where the opening tag is over <tag[>]<--
+		my $text = $node->toString();
+		$text =~ s/>.*$/>/s;
+
+		my $end = $buffer->get_end_iter;
+		$buffer->insert($end, $text);
+		
+		printf "\n\n%s\n%s\n\n\n", $node->nodePath, $text;
+#		ATTRIBUTE:
+#		foreach my $attribute ($node->attributes) {
+#		
+#			# Keep only 'Attributes'
+#			next ATTRIBUTE unless $attribute->isa('XML::LibXML::Attr');
+#			#printf "  %s %s\n", $attribute->getName(), $attribute->isId ? 'TRUE' : 'no id';
+#		}
+	}
+	elsif ($node->isa('XML::LibXML::Document')) {
+#		print "DOcument node\n";
+	}
+	
+	# Add the children
+	CHILD:
+	foreach my $child ($node->childNodes) {
+		
+		# Keep only 'Elements'
+		next CHILD unless $child->isa('XML::LibXML::Element');
+		
+		add_xml_into_buffer($buffer, $child);
+	}
+	
+}
+
+
+#
+# Called when the main window is closed
+#
+sub callback_window_close {
+	Gtk2->main_quit;
+}
+
+
+#
+# Called when the XPath expression must be runned.
+#
+sub callback_run_xpath {
+	# Arguments
+	my $self = shift;
+	
+	my $glade = $self->glade;
+
+	my $button = $glade->get_widget('xpath-evaluate');
+	return unless $button->is_sensitive;
+	
+	# Run the XPath expression
+	my $xpath = $glade->get_widget('xpath-entry')->get_text;
+	my $start = time;
+	my @nodes = $self->document->findnodes($xpath);
+	my $end = time;
+	
+	$self->display_statusbar_message(
+		sprintf "Found %d results in %0.3f s", scalar @nodes, $end - $start
+	);
+	
+	# Display the results
+	my $content = xpath_result_to_string(@nodes);
+	my $buffer = $glade->get_widget('xpath-results')->get_buffer();
+	$buffer->set_text($content);
+}
+
+
+#
+# Called when the XPath expression is changed, this will validate the expression.
+#
+# NOTE: There's no XPath compiler available, as a hack the XPath expression will
+#       be runned againsts an empty document, this way the result will be 
+#       instantaneous. Although, a better alternative will be to find a real 
+#       XPath parser that can tell where the problem is.
+#
+sub callback_xpath_entry_changed {
+	# Arguments
+	my $self = shift;
+	my ($widget) = @_;
+	
+	my $xpath = $widget->get_text;
+	my $button = $self->glade->get_widget('xpath-evaluate');
+
+	# Validate the XPath expression
+	if (! $self->document->validate($xpath) ) {
+		$button->set_sensitive(FALSE);
+		return;
+	}
+
+	$button->set_sensitive(TRUE);
+}
+
+
+#
+# Displays the given text in the statusbar
+#
+sub display_statusbar_message {
+	my $self = shift;
+	my ($message) = @_;
+	
+	my $statusbar = $self->glade->get_widget('statusbar');
+	my $id = $self->statusbar_context_id;
+	$statusbar->pop($id);
+	$statusbar->push($id, $message);
+}
+
+
+#
+# Returns the given XPath result as a string.
+#
+sub xpath_result_to_string {
+	my (@nodes) = @_;
+
+	my @strings = ();
+
+	foreach my $node (@nodes) {
+
+		my $string;
+
+		if ($node->isa('XML::LibXML::NodeList')) {
+			$string = xpath_result_to_string($node->get_nodelist);
+		}
+		elsif ($node->isa('XML::LibXML::Text')) {
+			$string = $node->nodeValue . "\n";
+		}
+		elsif ($node->isa('XML::LibXML::Literal')) {
+			$string = $node->value . "\n";
+		}
+		elsif ($node->isa('XML::LibXML::Boolean')){
+			$string = $node->to_literal . "\n";
+		}
+		elsif ($node->isa('XML::LibXML::Number')){
+			$string = $node->to_literal . "\n";
+		}
+		else {
+			$string = $node->toString . "\n";
+		}
+		
+		push @strings, $string;
+	}
+
+	return join '', @strings;
+}
