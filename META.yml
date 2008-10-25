@@ -1,5 +1,5 @@
 --- 
-abstract: XPath (XML Path Language) visualizer.
+abstract: Graphical interface for running XPath queries.
 author: 
   - Emmanuel Rodriguez <potyl@cpan.org>.
 build_requires: 
