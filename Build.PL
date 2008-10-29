@@ -7,17 +7,17 @@ use Module::Build;
 use File::Spec;
 
 my %requires = (
-		perl => '5.6.1',
+	perl => '5.6.1',
 
-		'Pod::Usage'            => 0,
-		'Getopt::Long'          => 0,
-		'Glib'                  => 0,
-		'Gtk2'                  => 0,
-		'Gtk2::GladeXML'        => 0,
-		'Time::HiRes'           => 0,
-		'XML::LibXML'           => 0,
-		'File::ShareDir'        => 0,
-		'Class::Accessor::Fast' => 0,
+	'Pod::Usage'            => 0,
+	'Getopt::Long'          => 0,
+	'Glib'                  => 0,
+	'Gtk2'                  => 0,
+	'Gtk2::GladeXML'        => 0,
+	'Time::HiRes'           => 0,
+	'XML::LibXML'           => 0,
+	'File::ShareDir'        => 0,
+	'Class::Accessor::Fast' => 0,
 );
 
 
