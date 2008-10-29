@@ -57,3 +57,4 @@ clean:
 	-rm -rf ${PACKAGE}-*/ || true
 	-rm ${PACKAGE}-*.tar.gz || true
 	-rm Makefile.old || true
+	-rm libxacobeo-perl_*
