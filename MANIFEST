@@ -1,15 +1,5 @@
 bin/xacobeo
 Changes
-inc/Module/Install.pm
-inc/Module/Install/Base.pm
-inc/Module/Install/Can.pm
-inc/Module/Install/Fetch.pm
-inc/Module/Install/Makefile.pm
-inc/Module/Install/Metadata.pm
-inc/Module/Install/Scripts.pm
-inc/Module/Install/Share.pm
-inc/Module/Install/Win32.pm
-inc/Module/Install/WriteAll.pm
 lib/Xacobeo.pm
 lib/Xacobeo/Document.pm
 lib/Xacobeo/DomModel.pm
@@ -18,7 +8,8 @@ MANIFEST
 MANIFEST.SKIP
 META.yml
 README
-share/xacobeo.glade
+share/applications/xacobeo.desktop
+share/xacobeo/xacobeo.glade
 t/document.t
 tests/beers.xml
 tests/SVG.svg
