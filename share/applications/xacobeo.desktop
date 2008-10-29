@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Xacobeo XPath visualizer
+GenericName=Xacobeo XPath visualizer
+Comment=Build and execute XPath queries
+Exec=xacobeo
+Icon=xacobeo
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Development;
