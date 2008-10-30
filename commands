@@ -59,4 +59,4 @@ clean:
 	-rm Makefile.old 2> /dev/null || true
 	-rm libxacobeo-perl_* 2> /dev/null || true
 	-rm Build 2> /dev/null || true
-	-rm _build 2> /dev/null || true
+	-rm -rf _build 2> /dev/null || true
