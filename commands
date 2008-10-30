@@ -53,8 +53,10 @@ upload: dist
 
 .PHONY: clean
 clean:
-	-make clean || true
-	-rm -rf ${PACKAGE}-*/ || true
-	-rm ${PACKAGE}-*.tar.gz || true
-	-rm Makefile.old || true
-	-rm libxacobeo-perl_*
+	-make clean  2> /dev/null || true
+	-rm -rf ${PACKAGE}-*/ 2> /dev/null || true
+	-rm ${PACKAGE}-*.tar.gz 2> /dev/null || true
+	-rm Makefile.old 2> /dev/null || true
+	-rm libxacobeo-perl_* 2> /dev/null || true
+	-rm Build 2> /dev/null || true
+	-rm _build 2> /dev/null || true
