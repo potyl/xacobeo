@@ -88,7 +88,8 @@ use Getopt::Long qw(:config auto_help);
 use Data::Dumper;
 use Time::HiRes qw(time);
 use XML::LibXML;
-use File::ShareDir qw(module_file);
+use File::Spec::Functions;
+use FindBin;
 
 use Xacobeo;
 use Xacobeo::DomModel;
@@ -134,7 +135,8 @@ sub construct_gui {
 	# Arguments
 	my $self = shift;
 
-  my $glade = Gtk2::GladeXML->new(module_file('Xacobeo', "xacobeo.glade"));
+	my $folder = find_app_folder();
+  my $glade = Gtk2::GladeXML->new(catfile('share', 'xacobeo', 'xacobeo.glade'));
 	$self->glade($glade);
 	
 	# Connect the signals to the callbacks, make sure that self is the first argument passed
@@ -463,4 +465,29 @@ sub xpath_result_to_string {
 	}
 
 	return join '', @strings;
+}
+
+
+# Return the root folder of the application once installed. The 'root' folder is
+# the one where the installation is done, in other words the root folder
+# hierarchy is as follows:
+#
+# (root)
+# |-- bin
+# |-- lib
+# |   `-- perl5
+# |       |-- Xacobeo
+# |       `-- i486-linux-gnu-thread-multi
+# |               `-- Xacobeo
+# |           `-- auto
+# |               `-- Xacobeo
+# |-- man
+# |   |-- man1
+# |   `-- man3
+# `-- share
+#     |-- applications
+#     |-- pixmaps
+#     `-- xacobeo
+sub find_app_folder {
+	return catdir($FindBin::Bin, '..');
 }

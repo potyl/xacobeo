@@ -47,9 +47,9 @@ my %requires = (
 	'Gtk2::GladeXML'        => 0,
 	'Time::HiRes'           => 0,
 	'XML::LibXML'           => 0,
-# Remove this as all data will be in the folder $PREFIX/share/xacobeo
-	'File::ShareDir'        => 0,
 	'Class::Accessor::Fast' => 0,
+	'File::Spec::Functions' => 0,
+	'FindBin'               => 0,
 );
 
 
