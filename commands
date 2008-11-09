@@ -21,23 +21,23 @@ info:
 install: ${DEST}/local/bin/xacobeo
 ${DEST}/local/bin/xacobeo:
 	rm -rf ${DEST} || true
-	perl Makefile.PL && make && make install PREFIX=${DEST}
+	perl Build.PL && ./Build && ./Build install --install_base ${DEST}
 
 
 .PHONY: run
 run: install
-	PERL5LIB=${DEST}/local/share/perl/5.8.8 ${DEST}/local/bin/xacobeo ${FILE}
+	PERL5LIB=${DEST}/lib/perl5 ${DEST}/bin/xacobeo ${FILE}
 
 
 .PHONY: dist
 dist: ${PACKAGE}-${VERSION}.tar.gz
 ${PACKAGE}-${VERSION}.tar.gz:
-	perl Makefile.PL && make && make dist
+	perl Build.PL && ./Build && ./Build dist
 
 
 .PHONY: distcheck
 distcheck:
-	perl Makefile.PL && make && make distcheck
+	perl Build.PL && ./Build && ./Build distcheck
 
 
 .PHONY: tag
