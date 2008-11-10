@@ -139,10 +139,8 @@ sub construct_gui {
   my $glade = Gtk2::GladeXML->new(catfile('share', 'xacobeo', 'xacobeo.glade'));
 	$self->glade($glade);
 	
-	# Connect the signals to the callbacks, make sure that self is the first argument passed
-	foreach my $handle qw(callback_run_xpath callback_window_close callback_xpath_entry_changed) {
-		$glade->signal_autoconnect_all($handle => sub { $self->$handle(@_) });
-	}
+	# Connect the signals to the callbacks
+	$glade->signal_autoconnect_from_package($self);
 	
 	# Status bar context id
 	my $statusbar = $self->glade->get_widget('statusbar');
@@ -413,6 +411,29 @@ sub callback_xpath_entry_changed {
 	}
 
 	$button->set_sensitive(TRUE);
+}
+
+
+#
+# Called when the about dialog has to be displayed.
+#
+sub callback_about_show {
+	my $self = shift;
+	print "Showing about dialog\n";
+	$self->glade->get_widget('about')->show_all();
+}
+
+
+#
+# Called when the about dialog has to be hidden. We can't destroy it because
+# glade will not recreate the dialog. This will cause an error the next time
+# that dialog will be requested.
+#
+sub callback_about_hide {
+	my $self = shift;
+	print "CLOSING About dialog\n";
+	$self->glade->get_widget('about')->hide();
+	return TRUE;
 }
 
 
