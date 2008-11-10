@@ -419,7 +419,6 @@ sub callback_xpath_entry_changed {
 #
 sub callback_about_show {
 	my $self = shift;
-	print "Showing about dialog\n";
 	$self->glade->get_widget('about')->show_all();
 }
 
@@ -431,7 +430,6 @@ sub callback_about_show {
 #
 sub callback_about_hide {
 	my $self = shift;
-	print "CLOSING About dialog\n";
 	$self->glade->get_widget('about')->hide();
 	return TRUE;
 }
