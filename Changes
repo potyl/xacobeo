@@ -6,6 +6,7 @@ Revision history for Xacobeo.
 	- Added a menu item and icon in the Desktop's main menu.
 	- Added an application menu.
 	- Can load new a different file at runtime.
+	- The results tab is shown automatically when a search is performed.
 
 
 0.01  Fri Oct 24 20:59:27 2008
