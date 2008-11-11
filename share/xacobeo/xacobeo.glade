@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Nov 11 21:56:39 2008 -->
+<!--Generated with glade3 3.4.5 on Tue Nov 11 22:07:16 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="width_request">800</property>
@@ -133,6 +133,7 @@
             <child>
               <widget class="GtkEntry" id="xpath-entry">
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <signal name="changed" handler="callback_xpath_entry_changed"/>
                 <signal name="activate" handler="callback_run_xpath"/>
               </widget>
@@ -215,7 +216,7 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkNotebook" id="notebook1">
+                  <widget class="GtkNotebook" id="notebook">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
