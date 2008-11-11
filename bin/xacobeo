@@ -6,7 +6,7 @@ xacobeo - Graphical interface for running XPath queries.
 
 =head1 SYNOPSIS
 
-xacobeo [OPTION]... file [xpath]
+xacobeo [OPTION]... [file [xpath]]
 
 Options:
 
@@ -226,17 +226,17 @@ sub contruct_namespaces_view {
 #
 sub main {
 
-	die "Usage: file [xpath]" unless @ARGV;
-
 	# Parse the command line options
 	parse_options();
 	
 	# Create a new instance of this application
 	my $self = __PACKAGE__->new();
 
-	my ($source, $xpath) = @ARGV;
-	$self->load_file($source);
-	$self->glade->get_widget('xpath-entry')->set_text($xpath) if defined $xpath;
+	if (@ARGV) {
+		my ($source, $xpath) = @ARGV;
+		$self->load_file($source);
+		$self->glade->get_widget('xpath-entry')->set_text($xpath) if defined $xpath;
+	}
 	
 	# Start the main loop
 	Gtk2->main;
@@ -415,7 +415,33 @@ sub callback_xpath_entry_changed {
 
 
 #
-# Called when the about dialog has to be displayed.
+# Called when the file choser is requested (File > Open).
+#
+sub callback_file_open {
+	my $self = shift;
+	$self->glade->get_widget('file')->show_all();
+}
+
+
+#
+# Called when the file choser has chosen a file (File > Open).
+#
+sub callback_file_selected {
+	my $self = shift;
+	my ($dialog, $response) = @_;
+	print "callback_file_open ", Dumper(\@_);
+	
+	if ($response eq 'accept') {
+		my $file = $dialog->get_filename;
+		$self->load_file($file);
+	}
+	
+	$dialog->hide();
+}
+
+
+#
+# Called when the about dialog has to be displayed (Help > About).
 #
 sub callback_about_show {
 	my $self = shift;
@@ -424,13 +450,20 @@ sub callback_about_show {
 
 
 #
-# Called when the about dialog has to be hidden. We can't destroy it because
-# glade will not recreate the dialog. This will cause an error the next time
-# that dialog will be requested.
+# Called when the a dialog has to be hidden. It's important that the dialog is
+# not destroyed because Glade will not recreate it. If the dialog is destroyed
+# the next time that dialog will be requested this will cause an error and the
+# dialog will not be displayed.
 #
-sub callback_about_hide {
+# This method will simply hide the dialog and request that the dialog is not
+# destroyed by returning TRUE.
+#
+# This callback can be used for all dialogs.
+#
+sub callback_dialog_hide {
 	my $self = shift;
-	$self->glade->get_widget('about')->hide();
+	my ($dialog) = @_;
+	$dialog->hide();
 	return TRUE;
 }
 
