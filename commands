@@ -53,7 +53,7 @@ upload: dist
 
 .PHONY: clean
 clean:
-	- [ -f Build ] && ./Build clean  > /dev/null 2&>1 || true
+	- [ -f Build ] && ./Build clean  > /dev/null 2>&1 || true
 	-rm -rf ${PACKAGE}-*/ 2> /dev/null || true
 	-rm ${PACKAGE}-*.tar.gz 2> /dev/null || true
 	-rm libxacobeo-perl_* 2> /dev/null || true
