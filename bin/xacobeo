@@ -295,6 +295,8 @@ sub load_file {
 	$self->display_statusbar_message(
 		sprintf "Document loaded in %.3f s", ($end - $start)
 	);
+	
+	$glade->get_widget('xpath-entry')->set_sensitive(TRUE);
 }
 
 
@@ -383,8 +385,12 @@ sub callback_run_xpath {
 	
 	# Display the results
 	my $content = xpath_result_to_string(@nodes);
-	my $buffer = $glade->get_widget('xpath-results')->get_buffer();
+	my $textview = $glade->get_widget('xpath-results');
+	my $buffer = $textview->get_buffer();
 	$buffer->set_text($content);
+	
+	# Show the results
+	$glade->get_widget('notebook')->set_current_page(0);
 }
 
 
@@ -429,8 +435,8 @@ sub callback_file_open {
 sub callback_file_selected {
 	my $self = shift;
 	my ($dialog, $response) = @_;
-	print "callback_file_open ", Dumper(\@_);
 	
+	# The open button send the response 'accept'
 	if ($response eq 'accept') {
 		my $file = $dialog->get_filename;
 		$self->load_file($file);
