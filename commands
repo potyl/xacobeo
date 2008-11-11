@@ -7,7 +7,7 @@ DEST=target
 FILE=tests/SVG.svg
 
 SVN_REPO=$(shell svn info | grep -E '^URL: ' | cut -f2 -d' ' | sed -e 's%/trunk%%')
-VERSION=$(shell perl -le "print `grep VERSION bin/xacobeo`")
+VERSION=$(shell perl -le "print `grep VERSION lib/Xacobeo.pm`")
 PACKAGE=Xacobeo
 
 
@@ -22,6 +22,11 @@ install: ${DEST}/local/bin/xacobeo
 ${DEST}/local/bin/xacobeo:
 	rm -rf ${DEST} || true
 	perl Build.PL && ./Build && ./Build install --install_base ${DEST}
+
+
+.PHONY: fakeinstall
+fakeinstall:
+	perl Build.PL && ./Build fakeinstall --install_base /usr 
 
 
 .PHONY: run
