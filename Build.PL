@@ -23,6 +23,7 @@ sub process_share_files {
 
 	# Copy the files in share/
 	for my $entry (@{ $self->rscan_dir('share') }) {
+
 		# Skip hidden entries or folders
 		next if $entry =~ m,(^|/)\., or -d $entry;
 
@@ -57,7 +58,7 @@ my $build = $class->new(
 	module_name       => 'Xacobeo',
 	license           => 'perl',
 	dist_author       => 'Emmanuel Rodriguez <potyl@cpan.org>',
-	dist_version_from => catfile('bin', 'xacobeo'),
+	dist_version_from => catfile('lib', 'Xacobeo.pm'),
 	
 	# Installation files
 	script_file => [ catfile('bin', 'xacobeo') ],
