@@ -3,13 +3,15 @@ Changes
 lib/Xacobeo.pm
 lib/Xacobeo/Document.pm
 lib/Xacobeo/DomModel.pm
-Makefile.PL
+Build.PL
 MANIFEST
 MANIFEST.SKIP
 META.yml
 README
 share/applications/xacobeo.desktop
 share/xacobeo/xacobeo.glade
+share/xacobeo/xacobeo.svg
+share/pixmaps/xacobeo.png
 t/document.t
 tests/beers.xml
 tests/SVG.svg
