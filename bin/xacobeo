@@ -6,7 +6,7 @@ xacobeo - Graphical interface for running XPath queries.
 
 =head1 SYNOPSIS
 
-xacobeo [OPTION]... file [xpath]
+xacobeo [OPTION]... [file [xpath]]
 
 Options:
 
@@ -88,7 +88,8 @@ use Getopt::Long qw(:config auto_help);
 use Data::Dumper;
 use Time::HiRes qw(time);
 use XML::LibXML;
-use File::ShareDir qw(module_file);
+use File::Spec::Functions;
+use FindBin;
 
 use Xacobeo;
 use Xacobeo::DomModel;
@@ -134,13 +135,12 @@ sub construct_gui {
 	# Arguments
 	my $self = shift;
 
-  my $glade = Gtk2::GladeXML->new(module_file('Xacobeo', "xacobeo.glade"));
+	my $folder = find_app_folder();
+  my $glade = Gtk2::GladeXML->new(catfile('share', 'xacobeo', 'xacobeo.glade'));
 	$self->glade($glade);
 	
-	# Connect the signals to the callbacks, make sure that self is the first argument passed
-	foreach my $handle qw(callback_run_xpath callback_window_close callback_xpath_entry_changed) {
-		$glade->signal_autoconnect_all($handle => sub { $self->$handle(@_) });
-	}
+	# Connect the signals to the callbacks
+	$glade->signal_autoconnect_from_package($self);
 	
 	# Status bar context id
 	my $statusbar = $self->glade->get_widget('statusbar');
@@ -226,17 +226,17 @@ sub contruct_namespaces_view {
 #
 sub main {
 
-	die "Usage: file [xpath]" unless @ARGV;
-
 	# Parse the command line options
 	parse_options();
 	
 	# Create a new instance of this application
 	my $self = __PACKAGE__->new();
 
-	my ($source, $xpath) = @ARGV;
-	$self->load_file($source);
-	$self->glade->get_widget('xpath-entry')->set_text($xpath) if defined $xpath;
+	if (@ARGV) {
+		my ($source, $xpath) = @ARGV;
+		$self->load_file($source);
+		$self->glade->get_widget('xpath-entry')->set_text($xpath) if defined $xpath;
+	}
 	
 	# Start the main loop
 	Gtk2->main;
@@ -295,6 +295,8 @@ sub load_file {
 	$self->display_statusbar_message(
 		sprintf "Document loaded in %.3f s", ($end - $start)
 	);
+	
+	$glade->get_widget('xpath-entry')->set_sensitive(TRUE);
 }
 
 
@@ -383,8 +385,12 @@ sub callback_run_xpath {
 	
 	# Display the results
 	my $content = xpath_result_to_string(@nodes);
-	my $buffer = $glade->get_widget('xpath-results')->get_buffer();
+	my $textview = $glade->get_widget('xpath-results');
+	my $buffer = $textview->get_buffer();
 	$buffer->set_text($content);
+	
+	# Show the results
+	$glade->get_widget('notebook')->set_current_page(0);
 }
 
 
@@ -411,6 +417,60 @@ sub callback_xpath_entry_changed {
 	}
 
 	$button->set_sensitive(TRUE);
+}
+
+
+#
+# Called when the file choser is requested (File > Open).
+#
+sub callback_file_open {
+	my $self = shift;
+	$self->glade->get_widget('file')->show_all();
+}
+
+
+#
+# Called when the file choser has chosen a file (File > Open).
+#
+sub callback_file_selected {
+	my $self = shift;
+	my ($dialog, $response) = @_;
+	
+	# The open button send the response 'accept'
+	if ($response eq 'accept') {
+		my $file = $dialog->get_filename;
+		$self->load_file($file);
+	}
+	
+	$dialog->hide();
+}
+
+
+#
+# Called when the about dialog has to be displayed (Help > About).
+#
+sub callback_about_show {
+	my $self = shift;
+	$self->glade->get_widget('about')->show_all();
+}
+
+
+#
+# Called when the a dialog has to be hidden. It's important that the dialog is
+# not destroyed because Glade will not recreate it. If the dialog is destroyed
+# the next time that dialog will be requested this will cause an error and the
+# dialog will not be displayed.
+#
+# This method will simply hide the dialog and request that the dialog is not
+# destroyed by returning TRUE.
+#
+# This callback can be used for all dialogs.
+#
+sub callback_dialog_hide {
+	my $self = shift;
+	my ($dialog) = @_;
+	$dialog->hide();
+	return TRUE;
 }
 
 
@@ -463,4 +523,29 @@ sub xpath_result_to_string {
 	}
 
 	return join '', @strings;
+}
+
+
+# Return the root folder of the application once installed. The 'root' folder is
+# the one where the installation is done, in other words the root folder
+# hierarchy is as follows:
+#
+# (root)
+# |-- bin
+# |-- lib
+# |   `-- perl5
+# |       |-- Xacobeo
+# |       `-- i486-linux-gnu-thread-multi
+# |               `-- Xacobeo
+# |           `-- auto
+# |               `-- Xacobeo
+# |-- man
+# |   |-- man1
+# |   `-- man3
+# `-- share
+#     |-- applications
+#     |-- pixmaps
+#     `-- xacobeo
+sub find_app_folder {
+	return catdir($FindBin::Bin, '..');
 }

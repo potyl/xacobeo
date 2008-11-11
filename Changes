@@ -1,9 +1,17 @@
 Revision history for Xacobeo.
 
-0.01  Fri Oct 24 20:59:27 2008
 
-	- First official release
+0.02_01  Tue Nov 11 22:11:28 2008
+	- Using Module::Build which provides a better installation path.
+	- Added a menu item and icon in the Desktop's main menu.
+	- Added an application menu.
+	- Can load new a different file at runtime.
+
+
+0.01  Fri Oct 24 20:59:27 2008
+	- First official release.
 
 
 0.01_01  Thu Oct 23 22:12:56 2008
-	- First release
+	- First release.
+

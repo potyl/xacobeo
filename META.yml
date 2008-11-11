@@ -17,7 +17,6 @@ no_index:
     - t
 requires: 
   Class::Accessor::Fast: 0
-  File::ShareDir: 0
   Getopt::Long: 0
   Glib: 0
   Gtk2: 0
