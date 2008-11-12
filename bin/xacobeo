@@ -136,7 +136,7 @@ sub construct_gui {
 	my $self = shift;
 
 	my $folder = find_app_folder();
-  my $glade = Gtk2::GladeXML->new(catfile('share', 'xacobeo', 'xacobeo.glade'));
+	my $glade = Gtk2::GladeXML->new(catfile($folder, 'share', 'xacobeo', 'xacobeo.glade'));
 	$self->glade($glade);
 	
 	# Connect the signals to the callbacks
