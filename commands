@@ -56,6 +56,11 @@ upload: dist
 	cpan-upload -verbose -mailto "${EMAIL}" -user potyl "${PACKAGE}-${VERSION}.tar.gz"
 
 
+.PHONY: release
+release: clean dist distcheck tag upload
+	@echo "Release ${PACKAGE} ${VERSION} done."
+
+
 .PHONY: clean
 clean:
 	- [ -f Build ] && ./Build clean  > /dev/null 2>&1 || true
