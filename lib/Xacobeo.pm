@@ -36,7 +36,7 @@ for the graphical interface.
 
 =head1 LIMITATIONS
 
-For the moment, the program focuses only XPath and doesn't allow the XML
+For the moment, the program focuses only on XPath and doesn't allow the XML
 document to be edited.
 
 =head1 AUTHORS
@@ -57,6 +57,6 @@ use strict;
 use warnings;
 use 5.006;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03_01';
 
 1;
