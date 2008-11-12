@@ -1,6 +1,10 @@
 Revision history for Xacobeo.
 
 
+0.02  Wed Nov 12 21:59:40 2008
+	- New release with changes from 0.02_01 and 0.02_02.
+
+
 0.02_02  Wed Nov 12 10:42:47 2008
 	- Fixed the path to the Glade file.
 
