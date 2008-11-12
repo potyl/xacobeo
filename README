@@ -16,8 +16,6 @@ DEPENDENCIES
 
 This module depends on the following CPAN modules:
 
-	Carp
-	POSIX
 	Pod::Usage
 	Getopt::Long
 	Glib
@@ -25,8 +23,9 @@ This module depends on the following CPAN modules:
 	Gtk2::GladeXML
 	Time::HiRes
 	XML::LibXML
-	File::ShareDir
 	Class::Accessor::Fast
+	File::Spec::Functions
+	FindBin
 
 COPYRIGHT AND LICENCE
 
