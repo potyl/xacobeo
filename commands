@@ -53,7 +53,7 @@ tag:
 
 .PHONY: upload
 upload: dist
-	cpan-upload --verbose --user potyl "${PACKAGE}-${VERSION}.tar.gz"
+	cpan-upload -verbose -mailto "${EMAIL}" -user potyl "${PACKAGE}-${VERSION}.tar.gz"
 
 
 .PHONY: clean
