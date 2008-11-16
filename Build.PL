@@ -78,6 +78,7 @@ my %requires = (
 	'File::Spec::Functions' => 0,
 	'FindBin'               => 0,
 	'Encode'                => 0,
+	'Carp'                  => 0,
 );
 
 

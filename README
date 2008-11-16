@@ -27,6 +27,7 @@ This module depends on the following CPAN modules:
 	File::Spec::Functions
 	FindBin
 	Encode
+	Carp
 
 COPYRIGHT AND LICENCE
 
