@@ -22,7 +22,7 @@ sub ACTION_install {
 
 	# Make sure that share/ has an installation path
 	my $p = $self->{properties};
-	if (not (exists $p->{install_path}{share} or $p->{install_base})) {
+	if (! exists $p->{install_path}{share}) {
 		my $script_dir = $self->install_destination('script');
 		my @dirs = File::Spec->splitdir($script_dir);
 		$dirs[-1] = 'share';
