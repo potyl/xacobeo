@@ -91,6 +91,7 @@ use XML::LibXML;
 use File::Spec::Functions;
 use FindBin;
 use Encode;
+use Carp;
 
 use Xacobeo;
 use Xacobeo::DomModel;
@@ -316,50 +317,98 @@ sub load_file {
 #
 sub add_xml_into_buffer {
 	my ($buffer, $node) = @_;
+	croak "Must pass (Gtk2::TextBuffer, XML::LibXML::Node)" unless @_ == 2;
+	croak "First parameter $buffer isn't a Gtk2::TextBuffer" unless $buffer->isa('Gtk2::TextBuffer');
+	croak "Second parameter $node isn't a XML::LibXML::Node" unless isa_dom_node($node);
+
 
 	# Evil shortcut - This method is not implemented yet
-	if ($node->isa('XML::LibXML::Document')) {
-		my $text = document_to_utf8_string($node);
-		$buffer->set_text($text);
+	if (isa_dom_document($node)) {
+		#my $text = document_to_utf8_string($node);
+		#$buffer->set_text($text);
+		add_xml_into_buffer($buffer, $node->documentElement());
 		return;
 	}
 
-	# Add the current node if it's an 'Element'
-	# NOTE: the first time we could get a 'Document'
-	if ($node->isa('XML::LibXML::Element')) {
-		#my $uri = $node->namespaceURI();
-		#printf "%s\n", $node->localname();
+	
+	if (isa_dom_element($node)) {
 		
-		# Find where the opening tag is over <tag[>]<--
-		my $text = $node->toString();
-		$text =~ s/>.*$/>/s;
+		# Start of the element
+		buffer_add($buffer, syntax => '<');
+		buffer_add($buffer, element => $node->localname());
 
-		my $end = $buffer->get_end_iter;
-		$buffer->insert($end, $text);
+		# The element's attributes
+		foreach my $attribute ($node->attributes) {
+			buffer_add($buffer, syntax => ' ');
+			buffer_add($buffer, attribute => $attribute->getName());
+			buffer_add($buffer, syntax => '="');
+			
+			# Escape the quotes with entities
+			my $value = $attribute->value();
+			$value =~ s/"/&quot;/;
+			buffer_add($buffer, attribute => $value);
+			
+			buffer_add($buffer, syntax => '"');
+		}
 		
-		printf "\n\n%s\n%s\n\n\n", $node->nodePath, $text;
-#		ATTRIBUTE:
-#		foreach my $attribute ($node->attributes) {
-#		
-#			# Keep only 'Attributes'
-#			next ATTRIBUTE unless $attribute->isa('XML::LibXML::Attr');
-#			#printf "  %s %s\n", $attribute->getName(), $attribute->isId ? 'TRUE' : 'no id';
-#		}
-	}
-	elsif ($node->isa('XML::LibXML::Document')) {
-#		print "DOcument node\n";
-	}
-	
-	# Add the children
-	CHILD:
-	foreach my $child ($node->childNodes) {
+		# Close the start of the element
+		if (! $node->hasChildNodes()) {
+			# Empty element
+			# FIXME only elements defined as empty in the DTD shoud be empty.
+			buffer_add($buffer, syntax => ' />');
+			return;
+		}
+		buffer_add($buffer, syntax => '>');
 		
-		# Keep only 'Elements'
-		next CHILD unless $child->isa('XML::LibXML::Element');
-		
-		add_xml_into_buffer($buffer, $child);
+
+		# Do the children
+		CHILD:
+		foreach my $child ($node->childNodes) {
+			add_xml_into_buffer($buffer, $child);
+		}
+
+
+		# Close the element		
+		buffer_add($buffer, syntax => '</');
+		buffer_add($buffer, element => $node->localname);
+		buffer_add($buffer, syntax => '>');
 	}
-	
+	elsif (isa_dom_text($node)) {
+		buffer_add($buffer, text => $node->nodeValue);
+	}
+	elsif (isa_dom_comment($node)) {
+		buffer_add($buffer, syntax => '<!--');
+		buffer_add($buffer, comment => $node->nodeValue);
+		buffer_add($buffer, syntax => '-->');
+	}
+	elsif (isa_dom_pi($node)) {
+		buffer_add($buffer, syntax => '<?');
+		buffer_add($buffer, pi => $node->nodeName);
+		
+		# Add the data if there's one
+		if (my $data = $node->getData) {
+			$data =~ s/\s+$//;
+			buffer_add($buffer, syntax => ' ');
+			buffer_add($buffer, comment => $data);
+		}
+		
+		buffer_add($buffer, syntax => '?>');
+	}
+	else {
+		warn "=====node $node not implemented";
+	}
+}
+
+
+#
+# Adds the given text at the end of the buffer.
+#
+sub buffer_add {
+	my ($buffer, $type, $string) = @_;
+#local $| = 1;
+#print "($type)->$string<-";
+
+	$buffer->insert($buffer->get_end_iter, $string);
 }
 
 
@@ -510,22 +559,22 @@ sub xpath_result_to_string {
 
 		my $string;
 
-		if ($node->isa('XML::LibXML::NodeList')) {
+		if (isa_dom_nodelist($node)) {
 			$string = xpath_result_to_string($node->get_nodelist);
 		}
-		elsif ($node->isa('XML::LibXML::Document')) {
+		elsif (isa_dom_document($node)) {
 			$string = document_to_utf8_string($node);
 		}
-		elsif ($node->isa('XML::LibXML::Text')) {
+		elsif (isa_dom_text($node)) {
 			$string = $node->nodeValue . "\n";
 		}
-		elsif ($node->isa('XML::LibXML::Literal')) {
+		elsif (isa_dom_literal($node)) {
 			$string = $node->value . "\n";
 		}
-		elsif ($node->isa('XML::LibXML::Boolean')){
+		elsif (isa_dom_boolean($node)){
 			$string = $node->to_literal . "\n";
 		}
-		elsif ($node->isa('XML::LibXML::Number')){
+		elsif (isa_dom_number($node)){
 			$string = $node->to_literal . "\n";
 		}
 		else {
@@ -574,4 +623,78 @@ sub document_to_utf8_string {
 #     `-- xacobeo
 sub find_app_folder {
 	return catdir($FindBin::Bin, '..');
+}
+
+
+sub isa_dom_document {
+	my ($node) = @_;
+	return defined $node ? $node->isa('XML::LibXML::Document') : 0;
+}
+
+
+sub isa_dom_element {
+	my ($node) = @_;
+	return defined $node ? $node->isa('XML::LibXML::Element') : 0;
+}
+
+
+sub isa_dom_attr {
+	my ($node) = @_;
+	return defined $node ? $node->isa('XML::LibXML::Attr') : 0;
+}
+
+
+sub isa_dom_nodelist {
+	my ($node) = @_;
+	return defined $node ? $node->isa('XML::LibXML::NodeList') : 0;
+}
+
+
+#
+# Return true if the node is a text as defined in the DOM. NOTE: XML::LibXML
+# decided that Comment node is alsto a Text node. This method doesn't consider a
+# Coment node as being a Text node.
+#
+sub isa_dom_text {
+	my ($node) = @_;
+	return unless defined $node;
+	return if isa_dom_comment($node);
+	return $node->isa('XML::LibXML::Text');
+}
+
+
+sub isa_dom_comment {
+	my ($node) = @_;
+	return unless defined $node;
+	return defined $node ? $node->isa('XML::LibXML::Comment') : 0;
+}
+
+
+sub isa_dom_literal {
+	my ($node) = @_;
+	return defined $node ? $node->isa('XML::LibXML::Literal') : 0;
+}
+
+
+sub isa_dom_boolean {
+	my ($node) = @_;
+	return defined $node ? $node->isa('XML::LibXML::Boolean') : 0;
+}
+
+
+sub isa_dom_number {
+	my ($node) = @_;
+	return defined $node ?  $node->isa('XML::LibXML::Number') : 0;
+}
+
+
+sub isa_dom_node {
+	my ($node) = @_;
+	return defined $node ?  $node->isa('XML::LibXML::Node') : 0;
+}
+
+
+sub isa_dom_pi {
+	my ($node) = @_;
+	return defined $node ?  $node->isa('XML::LibXML::PI') : 0;
 }
