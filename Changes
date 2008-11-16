@@ -1,6 +1,10 @@
 Revision history for Xacobeo.
 
 
+0.03_01  Sun Nov 16 12:19:29 2008
+	- Fixed Issue 1: dh-make-perl doesn't generate a properl debian/rules file.
+
+
 0.02  Wed Nov 12 21:59:40 2008
 	- New release with changes from 0.02_01 and 0.02_02.
 
