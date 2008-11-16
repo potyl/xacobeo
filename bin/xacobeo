@@ -137,9 +137,6 @@ sub construct_gui {
 
 	my $folder = find_app_folder();
 	
-	# Register the icons before glade uses them
-	$self->register_icons(catdir($folder, 'share'));
-	
 	# Load the GUI definition from the glade files
 	my $glade = Gtk2::GladeXML->new(catfile($folder, 'share', 'xacobeo', 'xacobeo.glade'));
 	$self->glade($glade);
@@ -165,23 +162,6 @@ sub construct_gui {
 	
 	# Create the list model for the Namespace view
 	$self->contruct_namespaces_view();
-}
-
-
-sub register_icons {
-	my $self = shift;
-	my ($folder) = @_;
-	
-	my $iconfactory = Gtk2::IconFactory->new();
-	$self->{iconfactory} = $iconfactory;
-	$iconfactory->add_default();
-
-
-	my $filename = catfile($folder, 'pixmaps', 'xacobeo.png');
-	print "Icon is $filename\n";
-	my $pixbuf = Gtk2::Gdk::Pixbuf->new_from_file($filename);
-	my $main_icon = Gtk2::IconSet->new_from_pixbuf($pixbuf);
-	$iconfactory->add('xacobeo', $main_icon);
 }
 
 
