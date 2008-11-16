@@ -77,6 +77,7 @@ my %requires = (
 	'Class::Accessor::Fast' => 0,
 	'File::Spec::Functions' => 0,
 	'FindBin'               => 0,
+	'Encode'                => 0,
 );
 
 
