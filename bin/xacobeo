@@ -90,6 +90,7 @@ use Time::HiRes qw(time);
 use XML::LibXML;
 use File::Spec::Functions;
 use FindBin;
+use Encode;
 
 use Xacobeo;
 use Xacobeo::DomModel;
@@ -141,6 +142,7 @@ sub construct_gui {
 	my $glade = Gtk2::GladeXML->new(catfile($folder, 'share', 'xacobeo', 'xacobeo.glade'));
 	$self->glade($glade);
 
+	# Set the application's icon
 	my $logo = Gtk2::Gdk::Pixbuf->new_from_file(catfile($folder, 'share', 'xacobeo', 'xacobeo.svg'));
 	$self->glade->get_widget('window')->set_icon($logo);
 	$self->glade->get_widget('about')->set_logo($logo);
@@ -317,7 +319,8 @@ sub add_xml_into_buffer {
 
 	# Evil shortcut - This method is not implemented yet
 	if ($node->isa('XML::LibXML::Document')) {
-		$buffer->set_text($node->toString());
+		my $text = document_to_utf8_string($node);
+		$buffer->set_text($text);
 		return;
 	}
 
@@ -510,6 +513,9 @@ sub xpath_result_to_string {
 		if ($node->isa('XML::LibXML::NodeList')) {
 			$string = xpath_result_to_string($node->get_nodelist);
 		}
+		elsif ($node->isa('XML::LibXML::Document')) {
+			$string = document_to_utf8_string($node);
+		}
 		elsif ($node->isa('XML::LibXML::Text')) {
 			$string = $node->nodeValue . "\n";
 		}
@@ -530,6 +536,19 @@ sub xpath_result_to_string {
 	}
 
 	return join '', @strings;
+}
+
+
+#
+# The method Document::toString returns a byte string in the original encoding.
+# This is will not work with Gtk2 which expects UFT-8 strings, even if the
+# original document is in string
+#
+sub document_to_utf8_string {
+	my ($node) = @_;
+	my $encoding = $node->actualEncoding();
+	my $text = decode($encoding, $node->toString());
+	return $text;
 }
 
 
