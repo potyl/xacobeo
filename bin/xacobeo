@@ -393,9 +393,7 @@ sub add_xml_into_buffer {
 
 	# A comment ex: <!-- comment -->
 	elsif (isa_dom_comment($node)) {
-		buffer_add($buffer, syntax => '<!--');
-		buffer_add($buffer, comment => $node->nodeValue);
-		buffer_add($buffer, syntax => '-->');
+		buffer_add($buffer, comment => '<!--' . $node->nodeValue . '-->');
 	}
 
 	# A PI (processing instruction) ex: <?stuff ?>
@@ -449,7 +447,6 @@ sub prepare_source_view {
 	$buffer->create_tag(dtd =>
 		foreground => '#558CBA',
 		style      => 'italic',
-		weight     => PANGO_WEIGHT_BOLD,
 	);
 	
 	$buffer->create_tag(element =>
@@ -460,11 +457,11 @@ sub prepare_source_view {
 	$buffer->create_tag(pi =>
 		foreground => '#558CBA',
 		style      => 'italic',
-		weight     => PANGO_WEIGHT_BOLD,
 	);
 	
 	$buffer->create_tag(syntax =>
 		foreground => 'black',
+		weight     => PANGO_WEIGHT_BOLD,
 	);
 	
 	$buffer->create_tag(text =>
