@@ -87,10 +87,10 @@ use Pod::Usage;
 use Getopt::Long qw(:config auto_help);
 use Data::Dumper;
 use Time::HiRes qw(time);
-use XML::LibXML;
+use XML::LibXML qw(:encoding);
 use File::Spec::Functions;
 use FindBin;
-use Encode;
+#use Encode;
 use Carp;
 
 use Xacobeo;
@@ -309,6 +309,9 @@ sub load_file {
 	$glade->get_widget('xpath-entry')->set_sensitive(TRUE);
 }
 
+sub val {
+	return defined $_[0] ? $_[0] : 'undef';
+}
 
 #
 # Adds the contents of the XML document to the text buffer. Ideally this 
@@ -322,16 +325,21 @@ sub add_xml_into_buffer {
 	croak "Second parameter $node isn't a XML::LibXML::Node" unless isa_dom_node($node);
 
 
-	# Evil shortcut - This method is not implemented yet
 	if (isa_dom_document($node)) {
-		#my $text = document_to_utf8_string($node);
-		#$buffer->set_text($text);
-		add_xml_into_buffer($buffer, $node->documentElement());
-		return;
+		# In concept a document has a single child the root element. In reality a
+		# document is allowed to have a prolog (http://www.w3.org/TR/REC-xml/#NT-prolog).
+		# The prolog is available in the child nodes of the document. The last node
+		# being the root element
+		my @children = $node->childNodes();
+		my $count = @children;
+		foreach my $child (@children) {
+			add_xml_into_buffer($buffer, $child);
+			# Add some new lines between the elements of the prolog. Libxml removes
+			# the white spaces in the prolog.
+			buffer_add($buffer, syntax => "\n") if --$count;
+		}
 	}
-
-	
-	if (isa_dom_element($node)) {
+	elsif (isa_dom_element($node)) {
 		
 		# Start of the element
 		buffer_add($buffer, syntax => '<');
@@ -362,7 +370,6 @@ sub add_xml_into_buffer {
 		
 
 		# Do the children
-		CHILD:
 		foreach my $child ($node->childNodes) {
 			add_xml_into_buffer($buffer, $child);
 		}
@@ -393,6 +400,9 @@ sub add_xml_into_buffer {
 		}
 		
 		buffer_add($buffer, syntax => '?>');
+	}
+	elsif (isa_dom_dtd($node)) {
+		buffer_add($buffer, dtd => $node->toString);
 	}
 	else {
 		warn "=====node $node not implemented";
@@ -596,7 +606,8 @@ sub xpath_result_to_string {
 sub document_to_utf8_string {
 	my ($node) = @_;
 	my $encoding = $node->actualEncoding();
-	my $text = decode($encoding, $node->toString());
+#	my $text = decode($encoding, $node->toString());
+	my $text = encodeToUTF8($encoding, $node->toString());
 	return $text;
 }
 
@@ -697,4 +708,10 @@ sub isa_dom_node {
 sub isa_dom_pi {
 	my ($node) = @_;
 	return defined $node ?  $node->isa('XML::LibXML::PI') : 0;
+}
+
+
+sub isa_dom_dtd {
+	my ($node) = @_;
+	return defined $node ?  $node->isa('XML::LibXML::Dtd') : 0;
 }
