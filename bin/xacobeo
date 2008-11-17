@@ -464,7 +464,6 @@ sub render_xml_into_buffer {
 		buffer_add($buffer, attribute_name => $node->getName());
 		buffer_add($buffer, syntax => '="');
 		
-		# Escape the quotes with entities
 		my $value = escape_xml_text($node->value());
 		buffer_add($buffer, attribute_value => $value);
 		
@@ -491,6 +490,19 @@ sub render_xml_into_buffer {
 		buffer_add($buffer, syntax => '<![CDATA[');
 		buffer_add($buffer, cdata => $node->nodeValue);
 		buffer_add($buffer, syntax => ']]> ');
+	}
+	
+	elsif (isa_dom_namespace($node)) {
+		buffer_add($buffer, syntax => ' ');
+		buffer_add($buffer, namespace_name => $node->nodeName);
+		buffer_add($buffer, syntax => '="');
+		
+		my $uri = escape_xml_text($node->getData);
+		buffer_add($buffer, namespace_uri => $uri);
+		
+		buffer_add($buffer, syntax => '"');
+
+
 	}
 
 	else {
@@ -576,6 +588,18 @@ sub prepare_textviews {
 	
 	add_tag($tag_table, cdata =>
 		foreground => '#008000',
+		style      => 'italic',
+		weight     => PANGO_WEIGHT_LIGHT,
+	);
+	
+	add_tag($tag_table, namespace_name =>
+		foreground => 'red',
+		style      => 'italic',
+		weight     => PANGO_WEIGHT_LIGHT,
+	);
+	
+	add_tag($tag_table, namespace_uri =>
+		foreground => 'blue',
 		style      => 'italic',
 		weight     => PANGO_WEIGHT_LIGHT,
 	);
@@ -880,3 +904,8 @@ sub isa_dom_cdata {
 	return defined $node ? $node->isa('XML::LibXML::CDATASection') : 0;
 }
 
+
+sub isa_dom_namespace {
+	my ($node) = @_;
+	return defined $node ? $node->isa('XML::LibXML::Namespace') : 0;
+}
