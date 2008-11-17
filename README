@@ -26,7 +26,6 @@ This module depends on the following CPAN modules:
 	Class::Accessor::Fast
 	File::Spec::Functions
 	FindBin
-	Encode
 	Carp
 
 COPYRIGHT AND LICENCE

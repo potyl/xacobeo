@@ -90,7 +90,6 @@ use Time::HiRes qw(time);
 use XML::LibXML qw(:encoding);
 use File::Spec::Functions;
 use FindBin;
-#use Encode;
 use Carp;
 
 use Xacobeo;
@@ -606,7 +605,6 @@ sub xpath_result_to_string {
 sub document_to_utf8_string {
 	my ($node) = @_;
 	my $encoding = $node->actualEncoding();
-#	my $text = decode($encoding, $node->toString());
 	my $text = encodeToUTF8($encoding, $node->toString());
 	return $text;
 }
