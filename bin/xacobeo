@@ -108,6 +108,16 @@ __PACKAGE__->mk_accessors(
 );
 
 
+# The entities defined in XML
+my %ENTITIES = qw(
+	<  &lt;
+	>  &gt;
+	&  &amp;
+	'  &apos;
+	"  &quot;
+);
+
+
 # Main entry point
 exit main();
 
@@ -335,7 +345,7 @@ sub render_xml_into_buffer {
 	}
 
 
-	# The main document
+	# A Document
 	if (isa_dom_document($node)) {
 
 		# Create the XML declaration <?xml version="" encoding=""?>
@@ -363,7 +373,7 @@ sub render_xml_into_buffer {
 		}
 	}
 	
-	# A node list
+	# A NodeList
 	elsif (isa_dom_nodelist($node)) {
 		my @children = $node->get_nodelist;
 		my $count = scalar @children;
@@ -382,7 +392,7 @@ sub render_xml_into_buffer {
 		}
 	}
 
-	# An element ex: <tag>...</tag>
+	# An Element ex: <tag>...</tag>
 	elsif (isa_dom_element($node)) {
 		
 		# Start of the element
@@ -417,12 +427,13 @@ sub render_xml_into_buffer {
 		buffer_add($buffer, syntax => '>');
 	}
 
-	# A text node, plain text in the document
+	# A Text node, plain text in the document
 	elsif (isa_dom_text($node)) {
-		buffer_add($buffer, text => $node->nodeValue);
+		my $text = escape_xml_text($node->nodeValue);
+		buffer_add($buffer, text => $text);
 	}
 
-	# A comment ex: <!-- comment -->
+	# A Comment ex: <!-- comment -->
 	elsif (isa_dom_comment($node)) {
 		buffer_add($buffer, comment => '<!--' . $node->nodeValue . '-->');
 	}
@@ -447,33 +458,39 @@ sub render_xml_into_buffer {
 		buffer_add($buffer, dtd => $node->toString);
 	}
 	
-	# An attribute ex: <... var="value" ...>
+	# An Attribute ex: <... var="value" ...>
 	elsif (isa_dom_attr($node)) {
 		buffer_add($buffer, syntax => ' ');
 		buffer_add($buffer, attribute_name => $node->getName());
 		buffer_add($buffer, syntax => '="');
 		
 		# Escape the quotes with entities
-		my $value = $node->value();
-		$value =~ s/"/&quot;/g;
+		my $value = escape_xml_text($node->value());
 		buffer_add($buffer, attribute_value => $value);
 		
 		buffer_add($buffer, syntax => '"');
 	}
 
-	# A boolean value ex: true() or false()
+	# A Boolean value ex: true() or false()
 	elsif (isa_dom_boolean($node)) {
 		buffer_add($buffer, boolean => $node->to_literal);
 	}
 
-	# A number ex: 2 + 5
+	# A Number ex: 2 + 5
 	elsif (isa_dom_number($node)) {
 		buffer_add($buffer, number => $node->to_literal);
 	}
 
-	# A literal (a single text string) ex: "hello"
+	# A Literal (a single text string) ex: "hello"
 	elsif (isa_dom_literal($node)) {
 		buffer_add($buffer, literal => $node->to_literal);
+	}
+
+	# A CDATA section ex: <![CDATA[<greeting>Hello, world!</greeting>]]> 
+	elsif (isa_dom_cdata($node)) {
+		buffer_add($buffer, syntax => '<![CDATA[');
+		buffer_add($buffer, cdata => $node->nodeValue);
+		buffer_add($buffer, syntax => ']]> ');
 	}
 
 	else {
@@ -555,6 +572,12 @@ sub prepare_textviews {
 	
 	add_tag($tag_table, literal =>
 		foreground => 'black',
+	);
+	
+	add_tag($tag_table, cdata =>
+		foreground => '#008000',
+		style      => 'italic',
+		weight     => PANGO_WEIGHT_LIGHT,
 	);
 
 
@@ -748,6 +771,28 @@ sub find_app_folder {
 }
 
 
+#
+# Escapes the text as if would be added to a Text node. This function escapes
+# only the entities <, > and &.
+#
+sub escape_xml_text {
+	my ($string) = @_;
+	$string =~ s/([<>&])/$ENTITIES{$1}/eg;
+	return $string;
+}
+
+
+#
+# Escapes the text as if would be added to an Element node as an Attribute. This
+# function escapes the entities &, >, <, ', and "
+#
+sub escape_xml_attribute {
+	my ($string) = @_;
+	$string =~ s/([<>&'"])/$ENTITIES{$1}/eg;
+	return $string;
+}
+
+
 sub isa_dom_document {
 	my ($node) = @_;
 	return defined $node ? $node->isa('XML::LibXML::Document') : 0;
@@ -773,14 +818,16 @@ sub isa_dom_nodelist {
 
 
 #
-# Return true if the node is a text as defined in the DOM. NOTE: XML::LibXML
-# decided that Comment node is alsto a Text node. This method doesn't consider a
-# Coment node as being a Text node.
+# Return true if the node is a text as defined in the DOM.
+#
+# NOTE: XML::LibXML decided that Comment and CDATA nodes are also a Text node.
+#       Despite XML::LibXML this method doesn't consider a Coment nor a CDATA
+#       node as being a Text node.
 #
 sub isa_dom_text {
 	my ($node) = @_;
 	return unless defined $node;
-	return if isa_dom_comment($node);
+	return if isa_dom_comment($node) or isa_dom_cdata($node);
 	return $node->isa('XML::LibXML::Text');
 }
 
@@ -806,23 +853,30 @@ sub isa_dom_boolean {
 
 sub isa_dom_number {
 	my ($node) = @_;
-	return defined $node ?  $node->isa('XML::LibXML::Number') : 0;
+	return defined $node ? $node->isa('XML::LibXML::Number') : 0;
 }
 
 
 sub isa_dom_node {
 	my ($node) = @_;
-	return defined $node ?  $node->isa('XML::LibXML::Node') : 0;
+	return defined $node ? $node->isa('XML::LibXML::Node') : 0;
 }
 
 
 sub isa_dom_pi {
 	my ($node) = @_;
-	return defined $node ?  $node->isa('XML::LibXML::PI') : 0;
+	return defined $node ? $node->isa('XML::LibXML::PI') : 0;
 }
 
 
 sub isa_dom_dtd {
 	my ($node) = @_;
-	return defined $node ?  $node->isa('XML::LibXML::Dtd') : 0;
+	return defined $node ? $node->isa('XML::LibXML::Dtd') : 0;
 }
+
+
+sub isa_dom_cdata {
+	my ($node) = @_;
+	return defined $node ? $node->isa('XML::LibXML::CDATASection') : 0;
+}
+
