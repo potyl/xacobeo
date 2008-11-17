@@ -88,7 +88,7 @@ use Pod::Usage;
 use Getopt::Long qw(:config auto_help);
 use Data::Dumper;
 use Time::HiRes qw(time);
-use XML::LibXML qw(:encoding);
+use XML::LibXML;
 use File::Spec::Functions;
 use FindBin;
 use Carp;
@@ -163,7 +163,7 @@ sub construct_gui {
 	# and http://gtk2-perl.sourceforge.net/doc/pod/Gtk2/TreeViewColumn.html#_tree_column_set_cel
 	$self->contruct_dom_tree_view();
 	
-	$self->prepare_source_view();
+	$self->prepare_textviews();
 	
 	# Create the list model for the Namespace view
 	$self->contruct_namespaces_view();
@@ -286,8 +286,8 @@ sub load_file {
 	my $glade = $self->glade;
 	
 	my $buffer = $glade->get_widget('xml-document')->get_buffer();
-#	$buffer->set_text($document->xml->toString());
-	add_xml_into_buffer($buffer, $document->xml);
+	$buffer->delete($buffer->get_start_iter, $buffer->get_end_iter);
+	render_xml_into_buffer($buffer, $document->xml);
 
 	# Populate the DOM view tree
 	my $treeview = $self->glade->get_widget('dom-tree-view');
@@ -316,15 +316,20 @@ sub val {
 }
 
 #
-# Adds the contents of the XML document to the text buffer. Ideally this 
-# function will tag the elements, this way it will be possible to jump to the
-# elements from the DomViewer.
+# Displays an XML node in a Gtk2::TextBuffer. The XML will be marked in the
+# text buffer. If the buffer defines the proper tags then the text will
+# automatically have syntax highlighting.
 #
-sub add_xml_into_buffer {
+#
+# TODO:
+# Ideally this add makrs to the elements, this way it will be possible to jump
+# to the elements from the DomViewer.
+#
+sub render_xml_into_buffer {
 	my ($buffer, $node) = @_;
 	croak "Must pass (Gtk2::TextBuffer, XML::LibXML::Node)" unless @_ == 2;
 	croak "First parameter $buffer isn't a Gtk2::TextBuffer" unless $buffer->isa('Gtk2::TextBuffer');
-	croak "Second parameter $node isn't a XML::LibXML::Node" unless isa_dom_node($node);
+	croak "Second parameter $node isn't a XML::LibXML::Node" unless isa_dom_node($node) or isa_dom_nodelist($node);
 
 	# The main document
 	if (isa_dom_document($node)) {
@@ -332,12 +337,22 @@ sub add_xml_into_buffer {
 		# document is allowed to have a prolog (http://www.w3.org/TR/REC-xml/#NT-prolog).
 		# The prolog is available in the child nodes of the document. The last node
 		# being the root element
-		my @children = $node->childNodes();
+		my @children = $node->childNodes;
 		my $count = @children;
 		foreach my $child (@children) {
-			add_xml_into_buffer($buffer, $child);
+			render_xml_into_buffer($buffer, $child);
 			# Add some new lines between the elements of the prolog. Libxml removes
 			# the white spaces in the prolog.
+			buffer_add($buffer, syntax => "\n") if --$count;
+		}
+	}
+	
+	# A node list
+	elsif (isa_dom_nodelist($node)) {
+		my @children = $node->get_nodelist;
+		my $count = scalar @children;
+		foreach my $child (@children) {
+			render_xml_into_buffer($buffer, $child);
 			buffer_add($buffer, syntax => "\n") if --$count;
 		}
 	}
@@ -376,7 +391,7 @@ sub add_xml_into_buffer {
 
 		# Do the children
 		foreach my $child ($node->childNodes) {
-			add_xml_into_buffer($buffer, $child);
+			render_xml_into_buffer($buffer, $child);
 		}
 
 
@@ -423,50 +438,70 @@ sub add_xml_into_buffer {
 
 
 #
-# This widget prepares the source view. It basically performs actions that can
-# be done through glade. For the moment this method registers some tags.
+# This widget prepares the text view widgets. It basically performs actions that
+# can be done through glade. For the moment this method registers some tags used
+# for syntax highlighting.
 #
-sub prepare_source_view {
+sub prepare_textviews {
 	my $self = shift;
-	my $buffer = $self->glade->get_widget('xml-document')->get_buffer();
 	
-	$buffer->create_tag(attribute_name =>
+	# Build the styles for the syntax highlighting
+	my $tag_table = Gtk2::TextTagTable->new();
+	
+	add_tag($tag_table, attribute_name =>
 		foreground => 'red',
 	);
 
-	$buffer->create_tag(attribute_value =>
+	add_tag($tag_table, attribute_value =>
 		foreground => 'blue',
 	);
 	
-	$buffer->create_tag(comment =>
+	add_tag($tag_table, comment =>
 		foreground => '#008000',
 		style      => 'italic',
 		weight     => PANGO_WEIGHT_BOLD,
 	);
 	
-	$buffer->create_tag(dtd =>
+	add_tag($tag_table, dtd =>
 		foreground => '#558CBA',
 		style      => 'italic',
 	);
 	
-	$buffer->create_tag(element =>
+	add_tag($tag_table, element =>
 		foreground => '#800080',
 		weight     => PANGO_WEIGHT_BOLD,
 	);
 	
-	$buffer->create_tag(pi =>
+	add_tag($tag_table, pi =>
 		foreground => '#558CBA',
 		style      => 'italic',
 	);
 	
-	$buffer->create_tag(syntax =>
+	add_tag($tag_table, syntax =>
 		foreground => 'black',
 		weight     => PANGO_WEIGHT_BOLD,
 	);
 	
-	$buffer->create_tag(text =>
+	add_tag($tag_table, text =>
 		foreground => 'black',
 	);
+
+
+	# Register new text buffers with support syntaxt highlighting
+	foreach my $name qw(xml-document xpath-results) {
+		my $buffer = Gtk2::TextBuffer->new($tag_table);
+		my $textview = $self->glade->get_widget($name);
+		$textview->set_buffer($buffer);
+	}
+}
+
+
+
+sub add_tag {
+	my ($tag_table, $name, @properties) = @_;
+	my $tag = Gtk2::TextTag->new($name);
+	$tag->set(@properties);
+	$tag_table->add($tag);
 }
 
 
@@ -507,18 +542,18 @@ sub callback_run_xpath {
 	# Run the XPath expression
 	my $xpath = $glade->get_widget('xpath-entry')->get_text;
 	my $start = time;
-	my @nodes = $self->document->findnodes($xpath);
+	my $nodelist = $self->document->find_nodelist($xpath);
 	my $end = time;
 	
 	$self->display_statusbar_message(
-		sprintf "Found %d results in %0.3f s", scalar @nodes, $end - $start
+		sprintf "Found %d results in %0.3f s", $nodelist->size, $end - $start
 	);
 	
 	# Display the results
-	my $content = xpath_result_to_string(@nodes);
 	my $textview = $glade->get_widget('xpath-results');
 	my $buffer = $textview->get_buffer();
-	$buffer->set_text($content);
+	$buffer->delete($buffer->get_start_iter, $buffer->get_end_iter);
+	render_xml_into_buffer($buffer, $nodelist);
 	
 	# Show the results
 	$glade->get_widget('notebook')->set_current_page(0);
@@ -616,60 +651,6 @@ sub display_statusbar_message {
 	my $id = $self->statusbar_context_id;
 	$statusbar->pop($id);
 	$statusbar->push($id, $message);
-}
-
-
-#
-# Returns the given XPath result as a string.
-#
-sub xpath_result_to_string {
-	my (@nodes) = @_;
-
-	my @strings = ();
-
-	foreach my $node (@nodes) {
-
-		my $string;
-
-		if (isa_dom_nodelist($node)) {
-			$string = xpath_result_to_string($node->get_nodelist);
-		}
-		elsif (isa_dom_document($node)) {
-			$string = document_to_utf8_string($node);
-		}
-		elsif (isa_dom_text($node)) {
-			$string = $node->nodeValue . "\n";
-		}
-		elsif (isa_dom_literal($node)) {
-			$string = $node->value . "\n";
-		}
-		elsif (isa_dom_boolean($node)){
-			$string = $node->to_literal . "\n";
-		}
-		elsif (isa_dom_number($node)){
-			$string = $node->to_literal . "\n";
-		}
-		else {
-			$string = $node->toString . "\n";
-		}
-		
-		push @strings, $string;
-	}
-
-	return join '', @strings;
-}
-
-
-#
-# The method Document::toString returns a byte string in the original encoding.
-# This is will not work with Gtk2 which expects UFT-8 strings, even if the
-# original document is in string
-#
-sub document_to_utf8_string {
-	my ($node) = @_;
-	my $encoding = $node->actualEncoding();
-	my $text = encodeToUTF8($encoding, $node->toString());
-	return $text;
 }
 
 
