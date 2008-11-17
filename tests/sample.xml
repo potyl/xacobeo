@@ -1,0 +1,28 @@
+<!-- with comments -->
+<?xml-stylesheet type="text/xml" href="#style1"?>
+<!DOCTYPE NewsML PUBLIC "urn:newsml:iptc.org:20001006:NewsMLv1.0:1" "dtds/NewsMLv1.0.dtd" [
+	<!ENTITY entity "***** this was an entity *****">
+]>
+<doc>
+	<target Href="http://www.afp.com/dtd/AFPCatalog.xml"/>
+	<no-content></no-content>
+<!-- A comment in the code -->
+	<p>&entity;</p>
+	<p>20011022</p>
+	<p>This is an embeded tag: &lt;tag&gt;</p>
+
+	<p attribute="escaped &quot; XML in an attribute.">Is the attribute escaped?</p>
+	<p eval="$var &gt; 4 ? &apos;bigger&apos; : &quot;smaller&quot; ">Is the attribute escaped?</p>
+
+	<p test="m&amp;n">Is the attribute escaped?</p>
+
+	]]&gt;
+
+<![CDATA[<greeting>Hello, world!</greeting>]]> 
+
+<!-- should we  escape stuff & bad thigs < > in a comment? -->
+
+<?magnum <insane> pi="a&b"?>
+
+</doc>
+
