@@ -2,7 +2,7 @@ Revision history for Xacobeo.
 
 
 0.03_01  Mon Nov 17 14:13:12 2008
-	- Fixed Issue 1: dh-make-perl doesn't generate a properl debian/rules file.
+	- Fixed Issue 1: dh-make-perl doesn't generate a proper debian/rules file.
 	- Fixed Issue 2: Document source view doesn't has broken UTF-8.
 	- Fixed Issue 9: Add syntax highlighting to the source view editor.
 
