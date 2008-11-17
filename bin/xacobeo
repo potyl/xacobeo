@@ -783,8 +783,8 @@ sub escape_xml_text {
 
 
 #
-# Escapes the text as if would be added to an Element node as an Attribute. This
-# function escapes the entities &, >, <, ', and "
+# Escapes the text as if would be added to an Attribute. This function escapes
+# the entities <, >, &, ' and ".
 #
 sub escape_xml_attribute {
 	my ($string) = @_;
