@@ -439,7 +439,7 @@ sub render_xml_into_buffer {
 		if (my $data = $node->getData) {
 			$data =~ s/\s+$//;
 			buffer_add($buffer, syntax => ' ');
-			buffer_add($buffer, pi => $data);
+			buffer_add($buffer, pi_data => $data);
 		}
 		
 		buffer_add($buffer, syntax => '?>');
@@ -524,7 +524,7 @@ sub prepare_textviews {
 	add_tag($tag_table, comment =>
 		foreground => '#008000',
 		style      => 'italic',
-		weight     => PANGO_WEIGHT_BOLD,
+		weight     => PANGO_WEIGHT_LIGHT,
 	);
 	
 	add_tag($tag_table, dtd =>
@@ -539,6 +539,11 @@ sub prepare_textviews {
 	
 	add_tag($tag_table, pi =>
 		foreground => '#558CBA',
+		style      => 'italic',
+	);
+	
+	add_tag($tag_table, pi_data =>
+		foreground => 'red',
 		style      => 'italic',
 	);
 	
