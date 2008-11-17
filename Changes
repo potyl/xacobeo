@@ -1,6 +1,11 @@
 Revision history for Xacobeo.
 
 
+0.03_02  Mon Nov 17 15:24:27 2008
+	- Added the XML declaration to the source view.
+	- Can evaluate XPath expressions that return a boolean, a number or a literal
+
+
 0.03_01  Mon Nov 17 14:13:12 2008
 	- Fixed Issue 1: dh-make-perl doesn't generate a proper debian/rules file.
 	- Fixed Issue 2: Document source view doesn't has broken UTF-8.
