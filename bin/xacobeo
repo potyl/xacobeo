@@ -333,9 +333,6 @@ sub render_xml_into_buffer {
 	if (! $buffer->isa('Gtk2::TextBuffer')) {
 		croak "First parameter $buffer must be of type Gtk2::TextBuffer";
 	}
-#	if (! (isa_dom_node($node) or isa_dom_nodelist($node)) ) {
-#		croak "Second parameter $node must be of type XML::LibXML::Node or XML::LibXML::NodeList instead got $node ", ref($node);
-#	}
 
 
 	# The main document
@@ -346,7 +343,7 @@ sub render_xml_into_buffer {
 		my $xml_declaration = $fake->createProcessingInstruction("xml");
 		$xml_declaration->setData(
 			version => $node->version,
-			encoding => $node->encoding,
+			encoding => $node->actualEncoding,
 		);
 		render_xml_into_buffer($buffer, $xml_declaration);
 		buffer_add($buffer, syntax => "\n");
