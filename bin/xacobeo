@@ -458,7 +458,7 @@ sub render_xml_into_buffer {
 		
 		# Escape the quotes with entities
 		my $value = $node->value();
-		$value =~ s/"/&quot;/;
+		$value =~ s/"/&quot;/g;
 		buffer_add($buffer, attribute_value => $value);
 		
 		buffer_add($buffer, syntax => '"');
