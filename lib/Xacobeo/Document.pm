@@ -98,9 +98,11 @@ sub findnodes {
 }
 
 
-=head2 find_nodelist
+=head2 find
 
-Runs the given XPath query on the document and returns the resulting node list.
+Runs the given XPath query on the document and returns the results. The results
+could be a node list or a single value like a boolean, a number or a scalar if
+an expression is passed.
 
 Paramters:
 
@@ -108,19 +110,19 @@ Paramters:
 
 =cut
 
-sub find_nodelist {
+sub find {
 	my $self = shift;
 	my ($xpath) = @_;
 	
-	my $nodelist;
+	my $result;
 	eval {
-		$nodelist = $self->xpath->findnodes($xpath, $self->xml);
+		$result = $self->xpath->find($xpath, $self->xml);
 	};
 	if (my $error = $@) {
 		return;
 	}
 	
-	return $nodelist;
+	return $result;
 }
 
 
