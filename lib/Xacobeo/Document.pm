@@ -98,6 +98,32 @@ sub findnodes {
 }
 
 
+=head2 find_nodelist
+
+Runs the given XPath query on the document and returns the resulting node list.
+
+Paramters:
+
+	$xpath: a valid XPath expression.
+
+=cut
+
+sub find_nodelist {
+	my $self = shift;
+	my ($xpath) = @_;
+	
+	my $nodelist;
+	eval {
+		$nodelist = $self->xpath->findnodes($xpath, $self->xml);
+	};
+	if (my $error = $@) {
+		return;
+	}
+	
+	return $nodelist;
+}
+
+
 =head2 validate
 
 Validates the syntax of the given XPath query. The syntax is validated within a
