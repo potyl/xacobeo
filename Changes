@@ -3,7 +3,9 @@ Revision history for Xacobeo.
 
 0.03_02  Mon Nov 17 15:24:27 CET 2008
 	- Added the XML declaration to the source view.
-	- Can evaluate XPath expressions that return a boolean, a number or a literal
+	- Can evaluate XPath expressions that return a boolean, a number or a literal.
+	- The XML declaration has an encoding even if the original document is missing
+	  one.
 
 
 0.03_01  Mon Nov 17 14:13:12 CET 2008
