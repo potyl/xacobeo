@@ -351,7 +351,15 @@ sub render_xml_into_buffer {
 	elsif (isa_dom_nodelist($node)) {
 		my @children = $node->get_nodelist;
 		my $count = scalar @children;
+
+		# Formatting using to indicate which result is being analyzed
+		my $i = 0;
+		my $format = sprintf " %%%dd. ", length($count);
+
 		foreach my $child (@children) {
+			my $result = sprintf $format, ++$i;
+			buffer_add($buffer, result => $result);
+			
 			render_xml_into_buffer($buffer, $child);
 			buffer_add($buffer, syntax => "\n") if --$count;
 		}
@@ -447,6 +455,14 @@ sub prepare_textviews {
 	
 	# Build the styles for the syntax highlighting
 	my $tag_table = Gtk2::TextTagTable->new();
+	
+	add_tag($tag_table, result =>
+		family     => 'Courier 10 Pitch',
+		background => '#EDE9E3',
+		foreground => 'black',
+		style      => 'italic',,
+		weight     => PANGO_WEIGHT_LIGHT
+	);
 	
 	add_tag($tag_table, attribute_name =>
 		foreground => 'red',
