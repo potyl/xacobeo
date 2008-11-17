@@ -492,6 +492,7 @@ sub render_xml_into_buffer {
 		buffer_add($buffer, syntax => ']]> ');
 	}
 	
+	# A Namespace definition ex: xmlns:svg="http://www.w3.org/2000/svg"
 	elsif (isa_dom_namespace($node)) {
 		buffer_add($buffer, syntax => ' ');
 		buffer_add($buffer, namespace_name => $node->nodeName);
@@ -501,8 +502,6 @@ sub render_xml_into_buffer {
 		buffer_add($buffer, namespace_uri => $uri);
 		
 		buffer_add($buffer, syntax => '"');
-
-
 	}
 
 	else {
