@@ -311,14 +311,16 @@ sub load_file {
 	$glade->get_widget('xpath-entry')->set_sensitive(TRUE);
 }
 
-sub val {
-	return defined $_[0] ? $_[0] : 'undef';
-}
 
 #
 # Displays an XML node in a Gtk2::TextBuffer. The XML will be marked in the
 # text buffer. If the buffer defines the proper tags then the text will
 # automatically have syntax highlighting.
+#
+# Parameters:
+#
+#  $buffer:   an instance of Gtk2::TextBuffer.
+#  $node:     an instance of XML::LibXML::Node or XML::LibXML::NodeList.
 #
 #
 # TODO:
@@ -328,11 +330,28 @@ sub val {
 sub render_xml_into_buffer {
 	my ($buffer, $node) = @_;
 	croak "Must pass (Gtk2::TextBuffer, XML::LibXML::Node)" unless @_ == 2;
-	croak "First parameter $buffer isn't a Gtk2::TextBuffer" unless $buffer->isa('Gtk2::TextBuffer');
-	croak "Second parameter $node isn't a XML::LibXML::Node" unless isa_dom_node($node) or isa_dom_nodelist($node);
+	if (! $buffer->isa('Gtk2::TextBuffer')) {
+		croak "First parameter $buffer must be of type Gtk2::TextBuffer";
+	}
+#	if (! (isa_dom_node($node) or isa_dom_nodelist($node)) ) {
+#		croak "Second parameter $node must be of type XML::LibXML::Node or XML::LibXML::NodeList instead got $node ", ref($node);
+#	}
+
 
 	# The main document
 	if (isa_dom_document($node)) {
+
+		# Create the XML declaration <?xml version="" encoding=""?>
+		my $fake = XML::LibXML->createDocument();
+		my $xml_declaration = $fake->createProcessingInstruction("xml");
+		$xml_declaration->setData(
+			version => $node->version,
+			encoding => $node->encoding,
+		);
+		render_xml_into_buffer($buffer, $xml_declaration);
+		buffer_add($buffer, syntax => "\n");
+
+
 		# In concept a document has a single child the root element. In reality a
 		# document is allowed to have a prolog (http://www.w3.org/TR/REC-xml/#NT-prolog).
 		# The prolog is available in the child nodes of the document. The last node
@@ -357,8 +376,9 @@ sub render_xml_into_buffer {
 		my $format = sprintf " %%%dd. ", length($count);
 
 		foreach my $child (@children) {
+			# Add the result count
 			my $result = sprintf $format, ++$i;
-			buffer_add($buffer, result => $result);
+			buffer_add($buffer, result_count => $result);
 			
 			render_xml_into_buffer($buffer, $child);
 			buffer_add($buffer, syntax => "\n") if --$count;
@@ -374,16 +394,7 @@ sub render_xml_into_buffer {
 
 		# The element's attributes
 		foreach my $attribute ($node->attributes) {
-			buffer_add($buffer, syntax => ' ');
-			buffer_add($buffer, attribute_name => $attribute->getName());
-			buffer_add($buffer, syntax => '="');
-			
-			# Escape the quotes with entities
-			my $value = $attribute->value();
-			$value =~ s/"/&quot;/;
-			buffer_add($buffer, attribute_value => $value);
-			
-			buffer_add($buffer, syntax => '"');
+			render_xml_into_buffer($buffer, $attribute);
 		}
 		
 		# Close the start of the element
@@ -438,9 +449,38 @@ sub render_xml_into_buffer {
 	elsif (isa_dom_dtd($node)) {
 		buffer_add($buffer, dtd => $node->toString);
 	}
+	
+	# An attribute ex: <... var="value" ...>
+	elsif (isa_dom_attr($node)) {
+		buffer_add($buffer, syntax => ' ');
+		buffer_add($buffer, attribute_name => $node->getName());
+		buffer_add($buffer, syntax => '="');
+		
+		# Escape the quotes with entities
+		my $value = $node->value();
+		$value =~ s/"/&quot;/;
+		buffer_add($buffer, attribute_value => $value);
+		
+		buffer_add($buffer, syntax => '"');
+	}
+
+	# A boolean value ex: true() or false()
+	elsif (isa_dom_boolean($node)) {
+		buffer_add($buffer, boolean => $node->to_literal);
+	}
+
+	# A number ex: 2 + 5
+	elsif (isa_dom_number($node)) {
+		buffer_add($buffer, number => $node->to_literal);
+	}
+
+	# A literal (a single text string) ex: "hello"
+	elsif (isa_dom_literal($node)) {
+		buffer_add($buffer, literal => $node->to_literal);
+	}
 
 	else {
-		warn "=====node $node not implemented";
+		warn "=====node $node of type (", ref($node),") is not implemented";
 	}
 }
 
@@ -456,13 +496,22 @@ sub prepare_textviews {
 	# Build the styles for the syntax highlighting
 	my $tag_table = Gtk2::TextTagTable->new();
 	
-	add_tag($tag_table, result =>
+	add_tag($tag_table, result_count =>
 		family     => 'Courier 10 Pitch',
 		background => '#EDE9E3',
 		foreground => 'black',
 		style      => 'italic',,
 		weight     => PANGO_WEIGHT_LIGHT
 	);
+	
+	# Make the boolean and number look a like
+	foreach my $name qw(boolean number) {
+		add_tag($tag_table, $name =>
+			family     => 'Courier 10 Pitch',
+			foreground => 'black',
+			weight     => PANGO_WEIGHT_BOLD
+		);
+	}
 	
 	add_tag($tag_table, attribute_name =>
 		foreground => 'red',
@@ -501,6 +550,10 @@ sub prepare_textviews {
 	add_tag($tag_table, text =>
 		foreground => 'black',
 	);
+	
+	add_tag($tag_table, literal =>
+		foreground => 'black',
+	);
 
 
 	# Register new text buffers with support syntaxt highlighting
@@ -512,7 +565,10 @@ sub prepare_textviews {
 }
 
 
-
+#
+# Creates a text tag (Gtk2::TextTag) with the given name and properties and adds
+# it to a tag table.
+#
 sub add_tag {
 	my ($tag_table, $name, @properties) = @_;
 	my $tag = Gtk2::TextTag->new($name);
@@ -526,13 +582,7 @@ sub add_tag {
 #
 sub buffer_add {
 	my ($buffer, $type, $string) = @_;
-
-	if ($buffer->get_tag_table->lookup($type)) {
-		$buffer->insert_with_tags_by_name($buffer->get_end_iter, $string, $type);
-	}
-	else {
-		$buffer->insert($buffer->get_end_iter, $string);
-	}
+	$buffer->insert_with_tags_by_name($buffer->get_end_iter, $string, $type);
 }
 
 #
@@ -558,18 +608,19 @@ sub callback_run_xpath {
 	# Run the XPath expression
 	my $xpath = $glade->get_widget('xpath-entry')->get_text;
 	my $start = time;
-	my $nodelist = $self->document->find_nodelist($xpath);
+	my $result = $self->document->find($xpath);
 	my $end = time;
 	
+	my $count = isa_dom_nodelist($result) ? $result->size : 1;
 	$self->display_statusbar_message(
-		sprintf "Found %d results in %0.3f s", $nodelist->size, $end - $start
+		sprintf "Found %d results in %0.3f s", $count, $end - $start
 	);
 	
 	# Display the results
 	my $textview = $glade->get_widget('xpath-results');
 	my $buffer = $textview->get_buffer();
 	$buffer->delete($buffer->get_start_iter, $buffer->get_end_iter);
-	render_xml_into_buffer($buffer, $nodelist);
+	render_xml_into_buffer($buffer, $result);
 	
 	# Show the results
 	$glade->get_widget('notebook')->set_current_page(0);
