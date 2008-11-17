@@ -82,6 +82,7 @@ use Glib qw(TRUE FALSE);
 use Gtk2 qw(-init);
 use Gtk2::GladeXML;
 use Gtk2::SimpleList;
+use Gtk2::Pango;
 
 use Pod::Usage;
 use Getopt::Long qw(:config auto_help);
@@ -161,6 +162,8 @@ sub construct_gui {
 	# See http://www.mail-archive.com/gtk-perl-list@gnome.org/msg03647.html	
 	# and http://gtk2-perl.sourceforge.net/doc/pod/Gtk2/TreeViewColumn.html#_tree_column_set_cel
 	$self->contruct_dom_tree_view();
+	
+	$self->prepare_source_view();
 	
 	# Create the list model for the Namespace view
 	$self->contruct_namespaces_view();
@@ -347,13 +350,13 @@ sub add_xml_into_buffer {
 		# The element's attributes
 		foreach my $attribute ($node->attributes) {
 			buffer_add($buffer, syntax => ' ');
-			buffer_add($buffer, attribute => $attribute->getName());
+			buffer_add($buffer, attribute_name => $attribute->getName());
 			buffer_add($buffer, syntax => '="');
 			
 			# Escape the quotes with entities
 			my $value = $attribute->value();
 			$value =~ s/"/&quot;/;
-			buffer_add($buffer, attribute => $value);
+			buffer_add($buffer, attribute_value => $value);
 			
 			buffer_add($buffer, syntax => '"');
 		}
@@ -395,7 +398,7 @@ sub add_xml_into_buffer {
 		if (my $data = $node->getData) {
 			$data =~ s/\s+$//;
 			buffer_add($buffer, syntax => ' ');
-			buffer_add($buffer, comment => $data);
+			buffer_add($buffer, pi => $data);
 		}
 		
 		buffer_add($buffer, syntax => '?>');
@@ -410,16 +413,67 @@ sub add_xml_into_buffer {
 
 
 #
+# This widget prepares the source view. It basically performs actions that can
+# be done through glade. For the moment this method registers some tags.
+#
+sub prepare_source_view {
+	my $self = shift;
+	my $buffer = $self->glade->get_widget('xml-document')->get_buffer();
+	
+	$buffer->create_tag(attribute_name =>
+		foreground => 'red',
+	);
+
+	$buffer->create_tag(attribute_value =>
+		foreground => 'blue',
+	);
+	
+	$buffer->create_tag(comment =>
+		foreground => '#008000',
+		style      => 'italic',
+		weight     => PANGO_WEIGHT_BOLD,
+	);
+	
+	$buffer->create_tag(dtd =>
+		foreground => '#558CBA',
+		style      => 'italic',
+		weight     => PANGO_WEIGHT_BOLD,
+	);
+	
+	$buffer->create_tag(element =>
+		foreground => '#800080',
+		weight     => PANGO_WEIGHT_BOLD,
+	);
+	
+	$buffer->create_tag(pi =>
+		foreground => '#558CBA',
+		style      => 'italic',
+		weight     => PANGO_WEIGHT_BOLD,
+	);
+	
+	$buffer->create_tag(syntax =>
+		foreground => 'black',
+	);
+	
+	$buffer->create_tag(text =>
+		foreground => 'black',
+	);
+}
+
+
+#
 # Adds the given text at the end of the buffer.
 #
 sub buffer_add {
 	my ($buffer, $type, $string) = @_;
-#local $| = 1;
-#print "($type)->$string<-";
 
-	$buffer->insert($buffer->get_end_iter, $string);
+	if ($buffer->get_tag_table->lookup($type)) {
+		$buffer->insert_with_tags_by_name($buffer->get_end_iter, $string, $type);
+	}
+	else {
+		$buffer->insert($buffer->get_end_iter, $string);
+	}
 }
-
 
 #
 # Called when the main window is closed
