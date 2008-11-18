@@ -57,6 +57,6 @@ use strict;
 use warnings;
 use 5.006;
 
-our $VERSION = '0.03_02';
+our $VERSION = '0.03_03';
 
 1;
