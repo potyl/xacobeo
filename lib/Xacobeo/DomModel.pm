@@ -50,39 +50,21 @@ sub add_columns {
 	# Arguments
 	my ($treeview) = @_;
 
-if (0) {
-	## Add the first column - Node element
-	my $column = Gtk2::TreeViewColumn->new();
-	$column->set_title('DOM');
-	$column->set_resizable(TRUE);
-	$column->set_sizing('autosize');
-
-	### First cell for column one - Icon
-	my $node_icon = Gtk2::CellRendererPixbuf->new();
-	$column->pack_start($node_icon, FALSE);
-	$column->set_attributes($node_icon, 'stock-id' => $NODE_ICON);
-
-	### Second cell for column one - Name
-	my $node_name = Gtk2::CellRendererText->new();
-	$column->pack_start($node_name, FALSE);
-	$column->set_attributes($node_name, 'text' => $NODE_NAME);
-	$treeview->append_column($column);
-}
 	my $column = add_text_column($treeview, $NODE_NAME, 'Element');
-	### First cell for column one - Icon
+
+	# Icon
 	my $node_icon = Gtk2::CellRendererPixbuf->new();
 	$column->pack_start($node_icon, FALSE);
 	$column->set_attributes($node_icon, 'stock-id' => $NODE_ICON);
-	
 
 
-
-	## Add the second column - Node attribute name (ID attribute)
+	# Node attribute name (ID attribute)
 	add_text_column($treeview, $NODE_ID_NAME, 'ID name');
 
-	## Add the third column - Node attribute value (ID attribute)
+	# Node attribute value (ID attribute)
 	add_text_column($treeview, $NODE_ID_VALUE, 'ID value');
 }
+
 
 sub add_text_column {
 	my ($treeview, $field, $title) = @_;
