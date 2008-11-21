@@ -104,6 +104,8 @@ __PACKAGE__->mk_accessors(
 		document 
 		statusbar_context_id
 		namespaces_view
+		
+		namespaces
 	)
 );
 
@@ -291,23 +293,26 @@ sub load_file {
 	my $document = Xacobeo::Document->new($file);
 	$self->document($document);
 
-
-	# Update the text widget
-	my $glade = $self->glade;
-	
-	my $buffer = $glade->get_widget('xml-document')->get_buffer();
-	$buffer->delete($buffer->get_start_iter, $buffer->get_end_iter);
-	render_xml_into_buffer($buffer, $document->xml);
-
-	# Populate the DOM view tree
-	my $treeview = $self->glade->get_widget('dom-tree-view');
-	my $model = $treeview->get_model();
+	# Get the namespaces
 	my $namespaces = {};
 	my @namespaces = ();
 	while (my ($prefix, $uri) = each %{ $self->document->namespaces }) {
 		push @namespaces, [$prefix, $uri];
 		$namespaces->{$uri} ||= $prefix;
 	}
+	$self->namespaces($namespaces);
+
+
+	# Update the text widget
+	my $glade = $self->glade;
+	
+	my $buffer = $glade->get_widget('xml-document')->get_buffer();
+	$buffer->delete($buffer->get_start_iter, $buffer->get_end_iter);
+	$self->render_xml_into_buffer($buffer, $document->xml);
+
+	# Populate the DOM view tree
+	my $treeview = $self->glade->get_widget('dom-tree-view');
+	my $model = $treeview->get_model();
 	Xacobeo::DomModel::populate($model, $document->xml, $namespaces);
 	my $end = time;
 	
@@ -338,6 +343,7 @@ sub load_file {
 # to the elements from the DomViewer.
 #
 sub render_xml_into_buffer {
+	my $self = shift;
 	my ($buffer, $node) = @_;
 	croak "Must pass (Gtk2::TextBuffer, XML::LibXML::Node)" unless @_ == 2;
 	if (! $buffer->isa('Gtk2::TextBuffer')) {
@@ -355,7 +361,7 @@ sub render_xml_into_buffer {
 			version => $node->version,
 			encoding => $node->actualEncoding,
 		);
-		render_xml_into_buffer($buffer, $xml_declaration);
+		$self->render_xml_into_buffer($buffer, $xml_declaration);
 		buffer_add($buffer, syntax => "\n");
 
 
@@ -366,7 +372,7 @@ sub render_xml_into_buffer {
 		my @children = $node->childNodes;
 		my $count = @children;
 		foreach my $child (@children) {
-			render_xml_into_buffer($buffer, $child);
+			$self->render_xml_into_buffer($buffer, $child);
 			# Add some new lines between the elements of the prolog. Libxml removes
 			# the white spaces in the prolog.
 			buffer_add($buffer, syntax => "\n") if --$count;
@@ -387,7 +393,7 @@ sub render_xml_into_buffer {
 			my $result = sprintf $format, ++$i;
 			buffer_add($buffer, result_count => $result);
 			
-			render_xml_into_buffer($buffer, $child);
+			$self->render_xml_into_buffer($buffer, $child);
 			buffer_add($buffer, syntax => "\n") if --$count;
 		}
 	}
@@ -397,11 +403,13 @@ sub render_xml_into_buffer {
 		
 		# Start of the element
 		buffer_add($buffer, syntax => '<');
-		buffer_add($buffer, element => $node->localname());
+
+		my $name = Xacobeo::DomModel::get_prefixed_name($node, $self->namespaces);
+		buffer_add($buffer, element => $name);
 
 		# The element's attributes
 		foreach my $attribute ($node->attributes) {
-			render_xml_into_buffer($buffer, $attribute);
+			$self->render_xml_into_buffer($buffer, $attribute);
 		}
 		
 		# Close the start of the element
@@ -417,13 +425,13 @@ sub render_xml_into_buffer {
 
 		# Do the children
 		foreach my $child ($node->childNodes) {
-			render_xml_into_buffer($buffer, $child);
+			$self->render_xml_into_buffer($buffer, $child);
 		}
 
 
 		# Close the element		
 		buffer_add($buffer, syntax => '</');
-		buffer_add($buffer, element => $node->localname);
+		buffer_add($buffer, element => $name);
 		buffer_add($buffer, syntax => '>');
 	}
 
@@ -461,10 +469,11 @@ sub render_xml_into_buffer {
 	# An Attribute ex: <... var="value" ...>
 	elsif (isa_dom_attr($node)) {
 		buffer_add($buffer, syntax => ' ');
-		buffer_add($buffer, attribute_name => $node->getName());
+		my $name = Xacobeo::DomModel::get_prefixed_name($node, $self->namespaces);
+		buffer_add($buffer, attribute_name => $name);
 		buffer_add($buffer, syntax => '="');
 		
-		my $value = escape_xml_text($node->value());
+		my $value = escape_xml_text($node->value);
 		buffer_add($buffer, attribute_value => $value);
 		
 		buffer_add($buffer, syntax => '"');
@@ -668,7 +677,7 @@ sub callback_run_xpath {
 	my $textview = $glade->get_widget('xpath-results');
 	my $buffer = $textview->get_buffer();
 	$buffer->delete($buffer->get_start_iter, $buffer->get_end_iter);
-	render_xml_into_buffer($buffer, $result);
+	$self->render_xml_into_buffer($buffer, $result);
 	
 	# Show the results
 	$glade->get_widget('notebook')->set_current_page(0);
