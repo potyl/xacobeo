@@ -132,13 +132,13 @@ sub populate {
 # Returns the node name by prefixing it with our prefixes in the case where
 # namespaces are used.
 #
+# FIXME now this method is public. It shouldn't be declared here
 sub get_prefixed_name {
-
 	my ($node, $namespaces) = @_;
 
 	my $name = $node->localname;
 	my $uri = $node->namespaceURI();
-	
+
 	# Check if the node uses a namespace if so return the name with our prefix
 	if (defined $uri and my $namespace = $namespaces->{$uri}) {
 		return "$namespace:$name";
