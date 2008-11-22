@@ -96,6 +96,7 @@ use Carp;
 use Xacobeo;
 use Xacobeo::DomModel;
 use Xacobeo::Document;
+use Xacobeo::Utils qw(:xml :dom);
 
 use base qw(Class::Accessor::Fast);
 __PACKAGE__->mk_accessors(
@@ -104,19 +105,7 @@ __PACKAGE__->mk_accessors(
 		document 
 		statusbar_context_id
 		namespaces_view
-		
-		namespaces
 	)
-);
-
-
-# The entities defined in XML
-my %ENTITIES = qw(
-	<  &lt;
-	>  &gt;
-	&  &amp;
-	'  &apos;
-	"  &quot;
 );
 
 
@@ -294,13 +283,10 @@ sub load_file {
 	$self->document($document);
 
 	# Get the namespaces
-	my $namespaces = {};
 	my @namespaces = ();
-	while (my ($prefix, $uri) = each %{ $self->document->namespaces }) {
+	while (my ($uri, $prefix) = each %{ $self->document->namespaces }) {
 		push @namespaces, [$prefix, $uri];
-		$namespaces->{$uri} ||= $prefix;
 	}
-	$self->namespaces($namespaces);
 
 
 	# Update the text widget
@@ -313,7 +299,7 @@ sub load_file {
 	# Populate the DOM view tree
 	my $treeview = $self->glade->get_widget('dom-tree-view');
 	my $model = $treeview->get_model();
-	Xacobeo::DomModel::populate($model, $document->xml, $namespaces);
+	Xacobeo::DomModel::populate($model, $document, $document->xml);
 	my $end = time;
 	
 	# Populate the Namespaces view
@@ -404,7 +390,7 @@ sub render_xml_into_buffer {
 		# Start of the element
 		buffer_add($buffer, syntax => '<');
 
-		my $name = Xacobeo::DomModel::get_prefixed_name($node, $self->namespaces);
+		my $name = $self->document->get_prefixed_name($node);
 		buffer_add($buffer, element => $name);
 
 		# The element's attributes
@@ -469,7 +455,7 @@ sub render_xml_into_buffer {
 	# An Attribute ex: <... var="value" ...>
 	elsif (isa_dom_attr($node)) {
 		buffer_add($buffer, syntax => ' ');
-		my $name = Xacobeo::DomModel::get_prefixed_name($node, $self->namespaces);
+		my $name = $self->document->get_prefixed_name($node);
 		buffer_add($buffer, attribute_name => $name);
 		buffer_add($buffer, syntax => '="');
 		
@@ -800,120 +786,4 @@ sub display_statusbar_message {
 #     `-- xacobeo
 sub find_app_folder {
 	return catdir($FindBin::Bin, '..');
-}
-
-
-#
-# Escapes the text as if would be added to a Text node. This function escapes
-# only the entities <, > and &.
-#
-sub escape_xml_text {
-	my ($string) = @_;
-	$string =~ s/([<>&])/$ENTITIES{$1}/eg;
-	return $string;
-}
-
-
-#
-# Escapes the text as if would be added to an Attribute. This function escapes
-# the entities <, >, &, ' and ".
-#
-sub escape_xml_attribute {
-	my ($string) = @_;
-	$string =~ s/([<>&'"])/$ENTITIES{$1}/eg;
-	return $string;
-}
-
-
-sub isa_dom_document {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Document') : 0;
-}
-
-
-sub isa_dom_element {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Element') : 0;
-}
-
-
-sub isa_dom_attr {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Attr') : 0;
-}
-
-
-sub isa_dom_nodelist {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::NodeList') : 0;
-}
-
-
-#
-# Return true if the node is a text as defined in the DOM.
-#
-# NOTE: XML::LibXML decided that Comment and CDATA nodes are also a Text node.
-#       Despite XML::LibXML this method doesn't consider a Coment nor a CDATA
-#       node as being a Text node.
-#
-sub isa_dom_text {
-	my ($node) = @_;
-	return unless defined $node;
-	return if isa_dom_comment($node) or isa_dom_cdata($node);
-	return $node->isa('XML::LibXML::Text');
-}
-
-
-sub isa_dom_comment {
-	my ($node) = @_;
-	return unless defined $node;
-	return defined $node ? $node->isa('XML::LibXML::Comment') : 0;
-}
-
-
-sub isa_dom_literal {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Literal') : 0;
-}
-
-
-sub isa_dom_boolean {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Boolean') : 0;
-}
-
-
-sub isa_dom_number {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Number') : 0;
-}
-
-
-sub isa_dom_node {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Node') : 0;
-}
-
-
-sub isa_dom_pi {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::PI') : 0;
-}
-
-
-sub isa_dom_dtd {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Dtd') : 0;
-}
-
-
-sub isa_dom_cdata {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::CDATASection') : 0;
-}
-
-
-sub isa_dom_namespace {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Namespace') : 0;
 }
