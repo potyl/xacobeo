@@ -37,6 +37,7 @@ use Data::Dumper;
 use Carp;
 
 use Xacobeo::Utils qw(:dom);
+use Xacobeo::Time;
 
 use base qw(Class::Accessor::Fast);
 __PACKAGE__->mk_accessors(
@@ -180,18 +181,23 @@ sub _load_document {
 
 	
 	# Parse the document
+	my $time_parse = Xacobeo::Time->start('parse file');
 	my $parser = _construct_xml_parser();
-
 	my $xml = $parser->parse_file($source);
 	$self->xml($xml);
+	$time_parse->display();
 	
 	# Find the namespaces
+	my $time_namespaces = Xacobeo::Time->start('find ns');
 	$self->namespaces(_get_all_namespaces($xml));
+	$time_namespaces->display();
 	
 	# Create the XPath context
+	my $time_xpath = Xacobeo::Time->start('create xpath');
 	$self->xpath(
 		$self->_create_xpath_context()
 	);
+	$time_xpath->display();
 }
 
 
@@ -212,25 +218,6 @@ sub _construct_xml_parser {
 #
 # Finds every namespace declared in the document.
 #
-sub _fetch_namespaces {
-	my ($node, $collected) = @_;
-
-	if (isa_dom_element($node)) {
-		foreach my $namespace ($node->getNamespaces) {
-			my $uri = $namespace->getData;
-			$collected->{$uri} ||= $namespace->getLocalName;
-		}
-	}
-
-	foreach my $child ($node->childNodes) {
-		_fetch_namespaces($child, $collected);
-	}
-}
-
-
-#
-# Finds every namespace declared in the document.
-#
 # Each prefix is warrantied to be unique. The function will assign the first
 # prefix seen for each namespace.
 #
@@ -241,7 +228,10 @@ sub _get_all_namespaces {
 
 	# Find the namespaces ($uri -> $prefix)
 	my %namespaces = ();
-	_fetch_namespaces($node, \%namespaces);
+	foreach my $namespace ($node->findnodes('.//namespace::*')) {
+		my $uri = $namespace->getData;
+		$namespaces{$uri} ||= $namespace->getLocalName;
+	}
 	
 	# Reverse the namespaces ($prefix -> $uri) and make sure that the prefixes
 	# don't clash with each other.
