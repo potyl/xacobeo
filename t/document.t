@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 19;
+use Test::More tests => 21;
 use Data::Dumper;
 
 BEGIN {
@@ -19,8 +19,9 @@ sub main {
 	
 	test_without_namespaces();
 	
-	test_namespaces();
+	test_namespaces1();
 	test_namespaces2();
+	test_namespaces3();
 	
 	return 0;
 }
@@ -84,7 +85,7 @@ sub test_without_namespaces {
 
 
 
-sub test_namespaces {
+sub test_namespaces1 {
 	my $document = Xacobeo::Document->new("$FOLDER/SVG.svg");
 	isa_ok($document, 'Xacobeo::Document');
 	
@@ -167,8 +168,25 @@ sub test_namespaces2 {
 	);
 
 
-	# Try to find all nodes in the default namespace
+	# Try to find all nodes in the default namespace (there are none)
 	$got = $document->find('//default:*');
 	is($got->size, 0, "Beers had no elements under the default namespace");
+}
+
+
+sub test_namespaces3 {
+	my $document = Xacobeo::Document->new("$FOLDER/stocks.xml");
+	isa_ok($document, 'Xacobeo::Document');
+
+	is_deeply(
+		$document->namespaces(),
+		{
+			'urn:schemas-microsoft-com:office:excel' => 'x',
+			'http://www.w3.org/TR/REC-html40' => 'html',
+			'urn:schemas-microsoft-com:office:office' => 'o',
+			'urn:schemas-microsoft-com:office:spreadsheet' => 'ss',
+		},
+		'Stocks namespaces'
+	);
 }
 
