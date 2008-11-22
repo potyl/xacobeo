@@ -18,6 +18,17 @@ Xacobeo::Utils - Utilities shared among the project.
 This package provides utility methods that are shared among the different
 modules in this project.
 
+=head1 IMPORTS
+
+The following import tags are defined:
+
+=head2 :xml
+
+Import the XML utilities.
+
+=head2 :dom
+
+Imports the DOM utilities.
 
 =head1 FUNCTIONS
 
@@ -88,13 +99,14 @@ my %ENTITIES = qw(
 );
 
 
-=head2
+
+=head2 escape_xml_text
+
+Escapes the text as if would be added to a Text node. This function escapes only
+the entities <, > and &.
 
 =cut
-#
-# Escapes the text as if would be added to a Text node. This function escapes
-# only the entities <, > and &.
-#
+
 sub escape_xml_text {
 	my ($string) = @_;
 	$string =~ s/([<>&])/$ENTITIES{$1}/eg;
@@ -102,10 +114,14 @@ sub escape_xml_text {
 }
 
 
-#
-# Escapes the text as if would be added to an Attribute. This function escapes
-# the entities <, >, &, ' and ".
-#
+
+=head2 escape_xml_attribute
+
+Escapes the text as if would be added to an Attribute. This function escapes the
+entities <, >, &, ' and ".
+
+=cut
+
 sub escape_xml_attribute {
 	my ($string) = @_;
 	$string =~ s/([<>&'"])/$ENTITIES{$1}/eg;
@@ -113,11 +129,27 @@ sub escape_xml_attribute {
 }
 
 
+
+=head2 isa_dom_document
+
+Returns true if the node is a DOM C<Document> (instance of 
+L<XML::LibXML::Document>).
+
+=cut
+
 sub isa_dom_document {
 	my ($node) = @_;
 	return defined $node ? $node->isa('XML::LibXML::Document') : 0;
 }
 
+
+
+=head2 isa_dom_element
+
+Returns true if the node is a DOM C<Element> (instance of 
+L<XML::LibXML::Element>).
+
+=cut
 
 sub isa_dom_element {
 	my ($node) = @_;
@@ -125,11 +157,27 @@ sub isa_dom_element {
 }
 
 
+
+=head2 isa_dom_attr
+
+Returns true if the node is a DOM C<Attribute> (instance of 
+L<XML::LibXML::Attr>).
+
+=cut
+
 sub isa_dom_attr {
 	my ($node) = @_;
 	return defined $node ? $node->isa('XML::LibXML::Attr') : 0;
 }
 
+
+
+=head2 isa_dom_nodelist
+
+Returns true if the node is a DOM C<NodeList> (instance of 
+L<XML::LibXML::NodeList>).
+
+=cut
 
 sub isa_dom_nodelist {
 	my ($node) = @_;
@@ -137,13 +185,18 @@ sub isa_dom_nodelist {
 }
 
 
-#
-# Return true if the node is a text as defined in the DOM.
-#
-# NOTE: XML::LibXML decided that Comment and CDATA nodes are also a Text node.
-#       Despite XML::LibXML this method doesn't consider a Coment nor a CDATA
-#       node as being a Text node.
-#
+
+=head2 isa_dom_text
+
+Returns true if the node is a DOM C<Text> (instance of 
+L<XML::LibXML::Text>).
+
+B<NOTE>: XML::LibXML considers that C<Comment> and C<CDATA> nodes are also
+C<Text> nodes. This method doesn't consider a C<Comment> nor a C<CDATA> node as
+        being C<Text> nodes.
+
+=cut
+
 sub isa_dom_text {
 	my ($node) = @_;
 	return unless defined $node;
@@ -152,30 +205,27 @@ sub isa_dom_text {
 }
 
 
+
+=head2 isa_dom_comment
+
+Returns true if the node is a DOM C<Comment> (instance of 
+L<XML::LibXML::Comment>).
+
+=cut
+
 sub isa_dom_comment {
 	my ($node) = @_;
-	return unless defined $node;
 	return defined $node ? $node->isa('XML::LibXML::Comment') : 0;
 }
 
 
-sub isa_dom_literal {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Literal') : 0;
-}
 
+=head2 isa_dom_node
 
-sub isa_dom_boolean {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Boolean') : 0;
-}
+Returns true if the node is a DOM C<Node> (instance of 
+L<XML::LibXML::Node>).
 
-
-sub isa_dom_number {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Number') : 0;
-}
-
+=cut
 
 sub isa_dom_node {
 	my ($node) = @_;
@@ -183,11 +233,27 @@ sub isa_dom_node {
 }
 
 
+
+=head2 isa_dom_node
+
+Returns true if the node is a DOM C<PI> (also known as: processing instruction)
+(instance of L<XML::LibXML::PI>).
+
+=cut
+
 sub isa_dom_pi {
 	my ($node) = @_;
 	return defined $node ? $node->isa('XML::LibXML::PI') : 0;
 }
 
+
+
+=head2 isa_dom_node
+
+Returns true if the node is a DOM C<DTD> (instance of 
+L<XML::LibXML::Dtd>).
+
+=cut
 
 sub isa_dom_dtd {
 	my ($node) = @_;
@@ -195,16 +261,92 @@ sub isa_dom_dtd {
 }
 
 
+
+=head2 isa_dom_node
+
+Returns true if the node is a DOM C<CDATASection> (instance of 
+L<XML::LibXML::CDATASection>).
+
+=cut
+
 sub isa_dom_cdata {
 	my ($node) = @_;
 	return defined $node ? $node->isa('XML::LibXML::CDATASection') : 0;
 }
 
 
+
+=head2 isa_dom_namespace
+
+Returns true if the node is a C<Namespace> (instance of 
+L<XML::LibXML::Namespace>).
+
+B<NOTE>: The DOM doesn't define an object type named C<Namespaces> but
+XML::LibXML does so this function is named 'isa_dom' for consistency with the
+other functions.
+
+=cut
+
 sub isa_dom_namespace {
 	my ($node) = @_;
 	return defined $node ? $node->isa('XML::LibXML::Namespace') : 0;
 }
+
+
+
+=head2 isa_dom_literal
+
+Returns true if the node is a C<Literal> (instance of 
+L<XML::LibXML::Literal>).
+
+B<NOTE>: The DOM doesn't define an object type named C<Literal> but XML::LibXML
+does so this function is named 'isa_dom' for consistency with the other
+functions.
+
+=cut
+
+sub isa_dom_literal {
+	my ($node) = @_;
+	return defined $node ? $node->isa('XML::LibXML::Literal') : 0;
+}
+
+
+
+=head2 isa_dom_boolean
+
+Returns true if the node is a C<Boolean> (instance of 
+L<XML::LibXML::Boolean>).
+
+B<NOTE>: The DOM doesn't define an object type named C<Boolean> but XML::LibXML
+does so this function is named 'isa_dom' for consistency with the other
+functions.
+
+=cut
+
+sub isa_dom_boolean {
+	my ($node) = @_;
+	return defined $node ? $node->isa('XML::LibXML::Boolean') : 0;
+}
+
+
+
+=head2 isa_dom_number
+
+Returns true if the node is a C<Number> (instance of 
+L<XML::LibXML::Number>).
+
+B<NOTE>: The DOM doesn't define an object type named C<Number> but XML::LibXML
+does so this function is named 'isa_dom' for consistency with the other
+functions.
+
+=cut
+
+sub isa_dom_number {
+	my ($node) = @_;
+	return defined $node ? $node->isa('XML::LibXML::Number') : 0;
+}
+
+
 
 1;
 
