@@ -1,6 +1,10 @@
 Revision history for Xacobeo.
 
 
+0.03 Sat Nov 22 10:23:26 CET 2008
+	- New release with all the changes from the 0.03_XX releases.
+
+
 0.03_03  Fri Nov 21 22:10:46 CET 2008
 	- Issue 13: No support for namespaces in the XML source view.
 
