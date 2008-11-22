@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 15;
+use Test::More tests => 19;
 use Data::Dumper;
 
 BEGIN {
@@ -20,6 +20,7 @@ sub main {
 	test_without_namespaces();
 	
 	test_namespaces();
+	test_namespaces2();
 	
 	return 0;
 }
@@ -140,3 +141,34 @@ sub test_namespaces {
 		'Mixing namespaces in SVG'
 	);
 }
+
+
+sub test_namespaces2 {
+	my $document = Xacobeo::Document->new("$FOLDER/beers.xml");
+	isa_ok($document, 'Xacobeo::Document');
+
+	is_deeply(
+		$document->namespaces(),
+		{
+			'' => 'default',
+			'http://www.w3.org/1999/xhtml' => 'default1',
+		},
+		'Beers namespaces'
+	);
+	
+	my $got;
+	
+	# Find the table header
+	$got = $document->find('//default1:th/default1:td[count(.//node()) = 1]/text()');
+	is_deeply(
+		[ map { $_->data } $got->get_nodelist ],
+		[ qw(Name Origin Description) ],
+		'Got the table header'
+	);
+
+
+	# Try to find all nodes in the default namespace
+	$got = $document->find('//default:*');
+	is($got->size, 0, "Beers had no elements under the default namespace");
+}
+
