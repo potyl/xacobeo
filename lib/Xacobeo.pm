@@ -39,6 +39,21 @@ for the graphical interface.
 For the moment, the program focuses only on XPath and doesn't allow the XML
 document to be edited.
 
+=head1 PROJECT
+
+The project is hosted on Google Code (http://xacobeo.googlecode.com/) which
+provides the latest source code (SVN trunk) and a simple bug tracking.
+
+Although Google Code provides a download facility, the project's source code
+bundles will always be published through CPAN. It's easier this way for the
+project and after all this is a Perl project!
+
+=head1 BUGS
+
+Please when possible try to submit the bugs through the Google Code Issue
+Tracker (http://code.google.com/p/xacobeo/issues/list) otherwise simply create a
+ticket through RT.
+
 =head1 AUTHORS
 
 Emmanuel Rodriguez E<lt>potyl@cpan.orgE<gt>.
