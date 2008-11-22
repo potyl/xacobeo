@@ -33,9 +33,10 @@ use strict;
 use warnings;
 
 use XML::LibXML;
-
 use Data::Dumper;
 use Carp;
+
+use Xacobeo::Utils qw(:dom);
 
 use base qw(Class::Accessor::Fast);
 __PACKAGE__->mk_accessors(
@@ -131,6 +132,30 @@ sub validate {
 }
 
 
+=head2 get_prefixed_name
+
+Returns the node name by prefixing it with our prefixes in the case where
+namespaces are used.
+
+
+=cut
+sub get_prefixed_name {
+	my $self = shift;
+	my ($node) = @_;
+
+	my $name = $node->localname;
+	my $uri = $node->namespaceURI();
+
+	# Check if the node uses a namespace if so return the name with our prefix
+	if (defined $uri and my $namespace = $self->{namespaces}{$uri}) {
+		return "$namespace:$name";
+	}
+
+	return $name;
+}
+
+
+
 #
 # Get/Set the namespaces.
 #
@@ -190,7 +215,7 @@ sub _construct_xml_parser {
 sub _fetch_namespaces {
 	my ($node, $collected) = @_;
 
-	if ($node->isa('XML::LibXML::Element')) {
+	if (isa_dom_element($node)) {
 		foreach my $namespace ($node->getNamespaces) {
 			my $uri = $namespace->getData;
 			$collected->{$uri} ||= $namespace->getLocalName;
@@ -206,10 +231,10 @@ sub _fetch_namespaces {
 #
 # Finds every namespace declared in the document.
 #
-# Each prefix is warrantied to be unique.
-# The function will assign the first prefix seen for each namespace.
+# Each prefix is warrantied to be unique. The function will assign the first
+# prefix seen for each namespace.
 #
-# The prefixes are returned in an hash ref of type ($prefix => $uri).
+# The prefixes are returned in an hash ref of type ($uri => $prefix).
 #
 sub _get_all_namespaces {
 	my ($node) = @_;
@@ -221,6 +246,7 @@ sub _get_all_namespaces {
 	# Reverse the namespaces ($prefix -> $uri) and make sure that the prefixes
 	# don't clash with each other.
 	my $cleaned = {};
+	my $namespaces = {};
 	my $index = 0;
 	while (my ($uri, $prefix) = each %namespaces) {
 
@@ -233,9 +259,10 @@ sub _get_all_namespaces {
 			} while (exists $cleaned->{$prefix});
 		}
 		$cleaned->{$prefix} = $uri;
+		$namespaces->{$uri} = $prefix;
 	}
 
-	return $cleaned;
+	return $namespaces;
 }
 
 
@@ -249,7 +276,7 @@ sub _create_xpath_context {
 	my $context = XML::LibXML::XPathContext->new();
 
 	# Add the namespaces to the XPath context
-	while (my ($prefix, $uri) = each %{ $self->namespaces }) {
+	while (my ($uri, $prefix) = each %{ $self->namespaces }) {
 		$context->registerNs($prefix, $uri);
 	}
 	
@@ -259,3 +286,18 @@ sub _create_xpath_context {
 
 # A true value
 1;
+
+=head1 AUTHORS
+
+Emmanuel Rodriguez E<lt>potyl@cpan.orgE<gt>.
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2008 by Emmanuel Rodriguez.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.8 or,
+at your option, any later version of Perl 5 you may have available.
+
+=cut
+

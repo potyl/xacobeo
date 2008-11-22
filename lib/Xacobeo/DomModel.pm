@@ -7,6 +7,7 @@ use Glib qw(TRUE FALSE);
 use Gtk2;
 
 use XML::LibXML;
+use Xacobeo::Utils qw(:dom);
 
 use Data::Dumper;
 
@@ -87,23 +88,23 @@ sub add_text_column {
 # Populates the DOM tree model by adding only node of the type 'Element'.
 #
 sub populate {
-	my ($model, $node, $namespaces, $iter) = @_;
+	my ($model, $document, $node, $iter) = @_;
 	
 	# Clear the model if called for the first time (there's no iter defined)
 	$model->clear() unless defined $iter;
 
 	# Add the current 'Element' (the first call could be for a 'Document')
-	if ($node->isa('XML::LibXML::Element')) {
+	if (isa_dom_element($node)) {
 		$iter = $model->append($iter);
 
 		# Find out if an attribute is used as an ID
 		foreach my $attribute ($node->attributes) {
 
 			# Keep only the attributes (there could be some namespaces that qualify as attributes)
-			next unless $attribute->isa('XML::LibXML::Attr') && $attribute->isId;
+			next unless isa_dom_attribute($attribute) && $attribute->isId;
 			$model->set(
 				$iter,
-				$NODE_ID_NAME  => get_prefixed_name($attribute, $namespaces),
+				$NODE_ID_NAME  => $document->get_prefixed_name($attribute),
 				$NODE_ID_VALUE => $attribute->value,
 			);
 			
@@ -115,7 +116,7 @@ sub populate {
 		$model->set(
 			$iter,
 			$NODE_ICON => 'gtk-directory',
-			$NODE_NAME => get_prefixed_name($node, $namespaces),
+			$NODE_NAME => $document->get_prefixed_name($node),
 			$NODE_DATA => $node,
 		);
 	}
@@ -123,28 +124,8 @@ sub populate {
 	
 	# Add the children to the DOM model
 	foreach my $child ($node->childNodes) {
-		populate($model, $child, $namespaces, $iter) if $child->isa('XML::LibXML::Element');
+		populate($model, $document, $child, $iter) if isa_dom_element($child);
 	}
-}
-
-
-#
-# Returns the node name by prefixing it with our prefixes in the case where
-# namespaces are used.
-#
-# FIXME now this method is public. It shouldn't be declared here
-sub get_prefixed_name {
-	my ($node, $namespaces) = @_;
-
-	my $name = $node->localname;
-	my $uri = $node->namespaceURI();
-
-	# Check if the node uses a namespace if so return the name with our prefix
-	if (defined $uri and my $namespace = $namespaces->{$uri}) {
-		return "$namespace:$name";
-	}
-
-	return $name;
 }
 
 
