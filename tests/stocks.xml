@@ -2,9 +2,8 @@
 <?mso-application progid="Excel.Sheet"?>
 <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
  xmlns:o="urn:schemas-microsoft-com:office:office"
- xmlns:x="urn:schemas-microsoft-com:office:excel"
  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
- xmlns:html="http://www.w3.org/TR/REC-html40">
+>
  <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
   <LastAuthor>me</LastAuthor>
   <Created>1996-10-14T23:33:28Z</Created>
@@ -20,12 +19,12 @@
   <Style ss:ID="Default" ss:Name="Normal">
    <Alignment ss:Vertical="Bottom"/>
   </Style>
-  <Style ss:ID="s21">
+  <Style ss:ID="s21" xmlns:html="http://www.w3.org/TR/REC-html40">
    <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
    <Font ss:Size="8" ss:Italic="1"/>
   </Style>
  </Styles>
- <Worksheet ss:Name="Sheet1">
+ <Worksheet ss:Name="Sheet1" xmlns:x="urn:schemas-microsoft-com:office:excel">
   <Table ss:ExpandedColumnCount="3" ss:ExpandedRowCount="354" x:FullColumns="1"
    x:FullRows="1">
    <Row>
