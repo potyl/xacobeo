@@ -1,6 +1,6 @@
 =head1 NAME
 
-Xacobeo::Document - XML document and it's related information
+Xacobeo::Document - An XML document and it's related information.
 
 =head1 SYNOPSIS
 
@@ -18,8 +18,8 @@ Xacobeo::Document - XML document and it's related information
 
 =head1 DESCRIPTION
 
-This package wraps an XML document with it's corresponding meta information (
-namespaces, source, etc).
+This package wraps an XML document with it's corresponding meta information
+(namespaces, source, etc).
 
 =head1 METHODS
 
@@ -51,7 +51,7 @@ __PACKAGE__->mk_accessors(
 
 Creates a new instance.
 
-Paramters:
+Parameters:
 
 	$source: the source of the XML document, this can be a file name.
 
@@ -75,7 +75,7 @@ sub new {
 Runs the given XPath query on the document. The resutls are returned as a list.
 In scalar context the number of nodes are returned.
 
-Paramters:
+Parameters:
 
 	$xpath: a valid XPath expression.
 
@@ -104,7 +104,7 @@ Runs the given XPath query on the document and returns the results. The results
 could be a node list or a single value like a boolean, a number or a scalar if
 an expression is passed.
 
-Paramters:
+Parameters:
 
 	$xpath: a valid XPath expression.
 
@@ -132,7 +132,7 @@ Validates the syntax of the given XPath query. The syntax is validated within a
 context that has the same namespaces as the ones defined in the current XML
 document.
 
-Paramters:
+Parameters:
 
 	$xpath: a valid XPath expression.
 
@@ -172,7 +172,7 @@ sub namespaces {
 
 
 #
-# Loads the XML document. This method will also find the namespaces used by the
+# Loads the XML document. This method will also find the namespaces used in the
 # document.
 #
 sub _load_document {
@@ -218,16 +218,14 @@ sub _construct_xml_parser {
 sub _fetch_namespaces {
 	my ($node, $collected) = @_;
 
-	foreach my $child ($node->childNodes) {
-		
-		# Only elements are allowed to declare namespaces
-		next unless $child->isa('XML::LibXML::Element');
-		
-		foreach my $namespace ($child->getNamespaces) {
+	if ($node->isa('XML::LibXML::Element')) {
+		foreach my $namespace ($node->getNamespaces) {
 			my $uri = $namespace->getData;
 			$collected->{$uri} ||= $namespace->getLocalName;
 		}
-		
+	}
+
+	foreach my $child ($node->childNodes) {
 		_fetch_namespaces($child, $collected);
 	}
 }
@@ -239,33 +237,33 @@ sub _fetch_namespaces {
 # Each prefix is warrantied to be unique.
 # The function will assign the first prefix seen for each namespace.
 #
-# The prefixes are returned in an hash ref of type $prefix => $uri.
+# The prefixes are returned in an hash ref of type ($prefix => $uri).
 #
 sub _get_all_namespaces {
 	my ($node) = @_;
-#FIXME the document test/beers.xml uses an empty namespace, this code has problems with it
+
 	# Find the namespaces ($uri -> $prefix)
 	my %namespaces = ();
 	_fetch_namespaces($node, \%namespaces);
 	
 	# Reverse the namespaces ($prefix -> $uri) and make sure that the prefixes
 	# don't clash with each other.
-	my $cleanned = {};
+	my $cleaned = {};
 	my $index = 0;
 	while (my ($uri, $prefix) = each %namespaces) {
 
 		# Make sure that the prefixes are unique
-		if (! defined $prefix or exists $cleanned->{$prefix}) {
+		if (! defined $prefix or exists $cleaned->{$prefix}) {
 			# Assign a new prefix until unique
 			do {
 				$prefix = 'default' . ($index ? $index : '');
 				++$index;
-			} while (exists $cleanned->{$prefix});
+			} while (exists $cleaned->{$prefix});
 		}
-		$cleanned->{$prefix} = $uri;
+		$cleaned->{$prefix} = $uri;
 	}
 
-	return $cleanned;
+	return $cleaned;
 }
 
 
