@@ -3,6 +3,7 @@ Changes
 lib/Xacobeo.pm
 lib/Xacobeo/Document.pm
 lib/Xacobeo/DomModel.pm
+lib/Xacobeo/Utils.pm
 Build.PL
 MANIFEST
 MANIFEST.SKIP
