@@ -101,7 +101,7 @@ sub populate {
 		foreach my $attribute ($node->attributes) {
 
 			# Keep only the attributes (there could be some namespaces that qualify as attributes)
-			next unless isa_dom_attribute($attribute) && $attribute->isId;
+			next unless isa_dom_attr($attribute) && $attribute->isId;
 			$model->set(
 				$iter,
 				$NODE_ID_NAME  => $document->get_prefixed_name($attribute),
