@@ -70,34 +70,6 @@ sub new {
 }
 
 
-=head2 findnodes
-
-Runs the given XPath query on the document. The resutls are returned as a list.
-In scalar context the number of nodes are returned.
-
-Parameters:
-
-	$xpath: a valid XPath expression.
-
-=cut
-
-sub findnodes {
-	my $self = shift;
-	my ($xpath) = @_;
-	
-	my @nodes = ();
-	eval {
-		@nodes = $self->xpath->findnodes($xpath, $self->xml);
-	};
-	if (my $error = $@) {
-#		warn "XPath '$xpath' failed: $error";
-		return;
-	}
-	
-	return wantarray ? @nodes : scalar @nodes;
-}
-
-
 =head2 find
 
 Runs the given XPath query on the document and returns the results. The results

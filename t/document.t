@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 21;
+use Test::More tests => 15;
 use Data::Dumper;
 
 BEGIN {
@@ -35,66 +35,50 @@ sub test_without_namespaces {
 		'Document without namespaces'
 	);
 	
-	my $count;
-	my $valid;
-	my @nodes;
+	my $got;
 	
 
 	# Look for a non existing node
-	$count = $document->findnodes('//x');
-	is($count, 0, 'Count for non existing element');
-
-	@nodes = $document->findnodes('//x');
+	$got = $document->find('//x');
 	is_deeply(
-		\@nodes,
-		[],
+		$got->size,
+		0,
 		'Nodes from a non existing element'
 	);
 
 	
 	# Test that an invalid xpath expression doesn't throw an error
-	$count = $document->findnodes('//x/');
-	is($count, undef, 'Count from an invalid XPath expression');
-	@nodes = $document->findnodes('//x/');
+	$got = $document->find('//x/');
 	is_deeply(
-		\@nodes,
-		[],
+		$got,
+		undef,
 		'Nodes from an invalid XPath expression'
 	);
 
 
 	# Find a existing node set
-	$count = $document->findnodes('//description[@xml:lang="es"]');
-	is($count, 461, 'Count from a lot of nodes');
-
-	@nodes = $document->findnodes('//description[@xml:lang="es"]');
-	is(scalar @nodes, 461, 'A lot of nodes');
+	$got = $document->find('//description[@xml:lang="es"]');
+	is($got->size, 461, 'A lot of nodes');
 	
 
 	# Fails because the namespace doesn't exist
-	$valid = $document->validate('/x:html//x:a[@href]');
-	ok(! $valid, 'Validate XPath query with undefined namespaces');
-	$count = $document->findnodes('/x:html//x:a[@href]');
-	is($count, undef, 'XPath query uses undefined namespaces');
+	$got = $document->find('/x:html//x:a[@href]');
+	is($got, undef, 'XPath query uses undefined namespaces');
 
 	
 	# Fails because the syntax is invalid
-	$valid = $document->validate('/html//a[@href');
-	ok(! $valid, 'Validate XPath query with invalid syntax');
-	$count = $document->findnodes('/html//a[@href');
-	is($count, undef, 'Invalid XPath syntax');
+	$got = $document->find('/html//a[@href');
+	is($got, undef, 'Invalid XPath syntax');
 
 	
 	# Fails because the function aaa() is not defined
-	$valid = $document->validate('aaa(1)');
-	ok(! $valid, 'Validate XPath query with an undefined function');
-	$count = $document->findnodes('aaa(1)');
-	is($count, undef, 'Undefined XPath function');
+	$got = $document->find('aaa(1)');
+	is($got, undef, 'Undefined XPath function');
 
 	
 	# This is fine
-	$valid = $document->validate('/xkbConfigRegistry');
-	ok($valid, 'Validate XPath query');
+	$got = $document->validate('/xkbConfigRegistry');
+	ok($got, 'Validate XPath query');
 }
 
 
@@ -117,18 +101,17 @@ sub test_namespaces {
 		'SVG namespaces'
 	);
 	
-	my $count;
-	my @nodes;
+	my $got;
 	
 	# Find a existing node set
-	$count = $document->findnodes('//default:text');
-	is($count, 12, 'Count for SVG text elements');
+	$got = $document->find('//default:text');
+	is($got->size, 12, 'Count for SVG text elements');
 
 
 	# Get some text strings
-	@nodes = $document->findnodes('//default:text/default:tspan/text()');
+	$got = $document->find('//default:text/default:tspan/text()');
 	is_deeply(
-		[ map { $_->nodeValue } @nodes ],
+		[ map { $_->nodeValue } $got->get_nodelist ],
 		[
 			'<svg version="1.0" xml>',
 			'<defs>',
@@ -148,9 +131,9 @@ sub test_namespaces {
 
 	
 	# Mix various namespaces
-	@nodes = $document->findnodes('//default:svg/default:metadata/rdf:RDF/cc:Work/dc:type');
+	$got = $document->find('//default:svg/default:metadata/rdf:RDF/cc:Work/dc:type');
 	is_deeply(
-		[ map { $_->toString } @nodes ],
+		[ map { $_->toString } $got->get_nodelist ],
 		[
 			'<dc:type id="type87" rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>',
 		],
