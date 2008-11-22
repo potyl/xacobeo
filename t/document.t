@@ -90,13 +90,13 @@ sub test_namespaces {
 	is_deeply(
 		$document->namespaces(),
 		{
-			dc       => 'http://purl.org/dc/elements/1.1/',
-			cc       => 'http://web.resource.org/cc/',
-			rdf      => 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-			inkscape => 'http://www.inkscape.org/namespaces/inkscape',
-			sodipodi => 'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd',
-			xlink    => 'http://www.w3.org/1999/xlink',
-			default  => 'http://www.w3.org/2000/svg',
+			'http://purl.org/dc/elements/1.1/'                   => 'dc',
+			'http://web.resource.org/cc/'                        => 'cc',
+			'http://www.w3.org/1999/02/22-rdf-syntax-ns#'        => 'rdf',
+			'http://www.inkscape.org/namespaces/inkscape'        => 'inkscape',
+			'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' => 'sodipodi',
+			'http://www.w3.org/1999/xlink'                       => 'xlink',
+			'http://www.w3.org/2000/svg'                         => 'default',
 		},
 		'SVG namespaces'
 	);
