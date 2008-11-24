@@ -97,7 +97,6 @@ use Xacobeo;
 use Xacobeo::DomModel;
 use Xacobeo::Document;
 use Xacobeo::Utils qw(:xml :dom);
-use Xacobeo::Time;
 
 use base qw(Class::Accessor::Fast);
 __PACKAGE__->mk_accessors(
@@ -281,9 +280,7 @@ sub load_file {
 	# Parse the content
 	my $start = time;
 	
-	my $time_load = Xacobeo::Time->start('load document');
 	my $document = Xacobeo::Document->new($file);
-	$time_load->display();
 	$self->document($document);
 
 
@@ -291,18 +288,14 @@ sub load_file {
 	# Update the text widget
 	my $glade = $self->glade;
 	
-	my $time_xml_view = Xacobeo::Time->start('display xml');
 	my $buffer = $glade->get_widget('xml-document')->get_buffer();
 	$buffer->delete($buffer->get_start_iter, $buffer->get_end_iter);
 	$self->render_xml_into_buffer($buffer, $document->xml);
-	$time_xml_view->display();
 
 	# Populate the DOM view tree
-	my $time_dom_model = Xacobeo::Time->start('dom model');
 	my $treeview = $self->glade->get_widget('dom-tree-view');
 	my $model = $treeview->get_model();
 	Xacobeo::DomModel::populate($model, $document, $document->xml);
-	$time_dom_model->display();
 	my $end = time;
 	
 	# Populate the Namespaces view
@@ -667,12 +660,10 @@ sub callback_run_xpath {
 	);
 	
 	# Display the results
-	my $time_results_view = Xacobeo::Time->start('display results');
 	my $textview = $glade->get_widget('xpath-results');
 	my $buffer = $textview->get_buffer();
 	$buffer->delete($buffer->get_start_iter, $buffer->get_end_iter);
 	$self->render_xml_into_buffer($buffer, $result);
-	$time_results_view->display();
 	
 	# Show the results
 	$glade->get_widget('notebook')->set_current_page(0);

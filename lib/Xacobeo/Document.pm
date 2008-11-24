@@ -37,7 +37,7 @@ use Data::Dumper;
 use Carp;
 
 use Xacobeo::Utils qw(:dom);
-use Xacobeo::Time;
+
 
 use base qw(Class::Accessor::Fast);
 __PACKAGE__->mk_accessors(
@@ -181,23 +181,17 @@ sub _load_document {
 
 	
 	# Parse the document
-	my $time_parse = Xacobeo::Time->start('parse file');
 	my $parser = _construct_xml_parser();
 	my $xml = $parser->parse_file($source);
 	$self->xml($xml);
-	$time_parse->display();
 	
 	# Find the namespaces
-	my $time_namespaces = Xacobeo::Time->start('find ns');
 	$self->namespaces(_get_all_namespaces($xml));
-	$time_namespaces->display();
 	
 	# Create the XPath context
-	my $time_xpath = Xacobeo::Time->start('create xpath');
 	$self->xpath(
 		$self->_create_xpath_context()
 	);
-	$time_xpath->display();
 }
 
 
