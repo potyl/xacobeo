@@ -491,7 +491,7 @@ sub render_xml_into_buffer {
 	elsif (isa_dom_cdata($node)) {
 		buffer_add($buffer, syntax => '<![CDATA[');
 		buffer_add($buffer, cdata => $node->nodeValue);
-		buffer_add($buffer, syntax => ']]> ');
+		buffer_add($buffer, syntax => ']]>');
 	}
 	
 	# A Namespace definition ex: xmlns:svg="http://www.w3.org/2000/svg"
