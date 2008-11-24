@@ -12,7 +12,8 @@
 	<p>This is an embeded tag: &lt;tag&gt;</p>
 
 	<p attribute="escaped &quot; XML in an attribute.">Is the attribute escaped?</p>
-	<p eval="$var &gt; 4 ? &apos;bigger&apos; : &quot;smaller&quot; ">Is the attribute escaped?</p>
+	<p eval="$var &gt; 4 ? &apos;bigger&apos; : &quot;smaller&quot; ">Is the attribute escaped? we got </p>
+	<p>same as in above $var &gt; 4 ? &apos;bigger&apos; : &quot;smaller&quot; </p>
 
 	<p test="m&amp;n">Is the attribute escaped?</p>
 
