@@ -1,6 +1,11 @@
 Revision history for Xacobeo.
 
 
+0.04_01 Wed Nov 26 08:23:24 CET 2008
+	- Speed improvement: the namespaces are found through XPath.
+	- RT #41178: notify user that the xpath is not correct (patch by Jozef Kutej)
+
+
 0.03 Sat Nov 22 10:23:26 CET 2008
 	- New release with all the changes from the 0.03_XX releases.
 

@@ -105,6 +105,7 @@ __PACKAGE__->mk_accessors(
 		document 
 		statusbar_context_id
 		namespaces_view
+		xpath_markup
 	)
 );
 
@@ -685,14 +686,53 @@ sub callback_xpath_entry_changed {
 	
 	my $xpath = $widget->get_text;
 	my $button = $self->glade->get_widget('xpath-evaluate');
+	
+	# Pango markup is like XML so we need to escape it
+	my $markup = escape_xml_text($xpath);
 
 	# Validate the XPath expression
 	if (! $self->document->validate($xpath) ) {
+		# Disable the evaluate button and set the XPath expression in red
 		$button->set_sensitive(FALSE);
-		return;
+
+		# Apply the Pango markup to mark the errors in the text
+		$markup = "<span underline='error' underline_color='red'>$markup</span>";
+	}
+	else {
+		# The expression is valid, let's restore the widgets to their inital state
+		$button->set_sensitive(TRUE);
 	}
 
-	$button->set_sensitive(TRUE);
+	$self->xpath_markup($markup);
+
+	# Force a redraw
+	if ($widget->realized) {
+		my $size = $widget->allocation;
+		my $rectangle = Gtk2::Gdk::Rectangle->new(0, 0, $size->width, $size->height);
+		$widget->window->invalidate_rect($rectangle, TRUE);
+	}
+}
+
+
+# Called at each expose event (redrawing), this happens a lot because of the
+# cursor which blinks periodically. The markup is sometimes forgotten between
+# redraws. This callback corrects this problem.
+sub callback_xpath_entry_expose {
+	my $self = shift;
+	my ($widget) = @_;
+	my $markup = $self->xpath_markup;
+	$markup = '' unless defined $markup;
+	$widget->get_layout->set_markup($markup);
+}
+
+
+#
+# Applies Pango markup to the given text. The text has the conflicting XML
+# characters encoded with entities first.
+#
+sub apply_pango_makup {
+	my ($text) = @_;
+
 }
 
 

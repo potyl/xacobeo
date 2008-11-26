@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Mon Nov 17 17:47:14 2008 -->
+<!--Generated with glade3 3.4.5 on Wed Nov 26 08:11:28 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="width_request">800</property>
@@ -134,6 +134,7 @@
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <signal name="changed" handler="callback_xpath_entry_changed"/>
+                <signal name="expose_event" handler="callback_xpath_entry_expose"/>
                 <signal name="activate" handler="callback_run_xpath"/>
               </widget>
               <packing>
