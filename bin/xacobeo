@@ -756,16 +756,6 @@ sub callback_xpath_entry_expose {
 
 
 #
-# Applies Pango markup to the given text. The text has the conflicting XML
-# characters encoded with entities first.
-#
-sub apply_pango_makup {
-	my ($text) = @_;
-
-}
-
-
-#
 # Called when the file choser is requested (File > Open).
 #
 sub callback_file_open {
