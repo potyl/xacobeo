@@ -110,6 +110,9 @@ __PACKAGE__->mk_accessors(
 );
 
 
+my $APP_NAME = 'Xacobeo';
+
+
 # Main entry point
 exit main();
 
@@ -144,12 +147,16 @@ sub construct_gui {
 	# Load the GUI definition from the glade files
 	my $glade = Gtk2::GladeXML->new(catfile($folder, 'share', 'xacobeo', 'xacobeo.glade'));
 	$self->glade($glade);
+	
+	my $window = $self->glade->get_widget('window');
+	$window->set_title($APP_NAME);
 
 	# Set the application's icon
 	my $logo = Gtk2::Gdk::Pixbuf->new_from_file(catfile($folder, 'share', 'xacobeo', 'xacobeo.svg'));
-	$self->glade->get_widget('window')->set_icon($logo);
+	$window->set_icon($logo);
 	$self->glade->get_widget('about')->set_logo($logo);
-	
+
+
 
 	# Connect the signals to the callbacks
 	$glade->signal_autoconnect_from_package($self);
@@ -312,6 +319,8 @@ sub load_file {
 	my $document = Xacobeo::Document->new($file);
 	$self->document($document);
 
+	my $glade = $self->glade;
+	$glade->get_widget('window')->set_title("$APP_NAME - $file");
 
 
 	# Update the text widget
@@ -319,7 +328,6 @@ sub load_file {
 
 
 	# Populate the DOM view tree
-	my $glade = $self->glade;
 	my $treeview = $glade->get_widget('dom-tree-view');
 	my $model = $treeview->get_model();
 	Xacobeo::DomModel::populate($model, $document, $document->xml);
