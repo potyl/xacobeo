@@ -190,14 +190,42 @@ sub contruct_dom_tree_view {
 	$treeview->signal_connect(row_activated =>
 		sub {
 			my ($treeview, $path, $column) = @_;
-			#my $iter = $namespaces_view->get_iter($path);
 			my $iter = $model->get_iter($path);
-			#$model->set($iter, 0, $new_text);
 			my $node = $model->get($iter, $Xacobeo::DomModel::NODE_DATA);
-			print "Column $column\n";
-			printf "Item %s = %s\n", $path->to_string, $node->localname;
+
+
+			# Display the node in results text view. Temporary hack, in the future
+			# click on the node will go to the node finition in the sourve view.
+			$self->display_results($node);
 		},
 	);
+}
+
+
+#
+# Displays an XML node into a text view. This mehtod clears the view of it's old
+# content.
+#
+sub display_xml_node {
+	my $self = shift;
+	my ($widget_name, $node) = @_;
+	
+	my $buffer = $self->glade->get_widget($widget_name)->get_buffer;
+	$buffer->delete($buffer->get_start_iter, $buffer->get_end_iter);
+	$self->render_xml_into_buffer($buffer, $node);
+}
+
+
+#
+# Displays an XML node in the results text view and makes sure that the results
+# view is shown. This mehtod clears the view of it's old content.
+#
+sub display_results {
+	my $self = shift;
+	my ($node) = @_;
+	
+	$self->display_xml_node('xpath-results', $node);
+	$self->glade->get_widget('notebook')->set_current_page(0);
 }
 
 
@@ -287,17 +315,16 @@ sub load_file {
 
 
 	# Update the text widget
-	my $glade = $self->glade;
-	
-	my $buffer = $glade->get_widget('xml-document')->get_buffer();
-	$buffer->delete($buffer->get_start_iter, $buffer->get_end_iter);
-	$self->render_xml_into_buffer($buffer, $document->xml);
+	$self->display_xml_node('xml-document', $document->xml);
+
 
 	# Populate the DOM view tree
-	my $treeview = $self->glade->get_widget('dom-tree-view');
+	my $glade = $self->glade;
+	my $treeview = $glade->get_widget('dom-tree-view');
 	my $model = $treeview->get_model();
 	Xacobeo::DomModel::populate($model, $document, $document->xml);
 	my $end = time;
+	
 	
 	# Populate the Namespaces view
 	my @namespaces = ();
@@ -661,13 +688,7 @@ sub callback_run_xpath {
 	);
 	
 	# Display the results
-	my $textview = $glade->get_widget('xpath-results');
-	my $buffer = $textview->get_buffer();
-	$buffer->delete($buffer->get_start_iter, $buffer->get_end_iter);
-	$self->render_xml_into_buffer($buffer, $result);
-	
-	# Show the results
-	$glade->get_widget('notebook')->set_current_page(0);
+	$self->display_results($result);
 }
 
 

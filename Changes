@@ -3,7 +3,8 @@ Revision history for Xacobeo.
 
 0.04_01 Wed Nov 26 08:23:24 CET 2008
 	- Speed improvement: the namespaces are found through XPath.
-	- RT #41178: notify user that the xpath is not correct (patch by Jozef Kutej)
+	- RT #41178: notify user that the xpath is not correct (patch by Jozef Kutej).
+	- RT #41180: show tree element in results text view (patch by Jozef Kutej).
 
 
 0.03 Sat Nov 22 10:23:26 CET 2008
