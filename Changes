@@ -3,7 +3,8 @@ Revision history for Xacobeo.
 
 0.04_02 Fri Nov 28 20:44:39 CET 2008
 	- Issue 15: In the README it says perl Makefile.PL but there is only Build.PL.
-	- 
+	- Issue 16: SVG icons are not supported by all installations of GTK.
+
 
 0.04_01 Thu Nov 27 21:19:11 CET 2008
 	- Speed improvement: the namespaces are found through XPath.

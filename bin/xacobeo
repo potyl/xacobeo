@@ -152,7 +152,7 @@ sub construct_gui {
 	$window->set_title($APP_NAME);
 
 	# Set the application's icon
-	my $logo = Gtk2::Gdk::Pixbuf->new_from_file(catfile($folder, 'share', 'xacobeo', 'xacobeo.svg'));
+	my $logo = Gtk2::Gdk::Pixbuf->new_from_file(catfile($folder, 'share', 'pixmaps', 'xacobeo.png'));
 	$window->set_icon($logo);
 	$self->glade->get_widget('about')->set_logo($logo);
 
