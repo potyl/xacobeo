@@ -1,6 +1,10 @@
 Revision history for Xacobeo.
 
 
+0.04_02 Fri Nov 28 20:44:39 CET 2008
+	- Issue 15: In the README it says perl Makefile.PL but there is only Build.PL.
+	- 
+
 0.04_01 Thu Nov 27 21:19:11 CET 2008
 	- Speed improvement: the namespaces are found through XPath.
 	- RT #41178: notify user that the xpath is not correct (patch by Jozef Kutej).
