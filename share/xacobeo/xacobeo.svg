@@ -16,7 +16,7 @@
    sodipodi:docname="xacobeo.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    version="1.0"
-   inkscape:export-filename="/home/emmanuel/Projects/personal/cpan/xacobeo-module-build/share/pixmaps/xacobeo.png"
+   inkscape:export-filename="/home/emmanuel/Projects/personal/cpan/xacobeo/share/pixmaps/xacobeo.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -61,8 +61,8 @@
      showgrid="false"
      inkscape:window-width="1162"
      inkscape:window-height="720"
-     inkscape:window-x="185"
-     inkscape:window-y="186"
+     inkscape:window-x="190"
+     inkscape:window-y="210"
      showguides="true"
      inkscape:guide-bbox="true" />
   <metadata
