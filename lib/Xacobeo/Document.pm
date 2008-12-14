@@ -143,8 +143,8 @@ sub validate {
 Returns the node name by prefixing it with our prefixes in the case where
 namespaces are used.
 
-
 =cut
+
 sub get_prefixed_name {
 	my $self = shift;
 	my ($node) = @_;
@@ -162,9 +162,13 @@ sub get_prefixed_name {
 
 
 
-#
-# Get/Set the namespaces.
-#
+=head2 namespaces
+
+Returns the namespaces declared in the document. The namespaces are returned in
+a hash REF where the URIs are used as a key and the prefix as a value.
+
+=cut
+
 sub namespaces {
 	my $self = shift;
 	if (@_) {
