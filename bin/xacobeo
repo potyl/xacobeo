@@ -202,7 +202,7 @@ sub contruct_dom_tree_view {
 
 
 			# Display the node in results text view. Temporary hack, in the future
-			# click on the node will go to the node finition in the sourve view.
+			# clicking on the node will display the node finition in the sourve view.
 			$self->display_results($node);
 		},
 	);
@@ -663,6 +663,7 @@ sub buffer_add {
 	my ($buffer, $type, $string) = @_;
 	$buffer->insert_with_tags_by_name($buffer->get_end_iter, $string, $type);
 }
+
 
 #
 # Called when the main window is closed
