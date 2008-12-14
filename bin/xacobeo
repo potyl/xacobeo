@@ -170,19 +170,19 @@ sub construct_gui {
 	# Create the tree model for the DOM view
 	# See http://www.mail-archive.com/gtk-perl-list@gnome.org/msg03647.html	
 	# and http://gtk2-perl.sourceforge.net/doc/pod/Gtk2/TreeViewColumn.html#_tree_column_set_cel
-	$self->contruct_dom_tree_view();
+	$self->construct_dom_tree_view();
 	
 	$self->prepare_textviews();
 	
 	# Create the list model for the Namespace view
-	$self->contruct_namespaces_view();
+	$self->construct_namespaces_view();
 }
 
 
 #
 # Creates the DOM tree view
 #
-sub contruct_dom_tree_view {
+sub construct_dom_tree_view {
 	# Arguments
 	my $self = shift;
 
@@ -239,7 +239,7 @@ sub display_results {
 #
 # Creates the Namespaces view
 #
-sub contruct_namespaces_view {
+sub construct_namespaces_view {
 	# Arguments
 	my $self = shift;
 
