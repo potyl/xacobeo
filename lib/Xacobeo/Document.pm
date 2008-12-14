@@ -9,11 +9,16 @@ Xacobeo::Document - An XML document and it's related information.
 	my $document Xacobeo::Document->new('file.xml');
 	
 	my $namespaces = $document->namespaces(); # Hashref
-	while (my ($prefix, $uri) = each %{ $namespaces }) {
+	while (my ($uri, $prefix) = each %{ $namespaces }) {
 		printf "%-5s: %s\n", $prefix, $uri;
 	}
 	
-	my @nodes = $document->findnodes('/x:html//x:a[@href]');
+	
+	my $nodes = $document->find('/x:html//x:a[@href]');
+	foreach my $node ($nodes->get_nodelist) {
+		print "Got node ", $node->name, "\n";
+	}
+	
 	$document->validate('/x:html//x:a[@href]') or die "Invalid XPath expression";
 
 =head1 DESCRIPTION
