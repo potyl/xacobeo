@@ -6,7 +6,7 @@ Xacobeo::Document - An XML document and it's related information.
 
 	use Xacobeo::Document;
 	
-	my $document Xacobeo::Document->new('file.xml');
+	my $document = Xacobeo::Document->new('file.xml');
 	
 	my $namespaces = $document->namespaces(); # Hashref
 	while (my ($uri, $prefix) = each %{ $namespaces }) {
