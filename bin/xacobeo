@@ -74,15 +74,11 @@ at your option, any later version of Perl 5 you may have available.
 
 use strict;
 use warnings;
-use 5.006;
-
-our $VERSION = '0.01';
 
 use Gtk2 qw(-init);
 
 use Pod::Usage;
 use Getopt::Long qw(:config auto_help);
-use Data::Dumper;
 use File::Spec::Functions;
 use FindBin;
 
@@ -91,13 +87,14 @@ use Xacobeo::UI;
 
 exit main();
 
+
 #
 # Main entry point of the program
 #
 sub main {
 
 	# Parse the command line options
-	parse_options();
+	GetOptions() or pod2usage(2);
 	
 	# Create a new instance of this application
 	my $folder = find_app_folder();
@@ -116,18 +113,9 @@ sub main {
 }
 
 
-#
-# Parses the command line options
-#
-sub parse_options {
-	# Parse the options
-	GetOptions() or pod2usage(2);
-}
-
-
 # Return the root folder of the application once installed. The 'root' folder is
-# the one where the installation is done, in other words the root folder
-# hierarchy is as follows:
+# the one where the installation is done, the root folder hierarchy is as
+# follows:
 #
 # (root)
 # |-- bin
