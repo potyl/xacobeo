@@ -4,6 +4,7 @@ lib/Xacobeo.pm
 lib/Xacobeo/Document.pm
 lib/Xacobeo/DomModel.pm
 lib/Xacobeo/Utils.pm
+lib/Xacobeo/UI.pm
 Build.PL
 MANIFEST
 MANIFEST.SKIP
