@@ -1,5 +1,6 @@
 bin/xacobeo
 Changes
+inc/MyBuilder.pm
 lib/Xacobeo.pm
 lib/Xacobeo/Document.pm
 lib/Xacobeo/DomModel.pm
