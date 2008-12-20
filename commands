@@ -4,7 +4,7 @@
 DEST=target
 
 # Default test file
-FILE=tests/SVG.svg
+FILE=tests/sample.xml
 
 SVN_REPO=$(shell svn info | grep -E '^URL: ' | cut -f2 -d' ' | sed -e 's%/trunk%%')
 VERSION=$(shell perl -le "print `grep VERSION lib/Xacobeo.pm`")
