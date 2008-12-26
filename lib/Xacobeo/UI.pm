@@ -1,3 +1,5 @@
+package Xacobeo::UI;
+
 =head1 NAME
 
 Xacobeo::UI - The graphical interface of the application.
@@ -17,8 +19,6 @@ and the application logic.
 The package defines the following methods:
 
 =cut
-
-package Xacobeo::UI;
 
 use strict;
 use warnings;
@@ -131,21 +131,14 @@ sub construct_dom_tree_view {
 	# Arguments
 	my $self = shift;
 
-	# Create the model
-	my $model = Xacobeo::DomModel::create_model();
-	
 	# Create the view
 	my $treeview = $self->glade->get_widget('dom-tree-view');
-	$treeview->set_model($model);
-	
-	Xacobeo::DomModel::add_columns($treeview);
-	$treeview->signal_connect(row_activated =>
+
+	# Create the model and link it with the view
+	Xacobeo::DomModel::create_model_with_view(
+		$treeview,	
 		sub {
-			my ($treeview, $path, $column) = @_;
-			my $iter = $model->get_iter($path);
-			my $node = $model->get($iter, $Xacobeo::DomModel::NODE_DATA);
-
-
+			my ($node) = @_;
 			# Display the node in results text view. Temporary hack, in the future
 			# clicking on the node will display the node finition in the sourve view.
 			$self->display_results($node);
@@ -752,6 +745,7 @@ sub display_statusbar_message {
 # A true value
 1;
 
+
 =head1 AUTHORS
 
 Emmanuel Rodriguez E<lt>potyl@cpan.orgE<gt>.
@@ -765,4 +759,3 @@ it under the same terms as Perl itself, either Perl version 5.8.8 or,
 at your option, any later version of Perl 5 you may have available.
 
 =cut
-
