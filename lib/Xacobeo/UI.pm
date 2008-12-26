@@ -38,6 +38,8 @@ use Time::HiRes qw(time);
 use Xacobeo::DomModel;
 use Xacobeo::Document;
 use Xacobeo::Utils qw(:xml :dom);
+use Xacobeo::Timer;
+
 
 use base qw(Class::Accessor::Fast);
 __PACKAGE__->mk_accessors(
@@ -243,21 +245,28 @@ sub load_file {
 	# Parse the content
 	my $start = time;
 	
+	my $t_load = Xacobeo::Timer->start('Load document');
 	my $document = Xacobeo::Document->new($file);
 	$self->document($document);
+	undef $t_load;
 
 	my $glade = $self->glade;
 	$glade->get_widget('window')->set_title("$APP_NAME - $file");
 
 
 	# Update the text widget
+	my $t_syntax = Xacobeo::Timer->start('Syntax Highlight');
 	$self->display_xml_node('xml-document', $document->xml);
+	undef $t_syntax;
 
 
 	# Populate the DOM view tree
 	my $treeview = $glade->get_widget('dom-tree-view');
-	my $model = $treeview->get_model();
-	Xacobeo::DomModel::populate($model, $document, $document->xml);
+#for (1 .. 10) {
+	my $t_dom = Xacobeo::Timer->start('DOM Tree');
+	Xacobeo::DomModel::populate($treeview, $document, $document->xml);
+	undef $t_dom;
+#}
 	my $end = time;
 	
 	
