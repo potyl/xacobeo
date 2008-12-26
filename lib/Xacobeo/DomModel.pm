@@ -180,7 +180,7 @@ sub populate {
 	my $model = $treeview->get_model();
 	$treeview->set_model(undef);
 	$model->clear();
-	populate_internal($model, $document, $element);
+	populate_internal($model, $document, $element, undef, 0);
 	$treeview->set_model($model);
 }
 
@@ -190,41 +190,38 @@ sub populate {
 # This function performs the actual insertion into the TreeStore.
 #
 sub populate_internal {
-	my ($model, $document, $node, $iter) = @_;
+	my ($model, $document, $node, $parent_iter, $position) = @_;
 
-	# Add the current 'Element' (the first call could be for a 'Document')
-	$iter = $model->append($iter);
+	my @values = (
+		$NODE_ICON => 'gtk-directory',
+		$NODE_NAME => $document->get_prefixed_name($node),
+		$NODE_DATA => $node,
+	);
 
 	# Find out if an attribute is used as an ID
 	foreach my $attribute ($node->attributes) {
 
 		# Keep only the attributes (there could be some namespaces that qualify as attributes)
-		if (isa_dom_attr($attribute) && $attribute->isId) {
+		if ($attribute->isId) {
 		
 			# The current node has an ID			
-			$model->set(
-				$iter,
+			@values = (
 				$NODE_ID_NAME  => $document->get_prefixed_name($attribute),
 				$NODE_ID_VALUE => $attribute->value,
 			);
 		
-			# There should be only one ID per element
+			# There's only one ID per element
 			last;
 		}
 	}
 
 	# Set the main data of the node
-	$model->set(
-		$iter,
-		$NODE_ICON => 'gtk-directory',
-		$NODE_NAME => $document->get_prefixed_name($node),
-		$NODE_DATA => $node,
-	);
-	
+	my $iter = $model->insert_with_values($parent_iter, $position, @values);
 	
 	# Add the children to the DOM model
+	my $i = 0;
 	foreach my $child ($node->childNodes) {
-		populate_internal($model, $document, $child, $iter) if isa_dom_element($child);
+		populate_internal($model, $document, $child, $iter, $i++) if isa_dom_element($child);
 	}
 }
 
