@@ -141,7 +141,7 @@ sub elapsed {
 	}
 	
 	my $name = $self->{name};
-	printf "Timer %s %05.4fs\n",
+	printf "Timer %-20s %05.4fs\n",
 		(defined $name ? $name : 'Unnamed'),
 		$self->{elapsed}
 	;
