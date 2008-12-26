@@ -137,9 +137,11 @@ Parameters:
 
 =over
 
-=item * $model
+=item * $treeview
 
-A reference to the L<Gtk2::TreeStore>.
+A reference to the L<Gtk2::TreeView>. The tree view is passed instead of the
+model because this way the loading can be performed faster by removing the
+model from the view.
 
 =item * $document
 
@@ -149,56 +151,80 @@ An instance to the Xacobeo::Document that will provide the namespaces lookup.
 
 The current node being processed.
 
-=item $iter (Optional)
-
-The TreeIter of the parent node, if C<undef> then the tree is cleared and
-repopulated.
-
 =back	
 
 =cut
 
 sub populate {
-	my ($model, $document, $node, $iter) = @_;
+	my ($treeview, $document, $node) = @_;
+
+	# Get the starting element
+	my $element;
+	if (isa_dom_document($node)) {
+		$element = $node->documentElement();
+	}
+	elsif (isa_dom_element($node)) {
+		$element = $node;
+	}
+	else {
+		$node->ownerDocument->documentElement();
+	}
 	
-	# Clear the model if called for the first time (there's no iter defined)
-	$model->clear() unless defined $iter;
+	if (! defined $element) {
+		warn "Can't find a starting element";
+		return;
+	}
+
+
+	# It's slightly faster to remove the model from the view and to insert it back
+	my $model = $treeview->get_model();
+	$treeview->set_model(undef);
+	$model->clear();
+	populate_internal($model, $document, $element);
+	$treeview->set_model($model);
+}
+
+
+
+#
+# This function performs the actual insertion into the TreeStore.
+#
+sub populate_internal {
+	my ($model, $document, $node, $iter) = @_;
 
 	# Add the current 'Element' (the first call could be for a 'Document')
-	if (isa_dom_element($node)) {
-		$iter = $model->append($iter);
+	$iter = $model->append($iter);
 
-		# Find out if an attribute is used as an ID
-		foreach my $attribute ($node->attributes) {
+	# Find out if an attribute is used as an ID
+	foreach my $attribute ($node->attributes) {
 
-			# Keep only the attributes (there could be some namespaces that qualify as attributes)
-			if (isa_dom_attr($attribute) && $attribute->isId) {
-			
-				# The current node has an ID			
-				$model->set(
-					$iter,
-					$NODE_ID_NAME  => $document->get_prefixed_name($attribute),
-					$NODE_ID_VALUE => $attribute->value,
-				);
-			
-				# There should be only one ID per element
-				last;
-			}
+		# Keep only the attributes (there could be some namespaces that qualify as attributes)
+		if (isa_dom_attr($attribute) && $attribute->isId) {
+		
+			# The current node has an ID			
+			$model->set(
+				$iter,
+				$NODE_ID_NAME  => $document->get_prefixed_name($attribute),
+				$NODE_ID_VALUE => $attribute->value,
+			);
+		
+			# There should be only one ID per element
+			last;
 		}
-
-		# Set the main data of the node
-		$model->set(
-			$iter,
-			$NODE_ICON => 'gtk-directory',
-			$NODE_NAME => $document->get_prefixed_name($node),
-			$NODE_DATA => $node,
-		);
 	}
+
+	# Set the main data of the node
+	$model->set(
+		$iter,
+		$NODE_ICON => 'gtk-directory',
+		$NODE_NAME => $document->get_prefixed_name($node),
+		$NODE_DATA => $node,
+	);
 	
 	
 	# Add the children to the DOM model
 	foreach my $child ($node->childNodes) {
-		populate($model, $document, $child, $iter) if isa_dom_element($child);
+		populate_internal($model, $document, $child, $iter) if isa_dom_element($child);
 	}
 }
 
