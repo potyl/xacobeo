@@ -59,12 +59,22 @@ my $APP_NAME = 'Xacobeo';
 
 Constructor. Creates a new instance of the UI.
 
+Parameters:
+
+=over
+
+=item * $app_folder
+
+The application's root folder.
+
+=back	
+
 =cut
 
 sub new {
 	# Arguments
 	my $class = shift;
-	croak "Usage: new(\$app_folder)" unless @_;
+	croak 'Usage: new($app_folder)' unless @_;
 	my ($app_folder) = @_;
 	
 	# Create an instance
@@ -213,6 +223,16 @@ sub construct_namespaces_view {
 This method loads a new file into the GUI. The new document will be parsed and
 displayed in the window.
 
+Parameters:
+
+=over
+
+=item * $file
+
+The XML file to load.
+
+=back	
+
 =cut
 
 sub load_file { 
@@ -255,6 +275,25 @@ sub load_file {
 	$glade->get_widget('xpath-entry')->set_sensitive(TRUE);
 }
 
+
+
+
+=head2 set_xpath
+
+This method sets the XPath expression to display in the XPath text area. The
+expression is not evaluated.
+
+Parameters:
+
+=over
+
+=item * $xpath
+
+The XML file to load.
+
+=back	
+
+=cut
 
 sub set_xpath {
 	my $self = shift;
