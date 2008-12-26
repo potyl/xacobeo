@@ -25,8 +25,15 @@ Xacobeo::Timer - A custom made timer.
 
 =head1 DESCRIPTION
 
-This package provides a very simple timer. This timer is used for finding
-hotspots in the application.
+This package provides a very simple timer. This timer is used for finding hot
+spots in the application.
+
+The timer is quite simple it provides the method L</start> that starts the timer
+and the method L</stop> that stops the timer and accumulates the elapsed time.
+The method L</elapsed> can be used to display the time elapsed so far.
+
+If the method I<elapsed> is not called during the lifetime of the instance then
+the time elapsed will be printed when the timer is garbage collected.
 
 =head1 METHODS
 
@@ -101,7 +108,8 @@ sub start {
 
 =head2 stop
 
-Stops the timer. If the timer wasn't started this is a noop.
+Stops the timer and adds accumulates the elapsed time. If the timer wasn't
+started previously this results in a no-op.
 
 =cut
 
