@@ -461,18 +461,19 @@ sub prepare_textviews {
 		weight     => PANGO_WEIGHT_BOLD,
 	);
 	
-	add_tag($tag_table, text =>
-		foreground => 'black',
-	);
-	
 	add_tag($tag_table, literal =>
 		foreground => 'black',
 	);
 	
 	add_tag($tag_table, cdata =>
-		foreground => '#008000',
-		style      => 'italic',
+		foreground => 'red',
+		weight     => PANGO_WEIGHT_BOLD
+	);
+	
+	add_tag($tag_table, cdata_content =>
+		foreground => 'purple',
 		weight     => PANGO_WEIGHT_LIGHT,
+		style      => 'italic',
 	);
 	
 	add_tag($tag_table, namespace_name =>
@@ -485,6 +486,12 @@ sub prepare_textviews {
 		foreground => 'blue',
 		style      => 'italic',
 		weight     => PANGO_WEIGHT_LIGHT,
+	);
+	
+	add_tag($tag_table, entity_ref =>
+		foreground => 'red',
+		style      => 'italic',
+		weight     => PANGO_WEIGHT_BOLD,
 	);
 
 
