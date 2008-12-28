@@ -39,6 +39,10 @@ use Xacobeo::DomModel;
 use Xacobeo::Document;
 use Xacobeo::Utils qw(:xml :dom);
 use Xacobeo::Timer;
+use Xacobeo::XS qw(
+	xacobeo_populate_gtk_text_buffer
+	xacobeo_populate_gtk_tree_store
+);
 
 
 use base qw(Class::Accessor::Fast);
@@ -161,16 +165,73 @@ sub construct_dom_tree_view {
 
 #
 # Displays an XML node into a text view. This mehtod clears the view of it's old
-# content.
+# content before displaying the new data.
 #
 sub display_xml_node {
 	my $self = shift;
 	my ($widget_name, $node) = @_;
 	
-	my $buffer = $self->glade->get_widget($widget_name)->get_buffer;
+	my $namespaces = $self->document->namespaces;
+	my $textview = $self->glade->get_widget($widget_name);
+
+	# It's faster to disconnect the buffer from the view and to reconnect it back
+	my $buffer = $textview->get_buffer;
+	$textview->set_buffer(Gtk2::TextBuffer->new());# Perl-Gk2 Bug can't set undef as a buffer
+	
+	# Clear the buffer
 	$buffer->delete($buffer->get_start_iter, $buffer->get_end_iter);
-	$self->render_xml_into_buffer($buffer, $node);
+
+
+	# A NodeList
+	if (isa_dom_nodelist($node)) {
+		my @children = $node->get_nodelist;
+		my $count = scalar @children;
+
+		# Formatting using to indicate which result is being analyzed
+		my $i = 0;
+		my $format = sprintf " %%%dd. ", length($count);
+
+		foreach my $child (@children) {
+			# Add the result count
+			my $result = sprintf $format, ++$i;
+			buffer_add($buffer, result_count => $result);
+			
+			# Print the current child (XS call)
+			# FIXME can't handle namespace nodes
+			xacobeo_populate_gtk_text_buffer($buffer, $child, $namespaces);
+			
+			buffer_add($buffer, syntax => "\n") if --$count;
+		}
+	}
+
+	# A Boolean value ex: true() or false()
+	elsif (isa_dom_boolean($node)) {
+		buffer_add($buffer, boolean => $node->to_literal);
+	}
+
+	# A Number ex: 2 + 5
+	elsif (isa_dom_number($node)) {
+		buffer_add($buffer, number => $node->to_literal);
+	}
+
+	# A Literal (a single text string) ex: "hello"
+	elsif (isa_dom_literal($node)) {
+		buffer_add($buffer, literal => $node->to_literal);
+	}
+
+	else {
+		# Any kind of XML node (XS call)
+		xacobeo_populate_gtk_text_buffer($buffer, $node, $namespaces);
+	}
+
+
+	# Add the buffer back into into the text view
+	$textview->set_buffer($buffer);
+
+	# Scroll to tbe beginning
+	$textview->scroll_to_iter($buffer->get_start_iter, 0.0, FALSE, 0.0, 0.0);
 }
+
 
 
 #
@@ -253,26 +314,26 @@ sub load_file {
 	my $glade = $self->glade;
 	$glade->get_widget('window')->set_title("$APP_NAME - $file");
 
+	my $xml = $document->xml;
+	my $namespaces = $document->namespaces;
 
 	# Update the text widget
 	my $t_syntax = Xacobeo::Timer->start('Syntax Highlight');
-#	$self->display_xml_node('xml-document', $document->xml);
+	$self->display_xml_node('xml-document', $xml);
 	undef $t_syntax;
 
 
 	# Populate the DOM view tree
-	my $treeview = $glade->get_widget('dom-tree-view');
-for (1 .. 10) {
 	my $t_dom = Xacobeo::Timer->start('DOM Tree');
-	Xacobeo::DomModel::populate($treeview, $document, $document->xml);
+	$self->populate_treeview($xml);
 	undef $t_dom;
-}
+
 	my $end = time;
 	
 	
 	# Populate the Namespaces view
 	my @namespaces = ();
-	while (my ($uri, $prefix) = each %{ $self->document->namespaces }) {
+	while (my ($uri, $prefix) = each %{ $namespaces }) {
 		push @namespaces, [$prefix, $uri];
 	}
 	@{ $self->namespaces_view->{data} } = @namespaces;
@@ -282,6 +343,24 @@ for (1 .. 10) {
 	);
 	
 	$glade->get_widget('xpath-entry')->set_sensitive(TRUE);
+}
+
+
+
+#
+# Populates the DOM tree view.
+#
+sub populate_treeview {
+	my $self = shift;
+	my ($node) = @_;
+
+
+	my $treeview = $self->glade->get_widget('dom-tree-view');
+	my $store = $treeview->get_model;
+	
+	$treeview->set_model(undef);
+	xacobeo_populate_gtk_tree_store($store, $node, $self->document->namespaces);
+	$treeview->set_model($store);
 }
 
 
@@ -311,198 +390,6 @@ sub set_xpath {
 	
 	if (defined $xpath) {
 		$self->glade->get_widget('xpath-entry')->set_text($xpath);
-	}
-}
-
-
-#
-# Displays an XML node in a Gtk2::TextBuffer. The XML will be marked in the
-# text buffer. If the buffer defines the proper tags then the text will
-# automatically have syntax highlighting.
-#
-# Parameters:
-#
-#  $buffer:   an instance of Gtk2::TextBuffer.
-#  $node:     an instance of XML::LibXML::Node or XML::LibXML::NodeList.
-#
-#
-# TODO:
-# Ideally this add makrs to the elements, this way it will be possible to jump
-# to the elements from the DomViewer.
-#
-sub render_xml_into_buffer {
-	my $self = shift;
-	my ($buffer, $node) = @_;
-	croak "Must pass (Gtk2::TextBuffer, XML::LibXML::Node)" unless @_ == 2;
-	if (! $buffer->isa('Gtk2::TextBuffer')) {
-		croak "First parameter $buffer must be of type Gtk2::TextBuffer";
-	}
-
-
-	# A Document
-	if (isa_dom_document($node)) {
-
-		# Create the XML declaration <?xml version="" encoding=""?>
-		my $fake = XML::LibXML->createDocument();
-		my $xml_declaration = $fake->createProcessingInstruction("xml");
-		$xml_declaration->setData(
-			version => $node->version,
-			encoding => $node->actualEncoding,
-		);
-		$self->render_xml_into_buffer($buffer, $xml_declaration);
-		buffer_add($buffer, syntax => "\n");
-
-
-		# In concept a document has a single child the root element. In reality a
-		# document is allowed to have a prolog (http://www.w3.org/TR/REC-xml/#NT-prolog).
-		# The prolog is available in the child nodes of the document. The last node
-		# being the root element
-		my @children = $node->childNodes;
-		my $count = @children;
-		foreach my $child (@children) {
-			$self->render_xml_into_buffer($buffer, $child);
-			# Add some new lines between the elements of the prolog. Libxml removes
-			# the white spaces in the prolog.
-			buffer_add($buffer, syntax => "\n") if --$count;
-		}
-	}
-	
-	# A NodeList
-	elsif (isa_dom_nodelist($node)) {
-		my @children = $node->get_nodelist;
-		my $count = scalar @children;
-
-		# Formatting using to indicate which result is being analyzed
-		my $i = 0;
-		my $format = sprintf " %%%dd. ", length($count);
-
-		foreach my $child (@children) {
-			# Add the result count
-			my $result = sprintf $format, ++$i;
-			buffer_add($buffer, result_count => $result);
-			
-			$self->render_xml_into_buffer($buffer, $child);
-			buffer_add($buffer, syntax => "\n") if --$count;
-		}
-	}
-
-	# An Element ex: <tag>...</tag>
-	elsif (isa_dom_element($node)) {
-		
-		# Start of the element
-		buffer_add($buffer, syntax => '<');
-
-		my $name = $self->document->get_prefixed_name($node);
-		buffer_add($buffer, element => $name);
-
-		# The element's attributes
-		foreach my $attribute ($node->attributes) {
-			$self->render_xml_into_buffer($buffer, $attribute);
-		}
-		
-		# Close the start of the element
-		if (! $node->hasChildNodes()) {
-			# Empty element, ex: <empty />
-			# FIXME only elements defined as empty in the DTD shoud be empty. The
-			#       others should be: <no-content></no-content>
-			buffer_add($buffer, syntax => ' />');
-			return;
-		}
-		buffer_add($buffer, syntax => '>');
-		
-
-		# Do the children
-		foreach my $child ($node->childNodes) {
-			$self->render_xml_into_buffer($buffer, $child);
-		}
-
-
-		# Close the element		
-		buffer_add($buffer, syntax => '</');
-		buffer_add($buffer, element => $name);
-		buffer_add($buffer, syntax => '>');
-	}
-
-	# A Text node, plain text in the document
-	elsif (isa_dom_text($node)) {
-		my $text = escape_xml_text($node->nodeValue);
-		buffer_add($buffer, text => $text);
-	}
-
-	# A Comment ex: <!-- comment -->
-	elsif (isa_dom_comment($node)) {
-		buffer_add($buffer, comment => '<!--' . $node->nodeValue . '-->');
-	}
-
-	# A PI (processing instruction) ex: <?stuff ?>
-	elsif (isa_dom_pi($node)) {
-		buffer_add($buffer, syntax => '<?');
-		buffer_add($buffer, pi => $node->nodeName);
-		
-		# Add the data if there's one
-		if (my $data = $node->getData) {
-			$data =~ s/\s+$//;
-			buffer_add($buffer, syntax => ' ');
-			buffer_add($buffer, pi_data => $data);
-		}
-		
-		buffer_add($buffer, syntax => '?>');
-	}
-
-	# A DTD definition ex: <!DOCTYPE ...
-	elsif (isa_dom_dtd($node)) {
-		buffer_add($buffer, dtd => $node->toString);
-	}
-	
-	# An Attribute ex: <... var="value" ...>
-	elsif (isa_dom_attr($node)) {
-		buffer_add($buffer, syntax => ' ');
-		my $name = $self->document->get_prefixed_name($node);
-		buffer_add($buffer, attribute_name => $name);
-		buffer_add($buffer, syntax => '="');
-		
-		my $value = escape_xml_attribute($node->value);
-		buffer_add($buffer, attribute_value => $value);
-		
-		buffer_add($buffer, syntax => '"');
-	}
-
-	# A Boolean value ex: true() or false()
-	elsif (isa_dom_boolean($node)) {
-		buffer_add($buffer, boolean => $node->to_literal);
-	}
-
-	# A Number ex: 2 + 5
-	elsif (isa_dom_number($node)) {
-		buffer_add($buffer, number => $node->to_literal);
-	}
-
-	# A Literal (a single text string) ex: "hello"
-	elsif (isa_dom_literal($node)) {
-		buffer_add($buffer, literal => $node->to_literal);
-	}
-
-	# A CDATA section ex: <![CDATA[<greeting>Hello, world!</greeting>]]> 
-	elsif (isa_dom_cdata($node)) {
-		buffer_add($buffer, syntax => '<![CDATA[');
-		buffer_add($buffer, cdata => $node->nodeValue);
-		buffer_add($buffer, syntax => ']]>');
-	}
-	
-	# A Namespace definition ex: xmlns:svg="http://www.w3.org/2000/svg"
-	elsif (isa_dom_namespace($node)) {
-		buffer_add($buffer, syntax => ' ');
-		buffer_add($buffer, namespace_name => $node->nodeName);
-		buffer_add($buffer, syntax => '="');
-		
-		my $uri = escape_xml_attribute($node->getData);
-		buffer_add($buffer, namespace_uri => $uri);
-		
-		buffer_add($buffer, syntax => '"');
-	}
-
-	else {
-		warn "=====node $node of type (", ref($node),") is not implemented";
 	}
 }
 
@@ -622,12 +509,14 @@ sub add_tag {
 }
 
 
+
 #
-# Adds the given text at the end of the buffer.
+# Adds the given text at the end of the buffer. The text is added with a tag
+# which can be used for performing syntax highlighting.
 #
 sub buffer_add {
-	my ($buffer, $type, $string) = @_;
-	$buffer->insert_with_tags_by_name($buffer->get_end_iter, $string, $type);
+	my ($buffer, $tag, $string) = @_;
+	$buffer->insert_with_tags_by_name($buffer->get_end_iter, $string, $tag);
 }
 
 
