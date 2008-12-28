@@ -30,11 +30,9 @@ use Glib qw(TRUE FALSE);
 use Gtk2;
 use XML::LibXML;
 
-our $VERSION = '0.05_01';
-
 sub dl_load_flags {0x01};
-__PACKAGE__->bootstrap;
 
+__PACKAGE__->bootstrap;
 
 
 =head2 populate_textview
@@ -136,4 +134,3 @@ it under the same terms as Perl itself, either Perl version 5.8.8 or,
 at your option, any later version of Perl 5 you may have available.
 
 =cut
-
