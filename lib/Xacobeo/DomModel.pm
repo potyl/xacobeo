@@ -100,13 +100,11 @@ sub create_model_with_view {
 	my ($treeview, $on_click) = @_;
 
 	my $model = Gtk2::TreeStore->new(
-		qw(
-			Glib::Scalar
-			Glib::String
-			Glib::String
-			Glib::String
-			Glib::String
-		)
+		'Glib::Scalar', # A reference to the XML::LibXML::Element
+		'Glib::String', # The icon to use (ex: 'gtk-directory')
+		'Glib::String', # The name of the Element
+		'Glib::String', # The name of the ID field
+		'Glib::String', # The value of the ID field
 	);
 
 	$treeview->set_model($model);
