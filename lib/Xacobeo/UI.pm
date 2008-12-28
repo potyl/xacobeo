@@ -195,9 +195,22 @@ sub display_xml_node {
 			my $result = sprintf $format, ++$i;
 			buffer_add($buffer, result_count => $result);
 			
-			# Print the current child (XS call)
-			# FIXME can't handle namespace nodes
-			xacobeo_populate_gtk_text_buffer($buffer, $child, $namespaces);
+			if (isa_dom_namespace($child)) {
+				# The namespaces nodes are an invention of XML::LibXML and they don't
+				# work with the XS code, we deal with them manually
+				buffer_add($buffer, syntax => ' ');
+				buffer_add($buffer, namespace_name => $child->nodeName);
+				buffer_add($buffer, syntax => '="');
+		
+				my $uri = escape_xml_attribute($child->getData);
+				buffer_add($buffer, namespace_uri => $uri);
+		
+				buffer_add($buffer, syntax => '"');
+			}
+			else {
+				# Performed through XS
+				xacobeo_populate_gtk_text_buffer($buffer, $child, $namespaces);
+			}
 			
 			buffer_add($buffer, syntax => "\n") if --$count;
 		}
