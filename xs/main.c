@@ -58,6 +58,8 @@ int main (int argc, char **argv) {
 		// Main event loop
 		gtk_main();
 	}
+	
+	xmlCleanupParser();
 
 	return 0;
 }
