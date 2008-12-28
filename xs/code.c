@@ -204,12 +204,12 @@ static void my_populate_tree_store (TreeRenderCtx *xargs, xmlNode *node, GtkTree
 	// Find out if an attribute is used as an ID
 	for (xmlAttr *attr = node->properties; attr; attr = attr->next) {
 		if (xmlIsID(node->doc, node, attr)) {
-			INFO("Element %s has Id attribute %s", (gchar *)node->name, (gchar *)attr->name);
+			INFO("Element %s has Id attribute %s", (gchar *) node->name, (gchar *) attr->name);
 			done = TRUE;
 	
-			gchar *id_name = my_get_node_name_prefixed(attr, xargs->namespaces);
+			gchar *id_name = my_get_node_name_prefixed((xmlNode *) attr, xargs->namespaces);
 			// If we pass attr then the output will be "id='23'" instead of "23"
-			gchar *id_value = my_to_string((xmlNode *)attr->children);
+			gchar *id_value = my_to_string((xmlNode *) attr->children);
 
 
 			// Add the current node
@@ -438,7 +438,7 @@ static void my_XML_DOCUMENT_NODE (TextRenderCtx *xargs, xmlNode *node) {
 	GString *gstring = g_string_sized_new(30);
 	g_string_printf(gstring, "version=\"%s\" encoding=\"%s\"", 
 		doc->version,
-		doc->encoding ? (gchar *)doc->encoding : "UTF-8"
+		doc->encoding ? (gchar *) doc->encoding : "UTF-8"
 	);
 	gchar *piBuffer = g_string_free(gstring, FALSE);
 	
@@ -528,7 +528,7 @@ static void my_XML_NAMESPACE_DECL (TextRenderCtx *xargs, xmlNs *ns) {
 
 	// Value
 	buffer_add(xargs, xargs->markup->syntax, "=\"");
-	buffer_add(xargs, xargs->markup->namespace_uri, (gchar *)ns->href);
+	buffer_add(xargs, xargs->markup->namespace_uri, (gchar *) ns->href);
 	buffer_add(xargs, xargs->markup->syntax, "\"");
 }
 
@@ -565,7 +565,7 @@ static void my_XML_ATTRIBUTE_VALUE (TextRenderCtx *xargs, xmlNode *node) {
 	}
 	else if (node->type == XML_ATTRIBUTE_DECL) {
 		xmlAttribute *child = (xmlAttribute *) node;
-		buffer_add(xargs, xargs->markup->attribute_value, (char *)child->defaultValue);
+		buffer_add(xargs, xargs->markup->attribute_value, (gchar *) child->defaultValue);
 	}
 }
 
@@ -790,7 +790,7 @@ static const gchar* my_get_uri_prefix (const xmlChar *uri, HV *namespaces) {
 	const gchar *prefix = NULL;
 	
 	// Get the prefix corresponding to the namespace
-	SV **svPtr = hv_fetch(namespaces, (gchar *)uri, xmlStrlen(uri), FALSE);
+	SV **svPtr = hv_fetch(namespaces, (gchar *) uri, xmlStrlen(uri), FALSE);
 	if (svPtr) {
 		if (SvTYPE(*svPtr) == SVt_PV) {
 			// Ok found the prefix!
