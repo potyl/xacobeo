@@ -1,4 +1,3 @@
-^commands$
 ^target/
 \.svn
 ^blib/

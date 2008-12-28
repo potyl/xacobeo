@@ -11,6 +11,7 @@ MANIFEST
 MANIFEST.SKIP
 META.yml
 README
+commands
 share/applications/xacobeo.desktop
 share/xacobeo/xacobeo.glade
 share/xacobeo/xacobeo.svg
