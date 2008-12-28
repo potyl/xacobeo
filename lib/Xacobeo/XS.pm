@@ -28,7 +28,14 @@ sub populate_textview {
 }
 
 
-#sub populate_treeview($treeview, $document, $namespaces);
+sub populate_treeview {
+	my ($treeview, $node, $namespaces) = @_;
+	my $store = $treeview->get_model;
+	
+	$treeview->set_model(undef);
+	xacobeo_populate_gtk_tree_store($store, $node, $namespaces);
+	$treeview->set_model($store);
+}
 
 
 

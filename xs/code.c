@@ -118,7 +118,7 @@ static gchar*       my_get_node_name_prefixed  (xmlNode *node, HV *namespaces);
 static const gchar* my_get_uri_prefix          (const xmlChar *uri, HV *namespaces);
 static void         my_render_buffer           (TextRenderCtx *xargs);
 static void         my_add_text_and_entity     (TextRenderCtx *xargs, GString *buffer, GtkTextTag *markup, const gchar *entity);
-static void         my_populate_treeview       (TreeRenderCtx *xargs, xmlNode *node, GtkTreeIter *parent, gint pos);
+static void         my_populate_tree_store     (TreeRenderCtx *xargs, xmlNode *node, GtkTreeIter *parent, gint pos);
 
 static void         my_XML_DOCUMENT_NODE       (TextRenderCtx *xargs, xmlNode *node);
 static void         my_XML_ELEMENT_NODE        (TextRenderCtx *xargs, xmlNode *node);
@@ -136,17 +136,15 @@ static void         my_XML_NAMESPACE_DECL      (TextRenderCtx *xargs, xmlNs *ns)
 
 //
 // This function displays a simplified version of the DOM tree of an XML node
-// into a GtkTreeView. The XML nodes are displayed with their corresponding
+// into a GtkTreeStore. The XML nodes are displayed with their corresponding
 // namespace prefix. The prefixes to use are taken from the given Perl hash.
 //
 // At the moment the DOM shows only the XML Elements. All other nodes are not
 // rendered. If an element defines an attribute that's an ID (with xml:id or
 // through the DTD) then the ID will be displayed.
 //
-void populate_treeview (GtkTreeView *treeview, xmlNode *node, HV *namespaces) {
+void xacobeo_populate_gtk_tree_store (GtkTreeStore *store, xmlNode *node, HV *namespaces) {
 
-	GtkTreeStore *store = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
-	gtk_tree_view_set_model(treeview, NULL);
 	gtk_tree_store_clear(store);
 
 	TreeRenderCtx xargs = {
@@ -167,8 +165,7 @@ void populate_treeview (GtkTreeView *treeview, xmlNode *node, HV *namespaces) {
 	g_get_current_time(&start);
 
 	// Populate the DOM tree	
-	my_populate_treeview(&xargs, root, NULL, 0);
-	gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(store));
+	my_populate_tree_store(&xargs, root, NULL, 0);
 
 	GTimeVal end;
 	g_get_current_time(&end);
@@ -184,14 +181,13 @@ void populate_treeview (GtkTreeView *treeview, xmlNode *node, HV *namespaces) {
 // This functions inserts recursively nodes into a TreStore. It takes as input
 // XML Elements.
 //
-static void my_populate_treeview (TreeRenderCtx *xargs, xmlNode *node, GtkTreeIter *parent, gint pos) {
+static void my_populate_tree_store (TreeRenderCtx *xargs, xmlNode *node, GtkTreeIter *parent, gint pos) {
 
 	++xargs->calls;
 	GtkTreeIter iter;
 	gboolean done = FALSE;
 	
 	
-//	SV *pointer = PmmNodeToSv(node, PmmPROXYNODE(self));
 	SV *pointer = NULL;
 	if (xargs->namespaces) {
 		// Hack the C main wrapper can't deal with the creation of an SV
@@ -240,7 +236,7 @@ static void my_populate_treeview (TreeRenderCtx *xargs, xmlNode *node, GtkTreeIt
 	gint i = 0;
 	for (xmlNode *child = node->children; child; child = child->next) {
 		if(child->type == XML_ELEMENT_NODE) {
-			my_populate_treeview(xargs, child, &iter, i++);
+			my_populate_tree_store(xargs, child, &iter, i++);
 		}
 	}
 }

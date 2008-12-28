@@ -15,13 +15,13 @@ MODULE = Xacobeo::XS		PACKAGE = Xacobeo::XS
 
 void
 xacobeo_populate_gtk_text_buffer(buffer, node, namespaces)
-	GtkTextBuffer  *buffer
-	xmlNodePtr     node
-	HV             *namespaces
+	GtkTextBuffer *buffer
+	xmlNodePtr    node
+	HV            *namespaces
 
 
 void
-populate_treeview(treeview, node, namespaces)
-	GtkTreeView  *treeview
+xacobeo_populate_gtk_tree_store(store, node, namespaces)
+	GtkTreeStore  *store
 	xmlNodePtr    node
-	HV           *namespaces
+	HV            *namespaces
