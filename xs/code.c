@@ -248,11 +248,11 @@ static void my_populate_treeview (TreeRenderCtx *xargs, xmlNode *node, GtkTreeIt
 
 
 //
-// This function displays an XML node into a GtkTextView. The XML nodes are
+// This function displays an XML node into a GtkTextBuffer. The XML nodes are
 // displayed with their corresponding namespace prefix. The prefixes to use are
 // taken from the given Perl hash.
 //
-// The XML is displayed with syntax highlighting. The GtkTextBuffer is expected
+// The XML is rendered with syntax highlighting. The GtkTextBuffer is expected
 // to have the styles already predefined. The name of the styles to be used are:
 //
 // XPath results:
@@ -278,10 +278,10 @@ static void my_populate_treeview (TreeRenderCtx *xargs, xmlNode *node, GtkTreeIt
 //   cdata_content - The content of a CDATA.
 //   entity_ref    - an entity reference.
 //
-void populate_textview (GtkTextView *textview, xmlNode *node, HV *namespaces) {
+void xacobeo_populate_gtk_text_buffer (GtkTextBuffer *buffer, xmlNode *node, HV *namespaces) {
 
 	TextRenderCtx xargs = {
-		.buffer = NULL,
+		.buffer = buffer,
 		.markup = NULL,
 		.namespaces = namespaces,
 		.xml_data = g_string_sized_new(5 * 1024),
@@ -291,10 +291,6 @@ void populate_textview (GtkTextView *textview, xmlNode *node, HV *namespaces) {
 		.calls = 0,
 	};
 	
-	// It's faster to fill the text buffer when it isn't linked to a text view
-	xargs.buffer = gtk_text_view_get_buffer(textview);
-	gtk_text_view_set_buffer(textview, NULL);
-
 	// Get the tags used by the buffer
 	xargs.markup = my_get_buffer_tags(xargs.buffer);
 	
@@ -307,15 +303,10 @@ void populate_textview (GtkTextView *textview, xmlNode *node, HV *namespaces) {
 	my_display_document_syntax(&xargs, node);
 	g_free(xargs.markup);
 
-  // Swap back the buffer
+  // Copy the text into the buffer
  	gsize tags = xargs.tags->len;
 	my_render_buffer(&xargs);
-	gtk_text_view_set_buffer(textview, xargs.buffer);
 
-	// Scroll to tbe beginning
-	GtkTextIter iter;
-	gtk_text_buffer_get_start_iter(xargs.buffer, &iter);
-	gtk_text_view_scroll_to_iter(textview, &iter, 0.0, FALSE, 0.0, 0.0); 
 	
 	GTimeVal end;
 	g_get_current_time(&end);

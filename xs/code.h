@@ -18,8 +18,8 @@ enum DomModelColumns {
 
 
 // Public prototypes
-void populate_textview (GtkTextView *textview, xmlNode *node, HV *namespaces);
-void populate_treeview (GtkTreeView *treeview, xmlNode *node, HV *namespaces);
+void xacobeo_populate_gtk_text_buffer (GtkTextBuffer *buffer, xmlNode *node, HV *namespaces);
+void populate_treeview                (GtkTreeView *treeview, xmlNode *node, HV *namespaces);
 
 
 #endif

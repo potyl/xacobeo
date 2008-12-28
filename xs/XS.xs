@@ -14,10 +14,10 @@ MODULE = Xacobeo::XS		PACKAGE = Xacobeo::XS
 
 
 void
-populate_textview(textview, node, namespaces)
-	GtkTextView  *textview
-	xmlNodePtr    node
-	HV           *namespaces
+xacobeo_populate_gtk_text_buffer(buffer, node, namespaces)
+	GtkTextBuffer  *buffer
+	xmlNodePtr     node
+	HV             *namespaces
 
 
 void

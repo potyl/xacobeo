@@ -17,7 +17,7 @@
 
 
 static void       my_create_buffer_tags (GtkTextBuffer *buffer);
-static void       my_create_widgets     (GtkWidget **textview, GtkWidget **treeview);
+static void       my_create_widgets     (GtkTextView **textview, GtkWidget **treeview);
 static GtkWidget* my_create_textview    (void);
 static GtkWidget* my_create_treeview    (void);
 static GtkWidget* my_wrap_in_scrolls    (GtkWidget *widget);
@@ -44,11 +44,24 @@ int main (int argc, char **argv) {
 	}
 
 	// Render the XML document
-	GtkWidget *textview = NULL;
+	GtkTextView *textview = NULL;
 	GtkWidget *treeview = NULL;
 	
 	my_create_widgets(&textview, &treeview);
-	populate_textview(GTK_TEXT_VIEW(textview), (xmlNode *) document, NULL);
+	
+	// Fill the TextView (it's faster to remove the buffer and to put it back)
+	GtkTextBuffer *buffer = gtk_text_view_get_buffer(textview);
+	gtk_text_view_set_buffer(textview, NULL);
+	xacobeo_populate_gtk_text_buffer(buffer, (xmlNode *) document, NULL);
+	gtk_text_view_set_buffer(textview, buffer);
+
+	// Scroll to the beginning of the text
+	GtkTextIter iter;
+	gtk_text_buffer_get_start_iter(buffer, &iter);
+	gtk_text_view_scroll_to_iter(textview, &iter, 0.0, FALSE, 0.0, 0.0); 
+	
+	
+	
 	populate_treeview(GTK_TREE_VIEW(treeview), (xmlNode *) document, NULL);
 	xmlFreeDoc(document);
 	
@@ -69,7 +82,7 @@ int main (int argc, char **argv) {
 // Creates the main widgets and prepares them for displaying. This function
 // returns the GtkTextView casted as a GtkWidget.
 //
-static void my_create_widgets (GtkWidget **prt_textview, GtkWidget **prt_treeview) {
+static void my_create_widgets (GtkTextView **prt_textview, GtkWidget **prt_treeview) {
 	
 	// The main widgets
 	GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -92,7 +105,7 @@ static void my_create_widgets (GtkWidget **prt_textview, GtkWidget **prt_treevie
 
 
 	// Set the return values
-	*prt_textview = textview;
+	*prt_textview = GTK_TEXT_VIEW(textview);
 	*prt_treeview = treeview;
 }
 
