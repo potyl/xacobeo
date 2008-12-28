@@ -5,7 +5,11 @@ package Xacobeo::Simple;
 use strict;
 use warnings;
 
-use Xacobeo::XS;
+use Xacobeo::DomModel;
+use Xacobeo::XS qw(
+	xacobeo_populate_gtk_text_buffer
+	xacobeo_populate_gtk_tree_store
+);
 
 use XML::LibXML;
 use Glib qw(TRUE FALSE);
@@ -27,8 +31,8 @@ sub render_document {
 	my $namespaces = get_namespaces($document);
 	
 	# Show the document with syntax highlighting
-	Xacobeo::XS::populate_textview($textview, $document, $namespaces);
-	Xacobeo::XS::populate_treeview($treeview, $document, $namespaces);
+	populate_textview($textview, $document, $namespaces);
+	populate_treeview($treeview, $document, $namespaces);
 	
 	return ($textview, $document, $namespaces);
 }
@@ -56,6 +60,29 @@ sub create_widgets {
 }
 
 
+sub populate_textview {
+	my ($textview, $node, $namespaces) = @_;
+	my $buffer = $textview->get_buffer;
+
+	$textview->set_buffer(Gtk2::TextBuffer->new()); # Perl-Gk2 Bug can't set undef as a buffer
+	xacobeo_populate_gtk_text_buffer($buffer, $node, $namespaces);
+	$textview->set_buffer($buffer);
+
+	# Scroll to tbe beginning
+	$textview->scroll_to_iter($buffer->get_start_iter, 0.0, FALSE, 0.0, 0.0);
+}
+
+
+sub populate_treeview {
+	my ($treeview, $node, $namespaces) = @_;
+	my $store = $treeview->get_model;
+	
+	$treeview->set_model(undef);
+	xacobeo_populate_gtk_tree_store($store, $node, $namespaces);
+	$treeview->set_model($store);
+}
+
+
 sub create_textview {
 	my $textview = Gtk2::TextView->new();
 	$textview->set_size_request(600, 400);
@@ -66,34 +93,14 @@ sub create_textview {
 
 
 sub create_treeview {
-	# Prepre the tree view
 	my $treeview = Gtk2::TreeView->new();
-	my $store = Gtk2::TreeStore->new(
-		'Glib::Scalar',
-		'Glib::String',
-	);
-	$treeview->set_model($store);
-
-	$treeview->signal_connect(row_activated =>
+	Xacobeo::DomModel::create_model_with_view(
+		$treeview,
 		sub {
-			my ($treeview, $path, $column) = @_;
-#			# The C code creates a new model
-#			my $model = $treeview->get_model;
-			my $iter = $store->get_iter($path);
-			my $node = $store->get($iter, 0);
-
+			my ($node) = @_;
 			print "Node is ", $node->toString, "\n";
 		}
 	);
-
-	my $cell = Gtk2::CellRendererText->new();
-	my $column = Gtk2::TreeViewColumn->new_with_attributes(
-		"Element", $cell,
-		'text' => 1,
-#		'resizable' => TRUE,
-#		'autosize'  => TRUE,
-	);
-  $treeview->insert_column($column, 0);
 
 	return $treeview;
 }
