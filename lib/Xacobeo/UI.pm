@@ -33,7 +33,6 @@ use Gtk2::Pango;
 use Data::Dumper;
 use Carp;
 use File::Spec::Functions;
-use Time::HiRes qw(time);
 
 use Xacobeo::DomModel;
 use Xacobeo::Document;
@@ -304,7 +303,7 @@ sub load_file {
 	my ($file) = @_;
 	
 	# Parse the content
-	my $start = time;
+	my $timer = Xacobeo::Timer->start();
 	
 	my $t_load = Xacobeo::Timer->start('Load document');
 	my $document = Xacobeo::Document->new($file);
@@ -322,13 +321,11 @@ sub load_file {
 	$self->display_xml_node('xml-document', $xml);
 	undef $t_syntax;
 
-
 	# Populate the DOM view tree
 	my $t_dom = Xacobeo::Timer->start('DOM Tree');
 	$self->populate_treeview($xml);
 	undef $t_dom;
-
-	my $end = time;
+	$timer->stop();
 	
 	
 	# Populate the Namespaces view
@@ -339,7 +336,7 @@ sub load_file {
 	@{ $self->namespaces_view->{data} } = @namespaces;
 
 	$self->display_statusbar_message(
-		sprintf "Document loaded in %.3f s", ($end - $start)
+		sprintf "Document loaded in %.3f s", $timer->elapsed
 	);
 	
 	$glade->get_widget('xpath-entry')->set_sensitive(TRUE);
@@ -549,13 +546,13 @@ sub callback_run_xpath {
 	
 	# Run the XPath expression
 	my $xpath = $glade->get_widget('xpath-entry')->get_text;
-	my $start = time;
+	my $timer = Xacobeo::Timer->start();
 	my $result = $self->document->find($xpath);
-	my $end = time;
+	$timer->stop();
 	
 	my $count = isa_dom_nodelist($result) ? $result->size : 1;
 	$self->display_statusbar_message(
-		sprintf "Found %d results in %0.3f s", $count, $end - $start
+		sprintf "Found %d results in %0.3f s", $count, $timer->elapsed
 	);
 	
 	# Display the results
