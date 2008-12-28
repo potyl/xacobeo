@@ -30,10 +30,13 @@ spots in the application.
 
 The timer is quite simple it provides the method L</start> that starts the timer
 and the method L</stop> that stops the timer and accumulates the elapsed time.
-The method L</elapsed> can be used to display the time elapsed so far.
+The method L</show> can be used to print the time elapsed so far while the
+method L</elapsed> returns the time elapsed so far.
 
-If the method I<elapsed> is not called during the lifetime of the instance then
-the time elapsed will be printed when the timer is garbage collected.
+When an instance of this class dies (because it was undefed or collected by the
+garbage collector) the builtin Perl desctrutor will automatically call the
+method L</show>. But if the method I<show> or I<elapsed> was called during the
+lifetime of the instance then the destructor will not invoke the method I<show>.
 
 =head1 METHODS
 
@@ -126,14 +129,14 @@ sub stop {
 
 
 
-=head2 elapsed
+=head2 show
 
 Prints the elapsed time. This method stops the timer if it was started
 previously and wasn't stopped.
 
 =cut
 
-sub elapsed {
+sub show {
 	my $self = shift;
 	
 	if ($self->{start}) {
@@ -141,21 +144,33 @@ sub elapsed {
 	}
 	
 	my $name = $self->{name};
-	printf "Timer %-20s %05.4fs\n",
+	printf "Timer %-20s %.4fs\n",
 		(defined $name ? $name : 'Unnamed'),
-		$self->{elapsed}
+		$self->elapsed
 	;
-	
-	$self->{displayed} = 1;
 	
 	return $self;
 }
 
 
 
+=head2 elapsed
+
+Returns the total time elapsed so far. If the timer was already started the
+pending time will not be taking into account.
+
+=cut
+
+sub elapsed {
+	my $self = shift;
+	$self->{displayed} = 1;
+	return $self->{elapsed};
+}
+
+
 sub DESTROY {
 	my $self = shift;
-	$self->elapsed() unless $self->{displayed};
+	$self->show() unless $self->{displayed};
 }
 
 
