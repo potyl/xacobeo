@@ -66,8 +66,10 @@ typedef struct _TextRenderCtx {
 	GString       *xml_data;
 
 	// Current position on the XML document. It counts the characters (not the
-	// bytes) accumulated so far.
-	guint          xml_pos;
+	// bytes) accumulated. This counter keeps track of the characters already
+	// present in the buffer. It's purpose is to provide the position where to
+	// apply the text tags (syntax highlighting styles).
+	guint          buffer_pos;
 
 	// The tags to apply (collected at runtime as the XML document gets built).
 	GArray        *tags;
@@ -281,14 +283,19 @@ void xacobeo_populate_gtk_text_buffer (GtkTextBuffer *buffer, xmlNode *node, HV 
 		.markup = NULL,
 		.namespaces = namespaces,
 		.xml_data = g_string_sized_new(5 * 1024),
-		.xml_pos = 0,
+		.buffer_pos = 0,
 		// A 400Kb document can require to apply up to 150 000 styles!
 		.tags = g_array_sized_new(TRUE, TRUE, sizeof(ApplyTag), 200 * 1000),
 		.calls = 0,
 	};
 	
 	// Get the tags used by the buffer
-	xargs.markup = my_get_buffer_tags(xargs.buffer);
+	xargs.markup = my_get_buffer_tags(buffer);
+	
+	// Compute the current position in the buffer
+	GtkTextIter iter;
+	gtk_text_buffer_get_end_iter(buffer, &iter);
+	xargs.buffer_pos = gtk_text_iter_get_offset(&iter);
 	
 	
 	DEBUG("Displaying document with syntax highlighting");
@@ -833,22 +840,21 @@ static void my_buffer_add (TextRenderCtx *xargs, GtkTextTag *tag, const gchar *t
 
 	++xargs->calls;
 	g_string_append(xargs->xml_data, text);
-//DEBUG("Adding text = '%s'", text);
 	
 	// We don't want the length of the string but the number of characters.
 	// UTF-8 may encode one character as multiple bytes.
-	glong end = xargs->xml_pos + g_utf8_strlen(text, -1);
+	glong end = xargs->buffer_pos + g_utf8_strlen(text, -1);
 
 	// Apply the markup if there's a tag
 	if (tag) {
 		ApplyTag to_apply = {
 			.tag   = tag,
-			.start = xargs->xml_pos,
+			.start = xargs->buffer_pos,
 			.end   = end,
 		};
 		g_array_append_val(xargs->tags, to_apply);
 	}
-	xargs->xml_pos = end;
+	xargs->buffer_pos = end;
 }
 
 
