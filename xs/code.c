@@ -25,6 +25,9 @@
 	g_free(content); \
 }
 
+// The icon type to use for an element
+#define ICON_ELEMENT "gtk-directory"
+
 
 // The markup styles to be used 
 typedef struct _MarkupTags {
@@ -203,18 +206,29 @@ static void my_populate_tree_store (TreeRenderCtx *xargs, xmlNode *node, GtkTree
 		if (xmlIsID(node->doc, node, attr)) {
 			INFO("Element %s has Id attribute %s", (gchar *)node->name, (gchar *)attr->name);
 			done = TRUE;
+	
+			gchar *id_name = my_get_node_name_prefixed(attr, xargs->namespaces);
+			// If we pass attr then the output will be "id='23'" instead of "23"
+			gchar *id_value = my_to_string((xmlNode *)attr->children);
+
 
 			// Add the current node
 			gtk_tree_store_insert_with_values(
 				xargs->store, &iter, parent, pos,
 	
+				DOM_COL_ICON,         ICON_ELEMENT,
 				DOM_COL_XML_POINTER,  pointer,
 				DOM_COL_ELEMENT_NAME, node_name,
 				
 				// TODO add the columns ID_NAME and ID_VALUE
-	
+				DOM_COL_ID_NAME,      id_name,
+				DOM_COL_ID_VALUE,     id_value,
+				
 				-1
 			);
+			
+			g_free(id_name);
+			g_free(id_value);
 			break;
 		}
 	}
@@ -225,6 +239,7 @@ static void my_populate_tree_store (TreeRenderCtx *xargs, xmlNode *node, GtkTree
 		gtk_tree_store_insert_with_values(
 			xargs->store, &iter, parent, pos,
 		
+			DOM_COL_ICON,         ICON_ELEMENT,
 			DOM_COL_XML_POINTER,  pointer,
 			DOM_COL_ELEMENT_NAME, node_name,
 		
