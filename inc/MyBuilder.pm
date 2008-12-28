@@ -8,6 +8,47 @@ use warnings;
 
 use base 'Module::Build';
 use File::Spec::Functions;
+use ExtUtils::Depends;
+use ExtUtils::PkgConfig;
+use ExtUtils::ParseXS;
+
+
+my $CFLAGS;
+my $LIBS;
+my $TYPEMAPS;
+my $C_FILE;
+my $XS_FILE;
+
+
+BEGIN {
+	# Automatically find the dependencies
+	my $package = ExtUtils::Depends->new('Xacobeo::XS', 'Gtk2');
+	$package->add_typemaps('libxml2-perl.typemap');
+	my %config = $package->get_makefile_vars();
+
+	# Add manually the libraries that don't provide typemaps
+	my %libxml = ExtUtils::PkgConfig->find('libxml-2.0');
+	$CFLAGS   = "-g -std=c99 $config{INC} $libxml{cflags}";
+	$LIBS     = "$config{LIBS} $libxml{libs}";
+	$TYPEMAPS = $config{TYPEMAPS};
+
+	# Make sure that the XS-C file doesn't exist otherwise it will be linked twice 
+	$C_FILE = catfile('lib', 'Xacobeo', 'XS.c');
+	unlink($C_FILE);
+	$XS_FILE = catfile('lib', 'Xacobeo', 'XS.xs');
+}
+
+
+sub new {
+	my $class = shift;
+	my (%args) = @_;
+	
+	$args{extra_compiler_flags} = $CFLAGS;
+  $args{extra_linker_flags}   = $LIBS;
+  $args{c_source} = 'xs';
+	
+	$class->SUPER::new(%args);
+}
 
 
 sub ACTION_install {
@@ -49,8 +90,34 @@ sub ACTION_build {
 		);
 	}
 
+	# Copy the XS.xs and the typemap file to the lib folder. This way 
+	# Module::Build will handle the compilation and installation of the XS
+	# library.
+	foreach my $file ('XS.xs', 'libxml2-perl.typemap') {
+		$self->copy_if_modified(
+			from => catfile('xs', $file),
+			to   => catfile('lib', 'Xacobeo', $file),
+		);
+	}
+
 	# Proceed normally
 	$self->SUPER::ACTION_build(@_);
+}
+
+
+# Transform the XS into a C file to our liking
+sub process_xs_files {
+  my $self = shift;
+
+	ExtUtils::ParseXS::process_file(
+		filename   => $XS_FILE,
+		prototypes => 0,
+		typemap    => $TYPEMAPS,
+		output     => $C_FILE,
+	);
+	
+	# Proceed normally
+	$self->SUPER::process_xs_files(@_);
 }
 
 

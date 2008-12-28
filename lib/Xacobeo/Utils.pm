@@ -507,8 +507,9 @@ sub isa_dom_number {
 }
 
 
-
+# A true value
 1;
+
 
 =head1 AUTHORS
 

@@ -256,17 +256,17 @@ sub load_file {
 
 	# Update the text widget
 	my $t_syntax = Xacobeo::Timer->start('Syntax Highlight');
-	$self->display_xml_node('xml-document', $document->xml);
+#	$self->display_xml_node('xml-document', $document->xml);
 	undef $t_syntax;
 
 
 	# Populate the DOM view tree
 	my $treeview = $glade->get_widget('dom-tree-view');
-#for (1 .. 10) {
+for (1 .. 10) {
 	my $t_dom = Xacobeo::Timer->start('DOM Tree');
 	Xacobeo::DomModel::populate($treeview, $document, $document->xml);
 	undef $t_dom;
-#}
+}
 	my $end = time;
 	
 	

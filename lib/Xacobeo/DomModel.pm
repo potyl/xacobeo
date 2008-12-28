@@ -201,7 +201,6 @@ sub populate_internal {
 	# Find out if an attribute is used as an ID
 	foreach my $attribute ($node->attributes) {
 
-		# Keep only the attributes (there could be some namespaces that qualify as attributes)
 		if ($attribute->isId) {
 		
 			# The current node has an ID			
