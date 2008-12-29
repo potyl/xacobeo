@@ -252,18 +252,15 @@ sub add_columns {
 #
 sub add_text_column {
 	my ($treeview, $field, $title) = @_;
-	
+
+	my $cell = Gtk2::CellRendererText->new();
 	my $column = Gtk2::TreeViewColumn->new();
+	$column->pack_end($cell, TRUE);
+	
 	$column->set_title($title);
 	$column->set_resizable(TRUE);
 	$column->set_sizing('autosize');
-
-	my $column = Gtk2::TreeViewColumn->new_with_attributes(
-		"Element", Gtk2::CellRendererText->new(),
-		'text' => 1,
-		'resizable' => TRUE,
-		'autosize'  => TRUE,
-	);
+	$column->set_attributes($cell, text => $field);
 
 	$treeview->append_column($column);
 	
