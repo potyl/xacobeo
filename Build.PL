@@ -40,6 +40,9 @@ my $build = inc::MyBuilder->new(
 	# Dependencies
 	requires => \%requires,
 	build_requires => {
+		'ExtUtils::Depends'   => 0,
+		'ExtUtils::PkgConfig' => 0,
+		'ExtUtils::ParseXS'   => 0,
 		'Test::More' => '0',
 	},
 );

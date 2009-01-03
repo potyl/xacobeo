@@ -6,11 +6,20 @@ package inc::MyBuilder;
 use strict;
 use warnings;
 
+BEGIN {
+
+	foreach my $module qw(ExtUtils::Depends ExtUtils::PkgConfig ExtUtils::ParseXS) {
+		eval "use $module";
+		if (my $error = $@) {
+			warn "Missing build dependency $module.";
+			warn $error;
+		}
+	}
+}
+
+
 use base 'Module::Build';
 use File::Spec::Functions;
-use ExtUtils::Depends;
-use ExtUtils::PkgConfig;
-use ExtUtils::ParseXS;
 
 
 my $CFLAGS;
