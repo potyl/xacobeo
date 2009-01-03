@@ -52,6 +52,8 @@ __PACKAGE__->mk_accessors(
 		statusbar_context_id
 		namespaces_view
 		xpath_markup
+		xpath_empty_attributes
+		xpath_empty_text
 		app_folder
 	)
 );
@@ -115,6 +117,10 @@ sub construct_gui {
 	$window->set_icon($logo);
 	$self->glade->get_widget('about')->set_logo($logo);
 
+	# Parse the Pango markup for the default value of the xpath entry widget
+	($self->{xpath_empty_attributes}, $self->{xpath_empty_text}) = Gtk2::Pango->parse_markup(
+		"<span color='grey' size='smaller'>XPath Expression...</span>"
+	);
 
 
 	# Connect the signals to the callbacks
@@ -582,34 +588,32 @@ sub callback_xpath_entry_changed {
 	# Arguments
 	my $self = shift;
 	my ($widget) = @_;
-	
+
 	my $xpath = $widget->get_text;
-	my $button = $self->glade->get_widget('xpath-evaluate');
+	my $markup = undef;
+	my $xpath_valid = FALSE;
+	if ($xpath) {
 	
-	# Pango markup is like XML so we need to escape it
-	my $markup = escape_xml_text($xpath);
-
-	# Validate the XPath expression
-	if (! $self->document->validate($xpath) ) {
-		# Disable the evaluate button and set the XPath expression in red
-		$button->set_sensitive(FALSE);
-
-		# Apply the Pango markup to mark the errors in the text
-		$markup = "<span underline='error' underline_color='red'>$markup</span>";
+		my $button = $self->glade->get_widget('xpath-evaluate');
+		if ($self->document->validate($xpath)) {
+			# The expression is valid
+			$xpath_valid = TRUE;
+		}
+		else {
+			# Mark the XPath expression as wrong
+			my $escaped = escape_xml_text($xpath);
+			$markup = "<span underline='error' underline_color='red'>$escaped</span>";
+		}
 	}
-	else {
-		# The expression is valid, let's restore the widgets to their inital state
-		$button->set_sensitive(TRUE);
-	}
-
+	$self->glade->get_widget('xpath-evaluate')->set_sensitive($xpath_valid);
 	$self->xpath_markup($markup);
+	
+	
+	$self->set_xpath_layout_attributes();
+
 
 	# Force a redraw
-	if ($widget->realized) {
-		my $size = $widget->allocation;
-		my $rectangle = Gtk2::Gdk::Rectangle->new(0, 0, $size->width, $size->height);
-		$widget->window->invalidate_rect($rectangle, TRUE);
-	}
+	request_redraw($widget);
 }
 
 
@@ -619,9 +623,36 @@ sub callback_xpath_entry_changed {
 sub callback_xpath_entry_expose {
 	my $self = shift;
 	my ($widget) = @_;
-	my $markup = $self->xpath_markup;
-	$markup = '' unless defined $markup;
-	$widget->get_layout->set_markup($markup);
+	$self->set_xpath_layout_attributes();
+#	my $markup = $self->xpath_markup;
+#	$markup = '' unless defined $markup;
+#	$widget->get_layout->set_markup($markup);
+
+	# Continue with the events
+	return FALSE;
+}
+
+
+#
+# This handler stops the widget from generating critical Pango warnings when the
+# text selection gesture is performed. If there's no text in the widget we
+# simply cancel the gesture.
+#
+# The gesture is done with: mouse button 1 pressed and dragged over the widget
+# while the button is still pressed.
+#
+sub callback_xpath_entry_button_press {
+	my $self = shift;
+	my ($widget) = @_;
+
+	if ($widget->get_text) {
+		# Propagate the event further since there's text in the widget
+		return FALSE;
+	}
+	
+	# Give focus to the widget but stop the text selection
+	$widget->grab_focus();
+	return TRUE;
 }
 
 
@@ -676,6 +707,57 @@ sub callback_dialog_hide {
 	my ($dialog) = @_;
 	$dialog->hide();
 	return TRUE;
+}
+
+
+#
+# Schedules a redraw of the widget.
+#
+# The text region must be invalidated in order to be repainted. This is true
+# even if the markup text is the same as the one in the widget. Remember that
+# the text in the Pango markup could turn out to be the same text that was 
+# previously in the widget but with new styles (this is most common when showing
+# an error with a red underline). In such case the Gtk2::Entry will not refresh
+# its appearance because the text didn't change. Here we are forcing the update.
+#
+sub request_redraw {
+	my ($widget) = @_;
+
+	return unless $widget->realized;
+
+	my $size = $widget->allocation;
+	my $rectangle = Gtk2::Gdk::Rectangle->new(0, 0, $size->width, $size->height);
+	$widget->window->invalidate_rect($rectangle, TRUE);
+}
+
+
+
+#
+# Applies the attributes to the widget. Gtk2::Pango::Layout::set_attributes()
+# doesn't accept an undef value (a patch has been submitted in order to address
+# this issue). So if the attributes are undef an empty attribute list has to be
+# submitted instead.
+#
+sub set_xpath_layout_attributes {
+	my $self = shift;
+
+	my $widget = $self->glade->get_widget('xpath-entry');
+	my $xpath = $widget->get_text;
+	my $layout = $widget->get_layout;
+
+	if ($xpath eq '') {
+		# The widget is empty, show the empty text
+		$layout->set_text($self->xpath_empty_text);
+		$layout->set_attributes($self->xpath_empty_attributes);
+	}
+	elsif (my $markup = $self->xpath_markup) {
+		# There's an error
+		$layout->set_markup($markup);
+	}
+	else {
+		# Reset the attributes just in case
+		$layout->set_attributes(Gtk2::Pango::AttrList->new());
+	}
 }
 
 
