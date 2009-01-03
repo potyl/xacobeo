@@ -224,13 +224,19 @@ sub _construct_xml_parser {
 # Each prefix is warrantied to be unique. The function will assign the first
 # prefix seen for each namespace.
 #
+# NOTE: libxml2 assumes that the prefix 'xml' is is bounded to the URI
+#       http://www.w3.org/XML/1998/namespace, therefore this namespace will
+#       always be returned even if it's not declared in the document.
+#
 # The prefixes are returned in an hash ref of type ($uri => $prefix).
 #
 sub _get_all_namespaces {
 	my ($node) = @_;
 
 	# Find the namespaces ($uri -> $prefix)
-	my %namespaces = ();
+	my %namespaces = (
+		XML_XML_NS() => 'xml',
+	);
 	foreach my $namespace ($node->findnodes('.//namespace::*')) {
 		my $uri = $namespace->getData;
 		$namespaces{$uri} ||= $namespace->getLocalName;
