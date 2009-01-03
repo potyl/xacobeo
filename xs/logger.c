@@ -24,10 +24,6 @@ typedef struct _MyLoggerTimeUnits {
 static MyLoggerTimeUnits TIME_UNITS [] = {
 	{1000, "\u03BCs"},
 	{1000, "ms"},
-//	{1000, "s"},
-//	{60, "m"},
-//	{60, "h"},
-//	{24, "d"},
 };
 
 
