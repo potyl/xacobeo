@@ -1,6 +1,13 @@
 Revision history for Xacobeo.
 
 
+0.05_01 Sat Jan  3 13:04:55 CET 2009
+	- Issue 14: Performance issues.
+	- The program uses now XS for speeding up the slow parts.
+	- Updated the syntax highlighting styles.
+	- Added the namespace XML http://www.w3.org/XML/1998/namespace to all results.
+
+
 0.04 Mon Dec  1 10:04:26 CET 2008
 	- New release with all the changes from the 0.04_XX releases.
 
