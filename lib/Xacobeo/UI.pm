@@ -610,7 +610,7 @@ sub callback_xpath_entry_changed {
 	$self->xpath_pango_attributes($pango_attributes);
 	
 	
-	$self->set_xpath_layout_attributes();
+	$self->set_xpath_pango_attributes();
 
 
 	# Force a redraw
@@ -624,7 +624,7 @@ sub callback_xpath_entry_changed {
 sub callback_xpath_entry_expose {
 	my $self = shift;
 	my ($widget) = @_;
-	$self->set_xpath_layout_attributes();
+	$self->set_xpath_pango_attributes();
 
 	# Continue with the events
 	return FALSE;
@@ -641,9 +641,9 @@ sub callback_xpath_entry_expose {
 #
 sub callback_xpath_entry_button_press {
 	my $self = shift;
-	my ($widget) = @_;
+	my ($widget, $event) = @_;
 
-	if ($widget->get_text) {
+	if ($widget->get_text or $event->button != 1) {
 		# Propagate the event further since there's text in the widget
 		return FALSE;
 	}
@@ -736,7 +736,7 @@ sub request_redraw {
 # this issue). So if the attributes are undef an empty attribute list has to be
 # submitted instead.
 #
-sub set_xpath_layout_attributes {
+sub set_xpath_pango_attributes {
 	my $self = shift;
 
 	my $widget = $self->glade->get_widget('xpath-entry');
