@@ -13,9 +13,14 @@ PACKAGE=Xacobeo
 # Compiler stuff
 LIBRARIES=gtk+-2.0 libxml-2.0
 
+ifdef DEBUG
+	DEBUG_ARGS=-DHAS_DEBUG
+endif
+
+
 CFLAGS=$(shell pkg-config --cflags $(LIBRARIES); perl -MExtUtils::Embed -e ccopts)
 LIBS=$(shell pkg-config --libs $(LIBRARIES) ; perl -MExtUtils::Embed -e ldopts)
-CC=gcc -g -std=c99 -Werror -Wall -Wextra -pedantic-errors -pedantic \
+CC=gcc $(DEBUG_ARGS) -g -std=c99 -Werror -Wall -Wextra -pedantic-errors -pedantic \
  -Wshadow \
  -Wunused-parameter \
  -Wmissing-field-initializers \
@@ -45,16 +50,25 @@ info:
 	@echo "CC      $(CC)"
 
 
+perl-build: Build
+Build: Build.PL
+	perl Build.PL --config ccflags="$(DEBUG_ARGS)"
+
+
+build: Build
+	./Build
+
+
 .PHONY: install
 install: ${DEST}/local/bin/xacobeo
-${DEST}/local/bin/xacobeo:
+${DEST}/local/bin/xacobeo: build
 	rm -rf ${DEST} || true
-	perl Build.PL && ./Build && ./Build install --install_base ${DEST}
+	./Build install --install_base ${DEST}
 
 
 .PHONY: fakeinstall
-fakeinstall:
-	perl Build.PL && ./Build fakeinstall --install_base /usr 
+fakeinstall: build
+	./Build fakeinstall --install_base /usr 
 
 
 .PHONY: run
@@ -64,13 +78,13 @@ run: install
 
 .PHONY: dist
 dist: ${PACKAGE}-${VERSION}.tar.gz
-${PACKAGE}-${VERSION}.tar.gz:
-	perl Build.PL && ./Build && ./Build dist
+${PACKAGE}-${VERSION}.tar.gz: build
+	./Build dist
 
 
 .PHONY: distcheck
-distcheck:
-	perl Build.PL && ./Build && ./Build distcheck
+distcheck: build
+	./Build distcheck
 
 
 .PHONY: test
@@ -95,8 +109,7 @@ release: clean dist distcheck tag upload
 	
 
 .PHONY: xs
-xs: Build.PL commands
-	perl Build.PL && ./Build
+xs: build commands
 
 
 xs/main.o: xs/main.c
