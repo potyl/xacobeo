@@ -21,10 +21,6 @@ Xacobeo::DomModel - The DOM model used for the TreeView.
 			print "Selected node ", $node->toString(), "\n";
 		},
 	);
-	
-	# Populate the tree view
-	my $document = Xacobeo::Document->new($file);
-	Xacobeo::DomModel::populate($treeview->get_model, $document, $document->xml);
 
 =head1 DESCRIPTION
 
@@ -125,105 +121,6 @@ sub create_model_with_view {
 
 
 
-=head2 populate
-
-Populates the DOM tree model. The tree is populated only with nodes of the type
-'Element'. If an element has an attribute which is marked as being an ID the it
-will be display as such.
-
-Parameters:
-
-=over
-
-=item * $treeview
-
-A reference to the L<Gtk2::TreeView>. The tree view is passed instead of the
-model because this way the loading can be performed faster by removing the
-model from the view.
-
-=item * $document
-
-An instance to the Xacobeo::Document that will provide the namespaces lookup.
-
-=item $node
-
-The current node being processed.
-
-=back	
-
-=cut
-
-sub populate {
-	my ($treeview, $document, $node) = @_;
-
-	# Get the starting element
-	my $element;
-	if (isa_dom_document($node)) {
-		$element = $node->documentElement();
-	}
-	elsif (isa_dom_element($node)) {
-		$element = $node;
-	}
-	else {
-		$node->ownerDocument->documentElement();
-	}
-	
-	if (! defined $element) {
-		warn "Can't find a starting element";
-		return;
-	}
-
-
-	# It's slightly faster to remove the model from the view and to insert it back
-	my $model = $treeview->get_model();
-	$treeview->set_model(undef);
-	$model->clear();
-	populate_internal($model, $document, $element, undef, 0);
-	$treeview->set_model($model);
-}
-
-
-
-#
-# This function performs the actual insertion into the TreeStore.
-#
-sub populate_internal {
-	my ($model, $document, $node, $parent_iter, $position) = @_;
-
-	my @values = (
-		$NODE_ICON => 'gtk-directory',
-		$NODE_NAME => $document->get_prefixed_name($node),
-		$NODE_DATA => $node,
-	);
-
-	# Find out if an attribute is used as an ID
-	foreach my $attribute ($node->attributes) {
-
-		if ($attribute->isId) {
-		
-			# The current node has an ID			
-			@values = (
-				$NODE_ID_NAME  => $document->get_prefixed_name($attribute),
-				$NODE_ID_VALUE => $attribute->value,
-			);
-		
-			# There's only one ID per element
-			last;
-		}
-	}
-
-	# Set the main data of the node
-	my $iter = $model->insert_with_values($parent_iter, $position, @values);
-	
-	# Add the children to the DOM model
-	my $i = 0;
-	foreach my $child ($node->childNodes) {
-		populate_internal($model, $document, $child, $iter, $i++) if isa_dom_element($child);
-	}
-}
-
-
-
 #
 # Adds the columns to the DOM tree view
 #
@@ -245,6 +142,7 @@ sub add_columns {
 	# Node attribute value (ID attribute)
 	add_text_column($treeview, $NODE_ID_VALUE, 'ID value');
 }
+
 
 
 #
