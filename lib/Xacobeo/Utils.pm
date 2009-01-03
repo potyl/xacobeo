@@ -105,6 +105,16 @@ my %ENTITIES = qw(
 Escapes the text as if would be added to a Text node. This function escapes only
 the entities <, > and &.
 
+Parameters:
+
+=over
+
+=item * $string
+
+The string to escape.
+
+=back	
+
 =cut
 
 sub escape_xml_text {
@@ -119,6 +129,16 @@ sub escape_xml_text {
 
 Escapes the text as if would be added to an Attribute. This function escapes the
 entities <, >, &, ' and ".
+
+Parameters:
+
+=over
+
+=item * $string
+
+The string to escape.
+
+=back	
 
 =cut
 
@@ -135,6 +155,16 @@ sub escape_xml_attribute {
 Returns true if the node is a DOM C<Document> (instance of 
 L<XML::LibXML::Document>).
 
+Parameters:
+
+=over
+
+=item * $node
+
+The node to check.
+
+=back	
+
 =cut
 
 sub isa_dom_document {
@@ -148,6 +178,16 @@ sub isa_dom_document {
 
 Returns true if the node is a DOM C<Element> (instance of 
 L<XML::LibXML::Element>).
+
+Parameters:
+
+=over
+
+=item * $node
+
+The node to check.
+
+=back	
 
 =cut
 
@@ -163,6 +203,16 @@ sub isa_dom_element {
 Returns true if the node is a DOM C<Attribute> (instance of 
 L<XML::LibXML::Attr>).
 
+Parameters:
+
+=over
+
+=item * $node
+
+The node to check.
+
+=back	
+
 =cut
 
 sub isa_dom_attr {
@@ -176,6 +226,16 @@ sub isa_dom_attr {
 
 Returns true if the node is a DOM C<NodeList> (instance of 
 L<XML::LibXML::NodeList>).
+
+Parameters:
+
+=over
+
+=item * $node
+
+The node to check.
+
+=back	
 
 =cut
 
@@ -195,6 +255,16 @@ B<NOTE>: XML::LibXML considers that C<Comment> and C<CDATA> nodes are also
 C<Text> nodes. This method doesn't consider a C<Comment> nor a C<CDATA> node as
         being C<Text> nodes.
 
+Parameters:
+
+=over
+
+=item * $node
+
+The node to check.
+
+=back	
+
 =cut
 
 sub isa_dom_text {
@@ -211,6 +281,16 @@ sub isa_dom_text {
 Returns true if the node is a DOM C<Comment> (instance of 
 L<XML::LibXML::Comment>).
 
+Parameters:
+
+=over
+
+=item * $node
+
+The node to check.
+
+=back	
+
 =cut
 
 sub isa_dom_comment {
@@ -225,6 +305,16 @@ sub isa_dom_comment {
 Returns true if the node is a DOM C<Node> (instance of 
 L<XML::LibXML::Node>).
 
+Parameters:
+
+=over
+
+=item * $node
+
+The node to check.
+
+=back	
+
 =cut
 
 sub isa_dom_node {
@@ -234,10 +324,20 @@ sub isa_dom_node {
 
 
 
-=head2 isa_dom_node
+=head2 isa_dom_pi
 
 Returns true if the node is a DOM C<PI> (also known as: processing instruction)
 (instance of L<XML::LibXML::PI>).
+
+Parameters:
+
+=over
+
+=item * $node
+
+The node to check.
+
+=back	
 
 =cut
 
@@ -248,10 +348,20 @@ sub isa_dom_pi {
 
 
 
-=head2 isa_dom_node
+=head2 isa_dom_dtd
 
 Returns true if the node is a DOM C<DTD> (instance of 
 L<XML::LibXML::Dtd>).
+
+Parameters:
+
+=over
+
+=item * $node
+
+The node to check.
+
+=back	
 
 =cut
 
@@ -262,10 +372,20 @@ sub isa_dom_dtd {
 
 
 
-=head2 isa_dom_node
+=head2 isa_dom_cdata
 
 Returns true if the node is a DOM C<CDATASection> (instance of 
 L<XML::LibXML::CDATASection>).
+
+Parameters:
+
+=over
+
+=item * $node
+
+The node to check.
+
+=back	
 
 =cut
 
@@ -285,6 +405,16 @@ B<NOTE>: The DOM doesn't define an object type named C<Namespaces> but
 XML::LibXML does so this function is named 'isa_dom' for consistency with the
 other functions.
 
+Parameters:
+
+=over
+
+=item * $node
+
+The node to check.
+
+=back	
+
 =cut
 
 sub isa_dom_namespace {
@@ -302,6 +432,16 @@ L<XML::LibXML::Literal>).
 B<NOTE>: The DOM doesn't define an object type named C<Literal> but XML::LibXML
 does so this function is named 'isa_dom' for consistency with the other
 functions.
+
+Parameters:
+
+=over
+
+=item * $node
+
+The node to check.
+
+=back	
 
 =cut
 
@@ -321,6 +461,16 @@ B<NOTE>: The DOM doesn't define an object type named C<Boolean> but XML::LibXML
 does so this function is named 'isa_dom' for consistency with the other
 functions.
 
+Parameters:
+
+=over
+
+=item * $node
+
+The node to check.
+
+=back	
+
 =cut
 
 sub isa_dom_boolean {
@@ -339,6 +489,16 @@ B<NOTE>: The DOM doesn't define an object type named C<Number> but XML::LibXML
 does so this function is named 'isa_dom' for consistency with the other
 functions.
 
+Parameters:
+
+=over
+
+=item * $node
+
+The node to check.
+
+=back	
+
 =cut
 
 sub isa_dom_number {
@@ -347,8 +507,9 @@ sub isa_dom_number {
 }
 
 
-
+# A true value
 1;
+
 
 =head1 AUTHORS
 

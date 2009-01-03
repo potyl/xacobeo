@@ -3,65 +3,8 @@
 use strict;
 use warnings;
 
-use Module::Build;
+use inc::MyBuilder;
 use File::Spec::Functions;
-
-
-my $class = Module::Build->subclass(
-	class => 'Xacobeo::Builder',
-	code  => q{
-
-use warnings;
-use strict;
-
-use File::Spec::Functions;
-
-
-sub ACTION_install {
-	my $self = shift;
-
-	# Make sure that share/ has an installation path
-	my $p = $self->{properties};
-	if (! exists $p->{install_path}{share}) {
-		my $script_dir = $self->install_destination('script');
-		my @dirs = File::Spec->splitdir($script_dir);
-		$dirs[-1] = 'share';
-		$p->{install_path}{share} = File::Spec->catdir(@dirs);
-	}
-
-	# Proceed normally
-	$self->SUPER::ACTION_install(@_);
-}
-
-
-sub ACTION_post_install {
-	my $self = shift;
-	print "Updating desktop database\n";
-	system('update-desktop-database');
-}
-
-
-sub ACTION_build {
-	my $self = shift;
-
-	# Copy the files in share/
-	for my $entry (@{ $self->rscan_dir('share') }) {
-
-		# Skip hidden entries or folders
-		next if $entry =~ m,(^|/)\., or -d $entry;
-
-		$self->copy_if_modified(
-			from => $entry,
-			to   => catfile($self->blib, $entry) 
-		);
-	}
-
-	# Proceed normally
-	$self->SUPER::ACTION_build(@_);
-}
-
-
-});
 
 
 my %requires = (
@@ -79,10 +22,12 @@ my %requires = (
 	'FindBin'               => 0,
 	'Carp'                  => 0,
 	'Exporter'              => 0,
+	'DynaLoader'            => 0,
+	'Data::Dumper'          => 0,
 );
 
 
-my $build = $class->new(
+my $build = inc::MyBuilder->new(
 	module_name       => 'Xacobeo',
 	license           => 'perl',
 	dist_author       => 'Emmanuel Rodriguez <potyl@cpan.org>',
@@ -95,6 +40,9 @@ my $build = $class->new(
 	# Dependencies
 	requires => \%requires,
 	build_requires => {
+		'ExtUtils::Depends'   => 0,
+		'ExtUtils::PkgConfig' => 0,
+		'ExtUtils::ParseXS'   => 0,
 		'Test::More' => '0',
 	},
 );

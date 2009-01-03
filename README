@@ -40,6 +40,8 @@ This module depends on the following CPAN modules:
 	FindBin
 	Carp
 	Exporter
+	DynaLoader
+	Data::Dumper
 
 PROJECT
 

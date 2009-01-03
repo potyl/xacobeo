@@ -6,14 +6,19 @@ Xacobeo::Document - An XML document and it's related information.
 
 	use Xacobeo::Document;
 	
-	my $document Xacobeo::Document->new('file.xml');
+	my $document = Xacobeo::Document->new('file.xml');
 	
 	my $namespaces = $document->namespaces(); # Hashref
-	while (my ($prefix, $uri) = each %{ $namespaces }) {
+	while (my ($uri, $prefix) = each %{ $namespaces }) {
 		printf "%-5s: %s\n", $prefix, $uri;
 	}
 	
-	my @nodes = $document->findnodes('/x:html//x:a[@href]');
+	
+	my $nodes = $document->find('/x:html//x:a[@href]');
+	foreach my $node ($nodes->get_nodelist) {
+		print "Got node ", $node->name, "\n";
+	}
+	
 	$document->validate('/x:html//x:a[@href]') or die "Invalid XPath expression";
 
 =head1 DESCRIPTION
@@ -138,8 +143,8 @@ sub validate {
 Returns the node name by prefixing it with our prefixes in the case where
 namespaces are used.
 
-
 =cut
+
 sub get_prefixed_name {
 	my $self = shift;
 	my ($node) = @_;
@@ -157,9 +162,13 @@ sub get_prefixed_name {
 
 
 
-#
-# Get/Set the namespaces.
-#
+=head2 namespaces
+
+Returns the namespaces declared in the document. The namespaces are returned in
+a hash REF where the URIs are used as a key and the prefix as a value.
+
+=cut
+
 sub namespaces {
 	my $self = shift;
 	if (@_) {
@@ -215,13 +224,19 @@ sub _construct_xml_parser {
 # Each prefix is warrantied to be unique. The function will assign the first
 # prefix seen for each namespace.
 #
+# NOTE: libxml2 assumes that the prefix 'xml' is is bounded to the URI
+#       http://www.w3.org/XML/1998/namespace, therefore this namespace will
+#       always be returned even if it's not declared in the document.
+#
 # The prefixes are returned in an hash ref of type ($uri => $prefix).
 #
 sub _get_all_namespaces {
 	my ($node) = @_;
 
 	# Find the namespaces ($uri -> $prefix)
-	my %namespaces = ();
+	my %namespaces = (
+		XML_XML_NS() => 'xml',
+	);
 	foreach my $namespace ($node->findnodes('.//namespace::*')) {
 		my $uri = $namespace->getData;
 		$namespaces{$uri} ||= $namespace->getLocalName;

@@ -10,7 +10,10 @@ BEGIN {
 	use_ok('Xacobeo::Document');
 }
 
+use XML::LibXML qw(XML_XML_NS);
+
 my $FOLDER = "tests";
+my @XML_NS = (XML_XML_NS() => 'xml');
 
 exit main();
 
@@ -33,7 +36,7 @@ sub test_without_namespaces {
 	
 	is_deeply(
 		$document->namespaces(),
-		{},
+		{@XML_NS},
 		'Document without namespaces'
 	);
 	
@@ -99,6 +102,7 @@ sub test_namespaces1 {
 			'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' => 'sodipodi',
 			'http://www.w3.org/1999/xlink'                       => 'xlink',
 			'http://www.w3.org/2000/svg'                         => 'default',
+			@XML_NS,
 		},
 		'SVG namespaces'
 	);
@@ -153,6 +157,7 @@ sub test_namespaces2 {
 		{
 			'' => 'default',
 			'http://www.w3.org/1999/xhtml' => 'default1',
+			@XML_NS,
 		},
 		'Beers namespaces'
 	);
@@ -185,6 +190,7 @@ sub test_namespaces3 {
 			'http://www.w3.org/TR/REC-html40' => 'html',
 			'urn:schemas-microsoft-com:office:office' => 'o',
 			'urn:schemas-microsoft-com:office:spreadsheet' => 'ss',
+			@XML_NS,
 		},
 		'Stocks namespaces'
 	);

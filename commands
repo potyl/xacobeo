@@ -4,29 +4,71 @@
 DEST=target
 
 # Default test file
-FILE=tests/SVG.svg
+FILE=tests/sample.xml
 
 SVN_REPO=$(shell svn info | grep -E '^URL: ' | cut -f2 -d' ' | sed -e 's%/trunk%%')
 VERSION=$(shell perl -le "print `grep VERSION lib/Xacobeo.pm`")
 PACKAGE=Xacobeo
+
+# Compiler stuff
+LIBRARIES=gtk+-2.0 libxml-2.0
+
+ifdef DEBUG
+	DEBUG_ARGS=-DHAS_DEBUG
+endif
+
+
+CFLAGS=$(shell pkg-config --cflags $(LIBRARIES); perl -MExtUtils::Embed -e ccopts)
+LIBS=$(shell pkg-config --libs $(LIBRARIES) ; perl -MExtUtils::Embed -e ldopts)
+CC=gcc $(DEBUG_ARGS) -g -std=c99 -Werror -Wall -Wextra -pedantic-errors -pedantic \
+ -Wshadow \
+ -Wunused-parameter \
+ -Wmissing-field-initializers \
+ -Wmissing-noreturn \
+ -Wmissing-declarations \
+ -Wmissing-prototypes \
+ -Wmissing-format-attribute \
+ -Wpointer-arith \
+ -Wwrite-strings \
+ -Wformat \
+ -Wformat-nonliteral \
+ -Wformat-security \
+ -Wswitch-default \
+ -Winit-self \
+ -Wundef \
+ -Waggregate-return \
+ -Wnested-externs \
+ -Wno-unused-function
 
 
 .PHONY: info
 info:
 	@echo "SVN     ${SVN_REPO}"
 	@echo "VERSION ${VERSION}"
+	@echo "CFLAGS  $(CFLAGS)"
+	@echo "LIBS    $(LIBS)"
+	@echo "CC      $(CC)"
+
+
+perl-build: Build
+Build: Build.PL
+	perl Build.PL --config ccflags="$(DEBUG_ARGS)"
+
+
+build: Build
+	./Build
 
 
 .PHONY: install
 install: ${DEST}/local/bin/xacobeo
-${DEST}/local/bin/xacobeo:
+${DEST}/local/bin/xacobeo: build
 	rm -rf ${DEST} || true
-	perl Build.PL && ./Build && ./Build install --install_base ${DEST}
+	./Build install --install_base ${DEST}
 
 
 .PHONY: fakeinstall
-fakeinstall:
-	perl Build.PL && ./Build fakeinstall --install_base /usr 
+fakeinstall: build
+	./Build fakeinstall --install_base /usr 
 
 
 .PHONY: run
@@ -36,18 +78,18 @@ run: install
 
 .PHONY: dist
 dist: ${PACKAGE}-${VERSION}.tar.gz
-${PACKAGE}-${VERSION}.tar.gz:
-	perl Build.PL && ./Build && ./Build dist
+${PACKAGE}-${VERSION}.tar.gz: build
+	./Build dist
 
 
 .PHONY: distcheck
-distcheck:
-	perl Build.PL && ./Build && ./Build distcheck
+distcheck: build
+	./Build distcheck
 
 
 .PHONY: test
-test:
-	perl Build.PL && ./Build && ./Build test
+test: xs
+	./Build test
 
 
 .PHONY: tag
@@ -64,6 +106,39 @@ upload: dist
 .PHONY: release
 release: clean dist distcheck tag upload
 	@echo "Release ${PACKAGE} ${VERSION} done."
+	
+
+.PHONY: xs
+xs: build commands
+
+
+xs/main.o: xs/main.c
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+
+xs/logger.o: xs/logger.c
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+
+xs/code.o: xs/code.c
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+
+xs/libxml.o: xs/libxml.c
+	$(CC) $(CFLAGS) -Wno-unused-parameter -o $@ -c $<
+	
+
+main: xs/main.o xs/code.o xs/logger.o xs/libxml.o
+	$(CC) $(LIBS) -o $@ xs/main.o xs/code.o xs/logger.o xs/libxml.o	
+
+
+.PHONY: all
+all: main xs
+
+
+.PHONY: leaks
+leaks: main
+	valgrind --leak-check=full --show-reachable=yes --trace-children=yes ./main $(FILE) quit
 
 
 .PHONY: clean
@@ -74,3 +149,5 @@ clean:
 	-rm libxacobeo-perl_* 2> /dev/null || true
 	-rm Build 2> /dev/null || true
 	-rm -rf _build 2> /dev/null || true
+	-rm -f main xs/*.o  || true
+	-rm -f lib/Xacobeo/XS.xs lib/Xacobeo/XS.c lib/Xacobeo/libxml2-perl.typemap || true
