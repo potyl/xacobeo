@@ -51,7 +51,7 @@ __PACKAGE__->mk_accessors(
 		document 
 		statusbar_context_id
 		namespaces_view
-		xpath_markup
+		xpath_pango_attributes
 		xpath_empty_attributes
 		xpath_empty_text
 		app_folder
@@ -590,7 +590,7 @@ sub callback_xpath_entry_changed {
 	my ($widget) = @_;
 
 	my $xpath = $widget->get_text;
-	my $markup = undef;
+	my $pango_attributes = undef;
 	my $xpath_valid = FALSE;
 	if ($xpath) {
 	
@@ -602,11 +602,12 @@ sub callback_xpath_entry_changed {
 		else {
 			# Mark the XPath expression as wrong
 			my $escaped = escape_xml_text($xpath);
-			$markup = "<span underline='error' underline_color='red'>$escaped</span>";
+			my $markup = "<span underline='error' underline_color='red'>$escaped</span>";
+			($pango_attributes) = Gtk2::Pango->parse_markup($markup);
 		}
 	}
 	$self->glade->get_widget('xpath-evaluate')->set_sensitive($xpath_valid);
-	$self->xpath_markup($markup);
+	$self->xpath_pango_attributes($pango_attributes);
 	
 	
 	$self->set_xpath_layout_attributes();
@@ -624,9 +625,6 @@ sub callback_xpath_entry_expose {
 	my $self = shift;
 	my ($widget) = @_;
 	$self->set_xpath_layout_attributes();
-#	my $markup = $self->xpath_markup;
-#	$markup = '' unless defined $markup;
-#	$widget->get_layout->set_markup($markup);
 
 	# Continue with the events
 	return FALSE;
@@ -745,19 +743,23 @@ sub set_xpath_layout_attributes {
 	my $xpath = $widget->get_text;
 	my $layout = $widget->get_layout;
 
+	my $attributes;
 	if ($xpath eq '') {
 		# The widget is empty, show the empty text
 		$layout->set_text($self->xpath_empty_text);
-		$layout->set_attributes($self->xpath_empty_attributes);
+		$attributes = $self->xpath_empty_attributes;
 	}
-	elsif (my $markup = $self->xpath_markup) {
-		# There's an error
-		$layout->set_markup($markup);
+	elsif ($self->xpath_pango_attributes) {
+		# Use the attributes set previously
+		$attributes = $self->xpath_pango_attributes;
 	}
 	else {
 		# Reset the attributes just in case
-		$layout->set_attributes(Gtk2::Pango::AttrList->new());
+		$attributes = Gtk2::Pango::AttrList->new();
 	}
+	
+	
+	$layout->set_attributes($attributes);
 }
 
 
