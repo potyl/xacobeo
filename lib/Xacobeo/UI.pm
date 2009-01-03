@@ -280,11 +280,9 @@ sub construct_namespaces_view {
 	$editor->signal_connect(edited => 
 		sub {
 			my ($cell, $text_path, $new_text) = @_;
-			printf "New text $text_path $new_text\n";
 			my $path = Gtk2::TreePath->new_from_string($text_path);
 			#my $iter = $namespaces_view->get_iter($path);
 			#$namespaces_view->set($iter, 0, $new_text);
-			printf "OLD[$text_path]  %s of $new_text\n", @{ $namespaces_view->{data}[$text_path] };
 			return FALSE;
 		}
 	);
@@ -315,9 +313,9 @@ sub load_file {
 	my $self = shift;
 	my ($file) = @_;
 	
-	# Parse the content
 	my $timer = Xacobeo::Timer->start();
 	
+	# Parse the content
 	my $t_load = Xacobeo::Timer->start('Load document');
 	my $document = Xacobeo::Document->new($file);
 	$self->document($document);
@@ -363,7 +361,6 @@ sub load_file {
 sub populate_treeview {
 	my $self = shift;
 	my ($node) = @_;
-
 
 	my $treeview = $self->glade->get_widget('dom-tree-view');
 	my $store = $treeview->get_model;
