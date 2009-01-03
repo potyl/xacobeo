@@ -22,6 +22,8 @@ my %requires = (
 	'FindBin'               => 0,
 	'Carp'                  => 0,
 	'Exporter'              => 0,
+	'DynaLoader'            => 0,
+	'Data::Dumper'          => 0,
 );
 
 
