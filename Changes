@@ -1,6 +1,10 @@
 Revision history for Xacobeo.
 
 
+0.05 Mon Jan  5 19:13:00 CET 2009
+	-  New release with all the changes from the 0.05_XX releases.
+
+
 0.05_02 Sun Jan  4 08:49:28 CET 2009
 	- The XPath entry has a default text when empty.
 
