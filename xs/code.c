@@ -220,7 +220,7 @@ static void my_populate_tree_store (TreeRenderCtx *xargs, xmlNode *node, GtkTree
 				DOM_COL_XML_POINTER,  pointer,
 				DOM_COL_ELEMENT_NAME, node_name,
 				
-				// TODO add the columns ID_NAME and ID_VALUE
+				// Add the columns ID_NAME and ID_VALUE
 				DOM_COL_ID_NAME,      id_name,
 				DOM_COL_ID_VALUE,     id_value,
 				
