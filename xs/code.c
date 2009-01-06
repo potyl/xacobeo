@@ -165,7 +165,7 @@ void xacobeo_populate_gtk_tree_store (GtkTreeStore *store, xmlNode *node, HV *na
 	DEBUG("Adding root element %s", root->name);
 	
 
-	DEBUG("Displaying document with syntax highlighting");
+	DEBUG("Populating DOM tree");
 	GTimeVal start;
 	g_get_current_time(&start);
 
@@ -318,11 +318,13 @@ void xacobeo_populate_gtk_text_buffer (GtkTextBuffer *buffer, xmlNode *node, HV 
 	g_get_current_time(&start);
 
 	// Render the XML document
+	DEBUG("Computing syntax highlighting");
 	my_display_document_syntax(&xargs, node);
 	g_free(xargs.markup);
 
-  // Copy the text into the buffer
- 	gsize tags = xargs.tags->len;
+	// Copy the text into the buffer
+	gsize tags = xargs.tags->len;
+	DEBUG("Applying syntax highlighting");
 	my_render_buffer(&xargs);
 
 	

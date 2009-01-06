@@ -71,17 +71,22 @@ int main (int argc, char **argv) {
 	gtk_tree_store_clear(store);
 	xacobeo_populate_gtk_tree_store(store, (xmlNode *) document, NULL);
 	gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(store));
+
+	INFO("Freeing XML document");
 	xmlFreeDoc(document);
 	
 
 	// If we just want to time the execution time we don't need an event loop
 	if (! (argc > 2 && strcmp("quit", argv[2]) == 0) ) {
 		// Main event loop
+		INFO("Starting main loop");
 		gtk_main();
 	}
 
+	INFO("Cleaning XML parser");
 	xmlCleanupParser();
 
+	INFO("End of program");
 	return 0;
 }
 
