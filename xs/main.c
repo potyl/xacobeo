@@ -13,6 +13,9 @@
 #include "logger.h"
 #include <glib/gprintf.h>
 
+#include <libxml/parser.h>
+#include <libxml/parserInternals.h>
+
 #define TAG(name, ...) gtk_text_buffer_create_tag(buffer, name, __VA_ARGS__, NULL)
 
 
@@ -22,6 +25,7 @@ static GtkTreeViewColumn* my_add_text_column    (GtkTreeView *treeview, DomModel
 static GtkWidget*         my_create_textview    (void);
 static GtkWidget*         my_create_treeview    (void);
 static GtkWidget*         my_wrap_in_scrolls    (GtkWidget *widget);
+static xmlDoc*            my_parse_document     (const gchar *filename);
 
 
 int main (int argc, char **argv) {
@@ -37,12 +41,13 @@ int main (int argc, char **argv) {
 
 	// Load the XML document
 	DEBUG("Reading file %s", filename);
-	xmlDoc *document = xmlReadFile(filename, NULL, 0);
-	INFO("Read file %s", filename);
+	xmlDoc *document = my_parse_document(filename);
 	if (document == NULL) {
 		g_printf("Failed to parse %s\n", filename);
 		return 1;
 	}
+	INFO("Read file %s", filename);
+
 
 	// Render the XML document
 	GtkTextView *textview = NULL;
@@ -74,7 +79,7 @@ int main (int argc, char **argv) {
 		// Main event loop
 		gtk_main();
 	}
-	
+
 	xmlCleanupParser();
 
 	return 0;
@@ -294,4 +299,28 @@ static void my_create_buffer_tags (GtkTextBuffer *buffer) {
 		"foreground",  "red",
 		"weight",      PANGO_WEIGHT_BOLD
 	);
+}
+
+
+//
+// Parses the XML document. Returns an XML document if the parsing was
+// successful otherwise NULL.
+//
+// The document has to be	freed with xmlFreeDoc();
+//
+static xmlDoc* my_parse_document (const gchar *filename) {
+
+	// Construct a parser contenxt
+	xmlParserCtxt *parserCtxt = xmlCreateFileParserCtxt(filename);
+	parserCtxt->loadsubset = XML_DETECT_IDS;
+	
+	// Parse the document
+	xmlDoc *document = NULL;
+	if (xmlParseDocument(parserCtxt) == 0) {
+		document = parserCtxt->myDoc;
+		parserCtxt->myDoc = NULL;
+	}
+
+	xmlFreeParserCtxt(parserCtxt);
+	return document;
 }
