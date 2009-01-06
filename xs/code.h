@@ -18,6 +18,7 @@ enum DomModelColumns {
 	DOM_COL_ID_NAME,
 	DOM_COL_ID_VALUE,
 };
+typedef enum DomModelColumns DomModelColumnsEnum;
 
 
 // Public prototypes
