@@ -16,11 +16,12 @@
 #define TAG(name, ...) gtk_text_buffer_create_tag(buffer, name, __VA_ARGS__, NULL)
 
 
-static void       my_create_buffer_tags (GtkTextBuffer *buffer);
-static void       my_create_widgets     (GtkTextView **textview, GtkTreeView **treeview);
-static GtkWidget* my_create_textview    (void);
-static GtkWidget* my_create_treeview    (void);
-static GtkWidget* my_wrap_in_scrolls    (GtkWidget *widget);
+static void               my_create_buffer_tags (GtkTextBuffer *buffer);
+static void               my_create_widgets     (GtkTextView **textview, GtkTreeView **treeview);
+static GtkTreeViewColumn* my_add_text_column    (GtkTreeView *treeview, DomModelColumnsEnum field, const gchar *title);
+static GtkWidget*         my_create_textview    (void);
+static GtkWidget*         my_create_treeview    (void);
+static GtkWidget*         my_wrap_in_scrolls    (GtkWidget *widget);
 
 
 int main (int argc, char **argv) {
@@ -137,25 +138,47 @@ static GtkWidget* my_create_textview (void) {
 static GtkWidget* my_create_treeview (void) {
 	// Prepre the tree view
 	GtkWidget *treeview = gtk_tree_view_new();
-	GtkTreeStore *store = gtk_tree_store_new(2, G_TYPE_POINTER, G_TYPE_STRING);
+	GtkTreeStore *store = gtk_tree_store_new(5,
+		G_TYPE_POINTER, 
+		G_TYPE_STRING,
+		G_TYPE_STRING,
+		G_TYPE_STRING,
+		G_TYPE_STRING
+	);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(treeview), GTK_TREE_MODEL(store));
 	
+	
+	
+	// Element name
+	GtkTreeViewColumn *column = my_add_text_column(GTK_TREE_VIEW(treeview), DOM_COL_ELEMENT_NAME, "Element");
 
-	GtkCellRenderer *cell = gtk_cell_renderer_text_new();
-  GtkTreeViewColumn *column = gtk_tree_view_column_new_with_attributes(
-		"Element",
-		GTK_CELL_RENDERER(cell),
-		"text", DOM_COL_ELEMENT_NAME,
-// Enable only if there are more than one column!
-//		"resizable", TRUE,
-//		"sizing", GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-		NULL
-	);
-  gtk_tree_view_insert_column(GTK_TREE_VIEW(treeview), GTK_TREE_VIEW_COLUMN(column), 0);
+	// Icon
+	GtkCellRenderer *cell = gtk_cell_renderer_pixbuf_new();
+	gtk_tree_view_column_pack_end(column, cell, FALSE);
+	gtk_tree_view_column_set_attributes(column, cell, "stock-id", DOM_COL_ICON, NULL);
+	
+	// XML::ID
+	my_add_text_column(GTK_TREE_VIEW(treeview), DOM_COL_ID_NAME, "ID name");
+	my_add_text_column(GTK_TREE_VIEW(treeview), DOM_COL_ID_VALUE, "ID value");
 
 	return treeview;
 }
 
+
+static GtkTreeViewColumn* my_add_text_column (GtkTreeView *treeview, DomModelColumnsEnum field, const gchar *title) {
+	GtkCellRenderer *cell = gtk_cell_renderer_text_new();
+	GtkTreeViewColumn *column = gtk_tree_view_column_new();
+	gtk_tree_view_column_pack_end(column, cell, TRUE);
+	
+	gtk_tree_view_column_set_title(column, title);
+	gtk_tree_view_column_set_resizable(column, TRUE);
+	gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
+	gtk_tree_view_column_set_attributes(column, cell, "text", field, NULL);
+
+	gtk_tree_view_append_column(treeview, column);
+	
+	return column;
+}
 
 
 //
