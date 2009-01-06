@@ -1,10 +1,12 @@
 #ifndef __XACOBEO_LOGGER_H
 #define __XACOBEO_LOGGER_H
 
-#if HAS_DEBUG
+#ifdef HAS_DEBUG
 #  define LOG(level, ...) my_logger_log(__FILE__, __LINE__, __FUNCTION__, level, __VA_ARGS__)
 #else
-#  define LOG(level,...)
+// Trick the compiler by pretending that we are using the statement. Otherwise
+// it can issue warnings regarding unused variables.
+#  define LOG(level,...) if (0) my_logger_log(__FILE__, __LINE__, __FUNCTION__, level, __VA_ARGS__)
 #endif
 
 
