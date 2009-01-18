@@ -64,7 +64,7 @@ sub populate_textview {
 	my ($textview, $node, $namespaces) = @_;
 	my $buffer = $textview->get_buffer;
 
-	$textview->set_buffer(Gtk2::TextBuffer->new()); # Perl-Gk2 Bug can't set undef as a buffer
+	$textview->set_buffer(Gtk2::TextBuffer->new());
 	xacobeo_populate_gtk_text_buffer($buffer, $node, $namespaces);
 	$textview->set_buffer($buffer);
 

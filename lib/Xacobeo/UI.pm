@@ -29,6 +29,7 @@ use Gtk2;
 use Gtk2::GladeXML;
 use Gtk2::SimpleList;
 use Gtk2::Pango;
+use Gtk2::SourceView;
 
 use Data::Dumper;
 use Carp;
@@ -106,6 +107,7 @@ sub construct_gui {
 	my $folder = $self->app_folder();
 	
 	# Load the GUI definition from the glade files
+	Gtk2::Glade->set_custom_handler(\&glade_custom_handler, $self);
 	my $glade = Gtk2::GladeXML->new(catfile($folder, 'share', 'xacobeo', 'xacobeo.glade'));
 	$self->glade($glade);
 	
@@ -136,8 +138,6 @@ sub construct_gui {
 	# See http://www.mail-archive.com/gtk-perl-list@gnome.org/msg03647.html	
 	# and http://gtk2-perl.sourceforge.net/doc/pod/Gtk2/TreeViewColumn.html#_tree_column_set_cel
 	$self->construct_dom_tree_view();
-	
-	$self->prepare_textviews();
 	
 	# Create the list model for the Namespace view
 	$self->construct_namespaces_view();
@@ -181,9 +181,7 @@ sub display_xml_node {
 
 	# It's faster to disconnect the buffer from the view and to reconnect it back
 	my $buffer = $textview->get_buffer;
-	$textview->set_buffer(Gtk2::TextBuffer->new());# Perl-Gk2 Bug can't set undef as a buffer
-	
-	# Clear the buffer
+	$textview->set_buffer(Gtk2::SourceView::Buffer->new(undef));
 	$buffer->delete($buffer->get_start_iter, $buffer->get_end_iter);
 
 
@@ -192,7 +190,7 @@ sub display_xml_node {
 		my @children = $node->get_nodelist;
 		my $count = scalar @children;
 
-		# Formatting using to indicate which result is being analyzed
+		# Formatting using to indicate which result is being displayed
 		my $i = 0;
 		my $format = sprintf " %%%dd. ", length($count);
 
@@ -408,15 +406,10 @@ sub set_xpath {
 
 
 #
-# This widget prepares the text view widgets. It basically performs actions that
-# can be done through glade. For the moment this method registers some tags used
-# for syntax highlighting.
+# Populates a text tag table.
 #
-sub prepare_textviews {
-	my $self = shift;
-	
-	# Build the styles for the syntax highlighting
-	my $tag_table = Gtk2::TextTagTable->new();
+sub populate_tag_table {
+	my ($tag_table) = @_;	
 	
 	add_tag($tag_table, result_count =>
 		family     => 'Courier 10 Pitch',
@@ -506,14 +499,8 @@ sub prepare_textviews {
 		style      => 'italic',
 		weight     => PANGO_WEIGHT_BOLD,
 	);
-
-
-	# Register new text buffers with support syntaxt highlighting
-	foreach my $name qw(xml-document xpath-results) {
-		my $buffer = Gtk2::TextBuffer->new($tag_table);
-		my $textview = $self->glade->get_widget($name);
-		$textview->set_buffer($buffer);
-	}
+	
+	return $tag_table;
 }
 
 
@@ -774,6 +761,61 @@ sub display_statusbar_message {
 	my $id = $self->statusbar_context_id;
 	$statusbar->pop($id);
 	$statusbar->push($id, $message);
+}
+
+
+sub glade_custom_handler {
+	my ($glade, $function, $name, $str1, $str2, $int1, $int2, $data) = @_;
+	my $self = $data;
+	print "Called $name->$function\n";
+	
+	my $widget;
+	if ($self->can($function)) {
+		$widget = $self->$function();
+	}
+	else {
+		my $message = "Missing method $function for creating widget $name";
+		warn $message;
+		$widget = Gtk2::Label->new($message);
+	}
+	
+	$widget->show_all();
+	return $widget;
+}
+
+
+#
+# Creates the view used to display the full XML document.
+#
+sub create_xml_document_view {
+	my $self = shift;
+
+	my $tag_table = populate_tag_table(Gtk2::SourceView::TagTable->new());
+	my $buffer = Gtk2::SourceView::Buffer->new($tag_table);
+	$buffer->set('highlight', FALSE);
+	# This will disable the undo/redo forever
+	$buffer->begin_not_undoable_action();
+	
+	my $widget = Gtk2::SourceView::View->new_with_buffer($buffer);
+	$widget->set_editable(FALSE);
+	$widget->set_show_line_numbers(TRUE);
+	$widget->set_highlight_current_line(TRUE);
+	
+	return $widget;	
+}
+
+
+#
+# Creates the view used to display the XPath results.
+#
+sub create_xpath_results_view {
+	my $self = shift;
+
+	my $tag_table = populate_tag_table(Gtk2::TextTagTable->new());
+	my $buffer = Gtk2::TextBuffer->new($tag_table);
+	my $widget = Gtk2::TextView->new_with_buffer($buffer);
+	
+	return $widget;
 }
 
 

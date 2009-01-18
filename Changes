@@ -1,6 +1,10 @@
 Revision history for Xacobeo.
 
 
+0.06_01 Sun Jan 18 20:21:11 CET 2009
+	-  The XML document is displayed in a Gtk2::SourceView (has line numbers).
+
+
 0.05 Mon Jan  5 19:13:00 CET 2009
 	-  New release with all the changes from the 0.05_XX releases.
 
