@@ -24,6 +24,7 @@ my %requires = (
 	'Exporter'              => 0,
 	'DynaLoader'            => 0,
 	'Data::Dumper'          => 0,
+	'Gtk2::SourceView'      => 0,
 );
 
 
