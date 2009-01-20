@@ -35,6 +35,7 @@ use Data::Dumper;
 use Carp;
 use File::Spec::Functions;
 
+use Xacobeo;
 use Xacobeo::DomModel;
 use Xacobeo::Document;
 use Xacobeo::Utils qw(:xml :dom);
@@ -141,6 +142,9 @@ sub construct_gui {
 	
 	# Create the list model for the Namespace view
 	$self->construct_namespaces_view();
+	
+	# Add the version to the about dialog
+	$self->glade->get_widget('about')->set_version($Xacobeo::VERSION);
 }
 
 
@@ -672,7 +676,8 @@ sub callback_file_selected {
 #
 sub callback_about_show {
 	my $self = shift;
-	$self->glade->get_widget('about')->show_all();
+	my $about = $self->glade->get_widget('about');
+	$about->show_all();
 }
 
 
