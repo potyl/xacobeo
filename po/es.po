@@ -44,3 +44,9 @@ msgstr "ID nombre"
 msgid "ID value"
 msgstr "ID valor"
 
+#: lib/Xacobeo/UI.pm:361
+msgid "Document loaded in %.3f second"
+msgid_plural "Document loaded in %.3f seconds"
+msgstr[0] "Documento leido en %.3f segundo"
+msgstr[1] "Documento leido en %.3f segundos"
+
