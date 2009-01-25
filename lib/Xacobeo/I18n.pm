@@ -1,34 +1,32 @@
-package Xacobeo::Utils;
+package Xacobeo::I18n;
 
 =head1 NAME
 
-Xacobeo::Utils - Utilities shared among the project.
+Xacobeo::I18n - Utilities for internationalization (i18n).
 
 =head1 SYNOPSIS
 
-	use Xacobeo::Utils qw(:dom :xml);
+	# Initialize the i18n framework (done once)
+	use FindBin;
+	use Xacobeo::I18n;
+	Xacobeo::I18n->init(xacobeo => "$FindBin::Bin/../share/locale/");
 	
-	if (isa_dom_text($node)) {
-		my $text = escape_xml_text($node->nodeValue);
-		print "$text\n";
-	}
+	
+	# Import the i18n utilities (used everywhere where i18n is needed)
+	use Xacobeo::I18n;
+	print _("Hello world"), "\n";
 
 =head1 DESCRIPTION
 
-This package provides utility methods that are shared among the different
-modules in this project.
+This package provides utilities that perform i18n. This module relies on
+gettext.
 
-=head1 IMPORTS
+The initialization of the i18n framework should be performed only once,
+preferably as soon as possible. Once the framework is initialized, any module
+requiring to translate a string can include this module.
 
-The following import tags are defined:
-
-=head2 :xml
-
-Import the XML utilities.
-
-=head2 :dom
-
-Imports the DOM utilities.
+This module exports automatically the shortcut functions used for translating
+messages. This is done in order to make the translation transparent.
 
 =head1 FUNCTIONS
 
@@ -40,98 +38,25 @@ use strict;
 use warnings;
 
 use XML::LibXML;
-#use Locale::TextDomain; # Don't invoke import() yet!
 use Locale::Messages qw (:locale_h :libintl_h);
+use Encode;
 
 use Exporter 'import';
-our @EXPORT_OK = qw(
-	escape_xml_text
-	escape_xml_attribute
-	
-	isa_dom_document
-	isa_dom_element
-	isa_dom_attr
-	isa_dom_nodelist
-	isa_dom_text
-	isa_dom_comment
-	isa_dom_literal
-	isa_dom_boolean
-	isa_dom_number
-	isa_dom_node
-	isa_dom_pi
-	isa_dom_dtd
-	isa_dom_cdata
-	isa_dom_namespace
-
-	_
-	_x
-	_n
-	_nx
-	_xn
-	i18n_init
-);
-
-our %EXPORT_TAGS = (
-	'xml' => [
-		qw(
-			escape_xml_text
-			escape_xml_attribute
-		)
-	],
-
-	'dom' => [
-		qw(
-			isa_dom_document
-			isa_dom_element
-			isa_dom_attr
-			isa_dom_nodelist
-			isa_dom_text
-			isa_dom_comment
-			isa_dom_literal
-			isa_dom_boolean
-			isa_dom_number
-			isa_dom_node
-			isa_dom_pi
-			isa_dom_dtd
-			isa_dom_cdata
-			isa_dom_namespace
-		)
-	],
-	
-	'i18n' => [
-		qw(
-			_
-			_x
-			_n
-			_nx
-			_xn
-			$_
-			%_
-			N_
-			N_n
-			i18n_init
-		)
-	],
+our @EXPORT = qw(
+	__
+	__x
+	__n
+	__nx
+	__xn
 );
 
 
-# The entities defined in XML
-my %ENTITIES = qw(
-	<  &lt;
-	>  &gt;
-	&  &amp;
-	'  &apos;
-	"  &quot;
-);
+# The text domain of the application.
+my $DOMAIN = '';
 
 
-#
-# Prototypes for the i18n functions. If the prototypes are not defined Perl will
-# issue some warnings.
-#
 
-
-=head2 _
+=head2 __
 
 Translates a single string through gettext.
 
@@ -147,11 +72,14 @@ The string to translate.
 
 =cut
 
-sub _ ($);
+sub __ ($) {
+	my ($msgid) = @_;
+	return dgettext_utf8($msgid);
+}
 
 
 
-=head2 _x
+=head2 __x
 
 Translates a string that uses place holders for variable substitution.
 
@@ -171,12 +99,15 @@ A series of key/value pairs that will be replacing the place holders.
 
 =cut
 
-sub _x ($@) {
+sub __x ($@) {
+	my ($msgid, %args) = @_;
+	my $i18n = dgettext_utf8($msgid);
+	return expand($i18n, %args);
 }
 
 
 
-=head2 _n
+=head2 __n
 
 Translates a string in either singular or plural.
 
@@ -190,7 +121,7 @@ The string in it's singular form (one item).
 
 =item * $plural
 
-The string in it's plural form (moret than one item).
+The string in it's plural form (more than one item).
 
 =item * $count
 
@@ -205,7 +136,14 @@ A series of key/value pairs that will be replacing the place holders.
 
 =cut
 
-sub _n ($@);
+sub __n ($$$) {
+	my ($msgid, $msgid_plural, $count) = @_;
+print "1) $msgid\n";
+print "2) $msgid_plural\n";
+	my $i18n = dngettext_utf8($msgid, $msgid_plural, $count);
+print "3) $i18n\n";
+	return $i18n;
+}
 
 
 
@@ -223,7 +161,7 @@ The string in it's singular form (one item).
 
 =item * $plural
 
-The string in it's plural form (moret than one item).
+The string in it's plural form (more than one item).
 
 =item * $count
 
@@ -234,11 +172,15 @@ The number of items.
 
 =cut
 
-sub _nx ($@);
+sub __nx ($$$%) {
+	my ($msgid, $msgid_plural, $count, %args) = @_;
+	my $i18n = dngettext_utf8($msgid, $msgid_plural, $count);
+	return expand($i18n);
+}
 
 
 
-=head2 _xn
+=head2 __xn
 
 Same as L</_xn>.
 
@@ -252,7 +194,7 @@ The string in it's singular form (one item).
 
 =item * $plural
 
-The string in it's plural form (moret than one item).
+The string in it's plural form (more than one item).
 
 =item * $count
 
@@ -263,446 +205,52 @@ The number of items.
 
 =cut
 
-sub _xn ($@);
-		
-
-
-
-=head2 escape_xml_text
-
-Escapes the text as if would be added to a Text node. This function escapes only
-the entities <, > and &.
-
-Parameters:
-
-=over
-
-=item * $string
-
-The string to escape.
-
-=back	
-
-=cut
-
-sub escape_xml_text {
-	my ($string) = @_;
-	$string =~ s/([<>&])/$ENTITIES{$1}/eg;
-	return $string;
+sub __xn ($$$%) {
+	my ($msgid, $msgid_plural, $count, %args) = @_;
+	return __nx($msgid, $msgid_plural, $count, %args);
 }
 
 
 
-=head2 escape_xml_attribute
-
-Escapes the text as if would be added to an Attribute. This function escapes the
-entities <, >, &, ' and ".
-
-Parameters:
-
-=over
-
-=item * $string
-
-The string to escape.
-
-=back	
-
-=cut
-
-sub escape_xml_attribute {
-	my ($string) = @_;
-	$string =~ s/([<>&'"])/$ENTITIES{$1}/eg;
-	return $string;
+#
+# Replaces the place markers with their corresponding values.
+#
+sub expand ($%) {
+	my ($i18n, %args) = @_;
+	my $re = join '|', map { quotemeta $_ } keys %args;
+	$i18n =~ s/\{($re)\}/defined $args{$1} ? $args{$1} : "{$1}"/ge;
+	return $i18n;
 }
 
 
 
-=head2 isa_dom_document
-
-Returns true if the node is a DOM C<Document> (instance of 
-L<XML::LibXML::Document>).
-
-Parameters:
-
-=over
-
-=item * $node
-
-The node to check.
-
-=back	
-
-=cut
-
-sub isa_dom_document {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Document') : 0;
+#
+# Calls dgettext and ensures that the converted text is in UTF-8.
+#
+sub dgettext_utf8 {
+	my ($msgid) = @_;
+	my $i18n = dgettext($DOMAIN, $msgid);
+	return decode("UTF-8", $i18n);
 }
 
 
 
-=head2 isa_dom_element
-
-Returns true if the node is a DOM C<Element> (instance of 
-L<XML::LibXML::Element>).
-
-Parameters:
-
-=over
-
-=item * $node
-
-The node to check.
-
-=back	
-
-=cut
-
-sub isa_dom_element {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Element') : 0;
+#
+# Calls dngettext and ensures that the converted text is in UTF-8.
+#
+sub dngettext_utf8 {
+	my ($msgid, $msgid_plural, $count) = @_;
+	my $i18n = dngettext($DOMAIN, $msgid, $msgid_plural, $count);
+	return decode("UTF-8", $i18n);
 }
 
 
 
-=head2 isa_dom_attr
+=head2 init
 
-Returns true if the node is a DOM C<Attribute> (instance of 
-L<XML::LibXML::Attr>).
+Initializes the i18n framework (gettext). Must be called in the fashion:
 
-Parameters:
-
-=over
-
-=item * $node
-
-The node to check.
-
-=back	
-
-=cut
-
-sub isa_dom_attr {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Attr') : 0;
-}
-
-
-
-=head2 isa_dom_nodelist
-
-Returns true if the node is a DOM C<NodeList> (instance of 
-L<XML::LibXML::NodeList>).
-
-Parameters:
-
-=over
-
-=item * $node
-
-The node to check.
-
-=back	
-
-=cut
-
-sub isa_dom_nodelist {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::NodeList') : 0;
-}
-
-
-
-=head2 isa_dom_text
-
-Returns true if the node is a DOM C<Text> (instance of 
-L<XML::LibXML::Text>).
-
-B<NOTE>: XML::LibXML considers that C<Comment> and C<CDATA> nodes are also
-C<Text> nodes. This method doesn't consider a C<Comment> nor a C<CDATA> node as
-        being C<Text> nodes.
-
-Parameters:
-
-=over
-
-=item * $node
-
-The node to check.
-
-=back	
-
-=cut
-
-sub isa_dom_text {
-	my ($node) = @_;
-	return unless defined $node;
-	return if isa_dom_comment($node) or isa_dom_cdata($node);
-	return $node->isa('XML::LibXML::Text');
-}
-
-
-
-=head2 isa_dom_comment
-
-Returns true if the node is a DOM C<Comment> (instance of 
-L<XML::LibXML::Comment>).
-
-Parameters:
-
-=over
-
-=item * $node
-
-The node to check.
-
-=back	
-
-=cut
-
-sub isa_dom_comment {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Comment') : 0;
-}
-
-
-
-=head2 isa_dom_node
-
-Returns true if the node is a DOM C<Node> (instance of 
-L<XML::LibXML::Node>).
-
-Parameters:
-
-=over
-
-=item * $node
-
-The node to check.
-
-=back	
-
-=cut
-
-sub isa_dom_node {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Node') : 0;
-}
-
-
-
-=head2 isa_dom_pi
-
-Returns true if the node is a DOM C<PI> (also known as: processing instruction)
-(instance of L<XML::LibXML::PI>).
-
-Parameters:
-
-=over
-
-=item * $node
-
-The node to check.
-
-=back	
-
-=cut
-
-sub isa_dom_pi {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::PI') : 0;
-}
-
-
-
-=head2 isa_dom_dtd
-
-Returns true if the node is a DOM C<DTD> (instance of 
-L<XML::LibXML::Dtd>).
-
-Parameters:
-
-=over
-
-=item * $node
-
-The node to check.
-
-=back	
-
-=cut
-
-sub isa_dom_dtd {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Dtd') : 0;
-}
-
-
-
-=head2 isa_dom_cdata
-
-Returns true if the node is a DOM C<CDATASection> (instance of 
-L<XML::LibXML::CDATASection>).
-
-Parameters:
-
-=over
-
-=item * $node
-
-The node to check.
-
-=back	
-
-=cut
-
-sub isa_dom_cdata {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::CDATASection') : 0;
-}
-
-
-
-=head2 isa_dom_namespace
-
-Returns true if the node is a C<Namespace> (instance of 
-L<XML::LibXML::Namespace>).
-
-B<NOTE>: The DOM doesn't define an object type named C<Namespaces> but
-XML::LibXML does so this function is named 'isa_dom' for consistency with the
-other functions.
-
-Parameters:
-
-=over
-
-=item * $node
-
-The node to check.
-
-=back	
-
-=cut
-
-sub isa_dom_namespace {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Namespace') : 0;
-}
-
-
-
-=head2 isa_dom_literal
-
-Returns true if the node is a C<Literal> (instance of 
-L<XML::LibXML::Literal>).
-
-B<NOTE>: The DOM doesn't define an object type named C<Literal> but XML::LibXML
-does so this function is named 'isa_dom' for consistency with the other
-functions.
-
-Parameters:
-
-=over
-
-=item * $node
-
-The node to check.
-
-=back	
-
-=cut
-
-sub isa_dom_literal {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Literal') : 0;
-}
-
-
-
-=head2 isa_dom_boolean
-
-Returns true if the node is a C<Boolean> (instance of 
-L<XML::LibXML::Boolean>).
-
-B<NOTE>: The DOM doesn't define an object type named C<Boolean> but XML::LibXML
-does so this function is named 'isa_dom' for consistency with the other
-functions.
-
-Parameters:
-
-=over
-
-=item * $node
-
-The node to check.
-
-=back	
-
-=cut
-
-sub isa_dom_boolean {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Boolean') : 0;
-}
-
-
-
-=head2 isa_dom_number
-
-Returns true if the node is a C<Number> (instance of 
-L<XML::LibXML::Number>).
-
-B<NOTE>: The DOM doesn't define an object type named C<Number> but XML::LibXML
-does so this function is named 'isa_dom' for consistency with the other
-functions.
-
-Parameters:
-
-=over
-
-=item * $node
-
-The node to check.
-
-=back	
-
-=cut
-
-sub isa_dom_number {
-	my ($node) = @_;
-	return defined $node ? $node->isa('XML::LibXML::Number') : 0;
-}
-
-
-
-=head2 _
-
-Simple wrapper to C<gettext>. This method is used request the translation of a
-string.
-
-Parameters:
-
-=over
-
-=item * $format
-
-The string format.
-
-=item * @values
-
-The values to substitute in the string format.
-
-=back	
-
-=cut
-
-
-
-
-=head2 i18n_init
-
-Initializes the i18n framework (gettext).
+	Xacobeo::I18n->init($domain, $folder);
 
 Parameters:
 
@@ -722,16 +270,19 @@ has to be provided.
 
 =cut
 
-sub i18n_init {
-	my ($domain, $folder) = @_;
-print "-----i18n $domain -> $folder\n";
-use POSIX ':locale_h';
-	setlocale (LC_ALL, '');
-	Locale::TextDomain->import($domain, $folder);
-	printf "%s\n", _("XPath Expression...");
-#	die "here";
+sub init {
+	my (undef, $domain, $folder) = @_;
+	
+	$DOMAIN = $domain;
+	
+print ">>>>i18n $domain -> $folder\n";
+#	use POSIX ':locale_h';
+#	setlocale(LC_ALL, '');
+	textdomain($DOMAIN);
+	bindtextdomain($DOMAIN, $folder);
+	printf "1) %s\n", gettext("XPath Expression...");
+	printf "2) %s\n", __("XPath Expression...");
 }
-
 
 
 # A true value
@@ -744,10 +295,11 @@ Emmanuel Rodriguez E<lt>potyl@cpan.orgE<gt>.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2008 by Emmanuel Rodriguez.
+Copyright (C) 2009 by Emmanuel Rodriguez.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.8 or,
 at your option, any later version of Perl 5 you may have available.
 
 =cut
+
