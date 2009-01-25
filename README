@@ -43,6 +43,7 @@ This module depends on the following CPAN modules:
 	DynaLoader
 	Data::Dumper
 	Gtk2::SourceView
+	Locale::TextDomain
 
 PROJECT
 

@@ -40,11 +40,13 @@ use strict;
 use warnings;
 
 use XML::LibXML;
+require Locale::TextDomain; # Don't invoke import() yet!
 
 use Exporter 'import';
 our @EXPORT_OK = qw(
 	escape_xml_text
 	escape_xml_attribute
+	
 	isa_dom_document
 	isa_dom_element
 	isa_dom_attr
@@ -59,6 +61,17 @@ our @EXPORT_OK = qw(
 	isa_dom_dtd
 	isa_dom_cdata
 	isa_dom_namespace
+
+	__
+	__x
+	__n
+	__nx
+	__xn
+	$__
+	%__
+	N__
+	N__n
+	i18n_init
 );
 
 our %EXPORT_TAGS = (
@@ -68,6 +81,7 @@ our %EXPORT_TAGS = (
 			escape_xml_attribute
 		)
 	],
+
 	'dom' => [
 		qw(
 			isa_dom_document
@@ -86,6 +100,21 @@ our %EXPORT_TAGS = (
 			isa_dom_namespace
 		)
 	],
+	
+	'i18n' => [
+		qw(
+			__
+			__x
+			__n
+			__nx
+			__xn
+			$__
+			%__
+			N__
+			N__n
+			i18n_init
+		)
+	],
 );
 
 
@@ -97,6 +126,147 @@ my %ENTITIES = qw(
 	'  &apos;
 	"  &quot;
 );
+
+
+#
+# Prototypes for the i18n functions. If the prototypes are not defined Perl will
+# issue some warnings.
+#
+
+
+=head2 __
+
+Translates a single string through gettext.
+
+Parameters:
+
+=over
+
+=item * $string
+
+The string to translate.
+
+=back	
+
+=cut
+
+sub __ ($);
+
+
+
+=head2 __x
+
+Translates a string that uses place holders for variable substitution.
+
+Parameters:
+
+=over
+
+=item * $string
+
+The string to translate.
+
+=item * %values
+
+A series of key/value pairs that will be replacing the place holders.
+
+=back	
+
+=cut
+
+sub __x ($@);
+
+
+
+=head2 __n
+
+Translates a string in either singular or plural.
+
+Parameters:
+
+=over
+
+=item * $singular
+
+The string in it's singular form (one item).
+
+=item * $plural
+
+The string in it's plural form (moret than one item).
+
+=item * $count
+
+The number of items.
+
+=item * %values
+
+A series of key/value pairs that will be replacing the place holders.
+
+
+=back	
+
+=cut
+
+sub __n ($@);
+
+
+
+=head2 __nx
+
+Translates a string in either singular or plural with variable substitution.
+
+Parameters:
+
+=over
+
+=item * $singular
+
+The string in it's singular form (one item).
+
+=item * $plural
+
+The string in it's plural form (moret than one item).
+
+=item * $count
+
+The number of items.
+
+=back	
+
+
+=cut
+
+sub __nx ($@);
+
+
+
+=head2 __xn
+
+Same as L</__xn>.
+
+Parameters:
+
+=over
+
+=item * $singular
+
+The string in it's singular form (one item).
+
+=item * $plural
+
+The string in it's plural form (moret than one item).
+
+=item * $count
+
+The number of items.
+
+=back	
+
+
+=cut
+
+sub __xn ($@);
+		
 
 
 
@@ -505,6 +675,60 @@ sub isa_dom_number {
 	my ($node) = @_;
 	return defined $node ? $node->isa('XML::LibXML::Number') : 0;
 }
+
+
+
+=head2 __
+
+Simple wrapper to C<gettext>. This method is used request the translation of a
+string.
+
+Parameters:
+
+=over
+
+=item * $format
+
+The string format.
+
+=item * @values
+
+The values to substitute in the string format.
+
+=back	
+
+=cut
+
+
+
+
+=head2 i18n_init
+
+Initializes the i18n framework (gettext).
+
+Parameters:
+
+=over
+
+=item * $domain
+
+The name of the gettext domain (program's name).
+
+=item * $folder
+
+The folder where to find the translation files. For instance for the translation
+F</usr/share/locale/fr/LC_MESSAGES/xacobeo.mo> the folder F</usr/share/locale>
+has to be provided.
+
+=back	
+
+=cut
+
+sub i18n_init {
+	my ($domain, $folder) = @_;
+	Locale::TextDomain->import($domain, $folder);
+}
+
 
 
 # A true value

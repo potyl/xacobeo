@@ -83,6 +83,7 @@ use File::Spec::Functions;
 use FindBin;
 
 use Xacobeo::UI;
+use Xacobeo::Utils qw(i18n_init);
 
 
 exit main();
@@ -98,6 +99,8 @@ sub main {
 	
 	# Create a new instance of this application
 	my $folder = find_app_folder();
+	i18n_init(xacobeo => catdir($folder, 'share', 'locale'));
+
 	my $xacobeo = Xacobeo::UI->new($folder);
 	
 	if (@ARGV) {

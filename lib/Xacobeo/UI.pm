@@ -38,7 +38,7 @@ use File::Spec::Functions;
 use Xacobeo;
 use Xacobeo::DomModel;
 use Xacobeo::Document;
-use Xacobeo::Utils qw(:xml :dom);
+use Xacobeo::Utils qw(:xml :dom :i18n);
 use Xacobeo::Timer;
 use Xacobeo::XS qw(
 	xacobeo_populate_gtk_text_buffer
@@ -121,8 +121,10 @@ sub construct_gui {
 	$self->glade->get_widget('about')->set_logo($logo);
 
 	# Parse the Pango markup for the default value of the xpath entry widget
-	($self->{xpath_empty_attributes}, $self->{xpath_empty_text}) = Gtk2::Pango->parse_markup(
-		"<span color='grey' size='smaller'>XPath Expression...</span>"
+	($self->{xpath_empty_attributes}, $self->{xpath_empty_text}) = pango_span(
+		__("XPath Expression..."),
+		color => 'grey',
+		size  => 'smaller',
 	);
 
 
@@ -324,7 +326,7 @@ sub load_file {
 	my $timer = Xacobeo::Timer->start();
 	
 	# Parse the content
-	my $t_load = Xacobeo::Timer->start('Load document');
+	my $t_load = Xacobeo::Timer->start(__('Load document'));
 	my $document = Xacobeo::Document->new($file);
 	$self->document($document);
 	undef $t_load;
@@ -336,12 +338,12 @@ sub load_file {
 	my $namespaces = $document->namespaces;
 
 	# Update the text widget
-	my $t_syntax = Xacobeo::Timer->start('Syntax Highlight');
+	my $t_syntax = Xacobeo::Timer->start(__('Syntax Highlight'));
 	$self->display_xml_node('xml-document', $xml);
 	undef $t_syntax;
 
 	# Populate the DOM view tree
-	my $t_dom = Xacobeo::Timer->start('DOM Tree');
+	my $t_dom = Xacobeo::Timer->start(__('DOM Tree'));
 	$self->populate_treeview($xml);
 	undef $t_dom;
 	$timer->stop();
@@ -354,9 +356,12 @@ sub load_file {
 	}
 	@{ $self->namespaces_view->{data} } = @namespaces;
 
-	$self->display_statusbar_message(
-		sprintf "Document loaded in %.3f s", $timer->elapsed
+	my $format = __nx(
+		"Document loaded in %.3f second", 
+		"Document loaded in %.3f seconds", 
+		int($timer->elapsed),
 	);
+	$self->display_statusbar_message(sprintf $format, $timer->elapsed);
 	
 	$glade->get_widget('xpath-entry')->set_sensitive(TRUE);
 }
@@ -592,9 +597,10 @@ sub callback_xpath_entry_changed {
 		}
 		else {
 			# Mark the XPath expression as wrong
-			my $escaped = escape_xml_text($xpath);
-			my $markup = "<span underline='error' underline_color='red'>$escaped</span>";
-			($pango_attributes) = Gtk2::Pango->parse_markup($markup);
+			#my $escaped = escape_xml_text($xpath);
+			#my $markup = "<span underline='error' underline_color='red'>$escaped</span>";
+			#($pango_attributes) = Gtk2::Pango->parse_markup($markup);
+			($pango_attributes) = pango_span($xpath, underline => 'error', underline_color => 'red');
 		}
 	}
 	$self->glade->get_widget('xpath-evaluate')->set_sensitive($xpath_valid);
@@ -821,6 +827,26 @@ sub create_xpath_results_view {
 	my $widget = Gtk2::TextView->new_with_buffer($buffer);
 	
 	return $widget;
+}
+
+
+#
+# Returns the Pango attribute list and the text from a Pango markup span that
+# would have the given attributes.
+#
+# This function creates a span element with the given attributes that wraps the
+# given text. The text has it's content escaped.
+#
+sub pango_span {
+	my ($text, %attributes) = @_;
+	
+	my $pango = "<span";
+	while (my ($key, $value) = each %attributes) {
+		$pango .= " $key='$value'";
+	}
+	$pango .= sprintf ">%s</span>", escape_xml_text($text);
+
+	return Gtk2::Pango->parse_markup($pango);
 }
 
 
