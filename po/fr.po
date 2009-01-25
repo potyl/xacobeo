@@ -1,0 +1,46 @@
+# English translations for xacobeo-i package.
+# Copyright (C) 2009 THE xacobeo-i'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the xacobeo-i package.
+# Emmanuel Rodriguez <emmanuel.rodriguez@gmail.com>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: xacobeo-i 18n\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-01-25 11:48+0100\n"
+"PO-Revision-Date: 2009-01-25 11:50+0100\n"
+"Last-Translator: Emmanuel Rodriguez <emmanuel.rodriguez@gmail.com>\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: lib/Xacobeo/UI.pm:125
+msgid "XPath Expression..."
+msgstr "Expression XPath..."
+
+#: lib/Xacobeo/UI.pm:329
+msgid "Load document"
+msgstr "Chargement du document"
+
+#: lib/Xacobeo/UI.pm:341
+msgid "Syntax Highlight"
+msgstr "Coloration syntaxique"
+
+#: lib/Xacobeo/UI.pm:346
+msgid "DOM Tree"
+msgstr "Arbre DOM"
+
+#: lib/Xacobeo/DomModel.pm:131
+msgid "Element"
+msgstr "Element"
+
+#: lib/Xacobeo/DomModel.pm:140
+msgid "ID name"
+msgstr "ID nom"
+
+#: lib/Xacobeo/DomModel.pm:143
+msgid "ID value"
+msgstr "ID valeur"
+
