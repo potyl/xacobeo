@@ -38,7 +38,8 @@ use File::Spec::Functions;
 use Xacobeo;
 use Xacobeo::DomModel;
 use Xacobeo::Document;
-use Xacobeo::Utils qw(:xml :dom :i18n);
+use Xacobeo::Utils qw(:xml :dom);
+use Xacobeo::I18n;
 use Xacobeo::Timer;
 use Xacobeo::XS qw(
 	xacobeo_populate_gtk_text_buffer
@@ -356,7 +357,7 @@ sub load_file {
 	}
 	@{ $self->namespaces_view->{data} } = @namespaces;
 
-	my $format = __nx(
+	my $format = __n(
 		"Document loaded in %.3f second", 
 		"Document loaded in %.3f seconds", 
 		int($timer->elapsed),

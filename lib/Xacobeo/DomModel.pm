@@ -41,7 +41,8 @@ use Glib qw(TRUE FALSE);
 use Gtk2;
 
 use XML::LibXML;
-use Xacobeo::Utils qw(:dom :i18n);
+use Xacobeo::Utils qw(:dom);
+use Xacobeo::I18n;
 
 use Data::Dumper;
 
