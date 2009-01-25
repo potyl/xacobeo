@@ -40,8 +40,7 @@ use strict;
 use warnings;
 
 use XML::LibXML;
-#use Locale::TextDomain; # Don't invoke import() yet!
-use Locale::Messages qw (:locale_h :libintl_h);
+use Locale::TextDomain; # Don't invoke import() yet!
 
 use Exporter 'import';
 our @EXPORT_OK = qw(
@@ -63,11 +62,11 @@ our @EXPORT_OK = qw(
 	isa_dom_cdata
 	isa_dom_namespace
 
-	_
-	_x
-	_n
-	_nx
-	_xn
+	__
+	__x
+	__n
+	__nx
+	__xn
 	i18n_init
 );
 
@@ -100,15 +99,11 @@ our %EXPORT_TAGS = (
 	
 	'i18n' => [
 		qw(
-			_
-			_x
-			_n
-			_nx
-			_xn
-			$_
-			%_
-			N_
-			N_n
+			__
+			__x
+			__n
+			__nx
+			__xn
 			i18n_init
 		)
 	],
@@ -676,7 +671,7 @@ sub isa_dom_number {
 
 
 
-=head2 _
+=head2 __
 
 Simple wrapper to C<gettext>. This method is used request the translation of a
 string.
