@@ -155,10 +155,23 @@ clean:
 	-rm -f main xs/*.o  || true
 	-rm -f lib/Xacobeo/XS.xs lib/Xacobeo/XS.c lib/Xacobeo/libxml2-perl.typemap || true
 
+
 .PHONY: i18n
 i18n: \
   target/share/locale/fr/LC_MESSAGES/xacobeo.mo \
   target/share/locale/es/LC_MESSAGES/xacobeo.mo
+
+
+xacobeo.pot:
+	xgettext --language=Perl --join-existing \
+	  --keyword \
+	  --keyword=__ \
+	  --keyword=__x \
+	  --keyword=__n:1,2 \
+	  --keyword=__nx:1,2 \
+	  --keyword=__xn \
+	  --keyword=N__ \
+	  -o $@ `find lib/ -type f -name '*.pm'`
 
 
 target/share/locale/fr/LC_MESSAGES/xacobeo.mo: po/fr.po
