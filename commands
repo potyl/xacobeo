@@ -66,6 +66,7 @@ install: ${DEST}/local/bin/xacobeo
 ${DEST}/local/bin/xacobeo: build
 	rm -rf ${DEST} || true
 	./Build install --install_base ${DEST}
+	./commands i18n
 
 
 .PHONY: fakeinstall
@@ -153,3 +154,18 @@ clean:
 	-rm -rf _build 2> /dev/null || true
 	-rm -f main xs/*.o  || true
 	-rm -f lib/Xacobeo/XS.xs lib/Xacobeo/XS.c lib/Xacobeo/libxml2-perl.typemap || true
+
+.PHONY: i18n
+i18n: \
+  target/share/locale/fr/LC_MESSAGES/xacobeo.mo \
+  target/share/locale/es/LC_MESSAGES/xacobeo.mo
+
+
+target/share/locale/fr/LC_MESSAGES/xacobeo.mo: po/fr.po
+	mkdir -p `dirname $@`
+	msgfmt -o $@ $<  
+
+
+target/share/locale/es/LC_MESSAGES/xacobeo.mo: po/es.po
+	mkdir -p `dirname $@`
+	msgfmt -o $@ $<  
