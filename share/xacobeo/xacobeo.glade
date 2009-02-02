@@ -317,7 +317,7 @@
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <property name="has_separator">False</property>
     <property name="program_name">Xacobeo</property>
-    <property name="copyright" translatable="yes">Copyright (C) 2008 by Emmanuel Rodriguez.</property>
+    <property name="copyright" translatable="yes">Copyright (C) 2008-2009 by Emmanuel Rodriguez.</property>
     <property name="website">http://code.google.com/p/xacobeo/</property>
     <property name="website_label">Xacobeo</property>
     <property name="license">			 The "Artistic License"
