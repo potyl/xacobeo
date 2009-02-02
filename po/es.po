@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xacobeo-i 18n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-25 11:48+0100\n"
+"POT-Creation-Date: 2009-02-02 20:04+0100\n"
 "PO-Revision-Date: 2009-01-25 11:50+0100\n"
 "Last-Translator: Emmanuel Rodriguez <emmanuel.rodriguez@gmail.com>\n"
 "Language-Team: English\n"
@@ -16,37 +16,66 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/Xacobeo/UI.pm:125
+#: lib/Xacobeo/UI.pm:130 lib/Xacobeo/I18n.pm:284
 msgid "XPath Expression..."
 msgstr "Expresión XPath..."
 
-#: lib/Xacobeo/UI.pm:329
+#: lib/Xacobeo/UI.pm:334
 msgid "Load document"
 msgstr "Lectura del documento"
 
-#: lib/Xacobeo/UI.pm:341
+#: lib/Xacobeo/UI.pm:346
 msgid "Syntax Highlight"
 msgstr "Coloreado de sintaxis"
 
-#: lib/Xacobeo/UI.pm:346
+#: lib/Xacobeo/UI.pm:351
 msgid "DOM Tree"
 msgstr "Arbol DOM"
 
-#: lib/Xacobeo/DomModel.pm:131
-msgid "Element"
-msgstr "Elemento"
-
-#: lib/Xacobeo/DomModel.pm:140
-msgid "ID name"
-msgstr "ID nombre"
-
-#: lib/Xacobeo/DomModel.pm:143
-msgid "ID value"
-msgstr "ID valor"
-
-#: lib/Xacobeo/UI.pm:361
+#: lib/Xacobeo/UI.pm:365
+#, perl-format
 msgid "Document loaded in %.3f second"
 msgid_plural "Document loaded in %.3f seconds"
 msgstr[0] "Documento leido en %.3f segundo"
 msgstr[1] "Documento leido en %.3f segundos"
 
+#: lib/Xacobeo/DomModel.pm:132
+msgid "Element"
+msgstr "Elemento"
+
+#: lib/Xacobeo/DomModel.pm:141
+msgid "ID name"
+msgstr "ID nombre"
+
+#: lib/Xacobeo/DomModel.pm:144
+msgid "ID value"
+msgstr "ID valor"
+
+#: share/xacobeo/xacobeo.glade:97
+msgid "_Help"
+msgstr ""
+
+#: share/xacobeo/xacobeo.glade:126
+msgid "XPath:"
+msgstr ""
+
+#: share/xacobeo/xacobeo.glade:150
+#, fuzzy
+msgid "Evaluate"
+msgstr "ID valor"
+
+#: share/xacobeo/xacobeo.glade:244
+msgid "Results"
+msgstr ""
+
+#: share/xacobeo/xacobeo.glade:275
+msgid "Namespaces"
+msgstr ""
+
+#: share/xacobeo/xacobeo.glade:314
+msgid "About Xacobeo"
+msgstr ""
+
+#: share/xacobeo/xacobeo.glade:320
+msgid "Copyright (C) 2008 by Emmanuel Rodriguez."
+msgstr ""
