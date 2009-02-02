@@ -163,7 +163,7 @@ i18n: \
 
 
 xacobeo.pot:
-	xgettext --language=Perl --join-existing \
+	xgettext --language=Perl \
 	  --keyword \
 	  --keyword=__ \
 	  --keyword=__x \
@@ -172,6 +172,15 @@ xacobeo.pot:
 	  --keyword=__xn \
 	  --keyword=N__ \
 	  -o $@ `find lib/ -type f -name '*.pm'`
+	xgettext --language=Glade --join-existing -o $@ share/xacobeo/xacobeo.glade
+
+
+po/fr.po: xacobeo.pot
+	msgmerge --update $@ $<
+
+
+po/es.po: xacobeo.pot
+	msgmerge --update $@ $<
 
 
 target/share/locale/fr/LC_MESSAGES/xacobeo.mo: po/fr.po
