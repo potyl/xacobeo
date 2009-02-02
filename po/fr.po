@@ -53,29 +53,28 @@ msgstr "ID valeur"
 
 #: share/xacobeo/xacobeo.glade:97
 msgid "_Help"
-msgstr ""
+msgstr "Aid_e"
 
 #: share/xacobeo/xacobeo.glade:126
 msgid "XPath:"
-msgstr ""
+msgstr "XPath:"
 
 #: share/xacobeo/xacobeo.glade:150
-#, fuzzy
 msgid "Evaluate"
-msgstr "ID valeur"
+msgstr "Évaluer"
 
 #: share/xacobeo/xacobeo.glade:244
 msgid "Results"
-msgstr ""
+msgstr "Résultats"
 
 #: share/xacobeo/xacobeo.glade:275
 msgid "Namespaces"
-msgstr ""
+msgstr "Espace de noms"
 
 #: share/xacobeo/xacobeo.glade:314
 msgid "About Xacobeo"
-msgstr ""
+msgstr "À _propos de"
 
 #: share/xacobeo/xacobeo.glade:320
-msgid "Copyright (C) 2008 by Emmanuel Rodriguez."
-msgstr ""
+msgid "Copyright (C) 2008-2009 by Emmanuel Rodriguez."
+msgstr "Copyright (C) 2008-2009 by Emmanuel Rodriguez."
