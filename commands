@@ -159,10 +159,10 @@ clean:
 .PHONY: i18n
 i18n: \
   target/share/locale/fr/LC_MESSAGES/xacobeo.mo \
-  target/share/locale/es/LC_MESSAGES/xacobeo.mo
+  target/share/locale/es/LC_MESSAGES/xacobeo.mo \
+  po/xacobeo.pot
 
-
-xacobeo.pot:
+po/xacobeo.pot:
 	xgettext --language=Perl \
 	  --keyword \
 	  --keyword=__ \
@@ -175,11 +175,11 @@ xacobeo.pot:
 	xgettext --language=Glade --join-existing -o $@ share/xacobeo/xacobeo.glade
 
 
-po/fr.po: xacobeo.pot
+po/fr.po: po/xacobeo.pot
 	msgmerge --update $@ $<
 
 
-po/es.po: xacobeo.pot
+po/es.po: po/xacobeo.pot
 	msgmerge --update $@ $<
 
 
