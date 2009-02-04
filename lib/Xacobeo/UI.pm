@@ -77,6 +77,10 @@ Parameters:
 
 The application's root folder.
 
+=item * $domain
+
+The i18n (gettext) domain to use for the translations.
+
 =back	
 
 =cut
@@ -84,15 +88,15 @@ The application's root folder.
 sub new {
 	# Arguments
 	my $class = shift;
-	croak 'Usage: new($app_folder)' unless @_;
-	my ($app_folder) = @_;
+	croak 'Usage: new($app_folder, $domain)' unless @_ == 2;
+	my ($app_folder, $domain) = @_;
 	
 	# Create an instance
 	my $self = bless {}, ref($class) || $class;
 	
 	# Create the GUI
 	$self->app_folder($app_folder);
-	$self->construct_gui();
+	$self->construct_gui($domain);
 	
 	# Return the new instances
 	return $self;
@@ -105,12 +109,17 @@ sub new {
 sub construct_gui {
 	# Arguments
 	my $self = shift;
+	my ($domain) = @_;
 
 	my $folder = $self->app_folder();
 	
 	# Load the GUI definition from the glade files
 	Gtk2::Glade->set_custom_handler(\&glade_custom_handler, $self);
-	my $glade = Gtk2::GladeXML->new(catfile($folder, 'share', 'xacobeo', 'xacobeo.glade'));
+	my $glade = Gtk2::GladeXML->new(
+		catfile($folder, 'share', 'xacobeo', 'xacobeo.glade'),
+		undef,
+		$domain,
+	);
 	$self->glade($glade);
 	
 	my $window = $self->glade->get_widget('window');
@@ -127,7 +136,6 @@ sub construct_gui {
 		color => 'grey',
 		size  => 'smaller',
 	);
-
 
 	# Connect the signals to the callbacks
 	$glade->signal_autoconnect_from_package($self);

@@ -100,9 +100,10 @@ sub main {
 	
 	# Create a new instance of this application
 	my $folder = find_app_folder();
-	Xacobeo::I18n->init(xacobeo => catdir($folder, 'share', 'locale'));
+	my $domain = 'xacobeo';
+	Xacobeo::I18n->init($domain => catdir($folder, 'share', 'locale'));
 
-	my $xacobeo = Xacobeo::UI->new($folder);
+	my $xacobeo = Xacobeo::UI->new($folder, $domain);
 	
 	if (@ARGV) {
 		my ($source, $xpath) = @ARGV;
