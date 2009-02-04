@@ -138,10 +138,7 @@ A series of key/value pairs that will be replacing the place holders.
 
 sub __n ($$$) {
 	my ($msgid, $msgid_plural, $count) = @_;
-print "1) $msgid\n";
-print "2) $msgid_plural\n";
 	my $i18n = dngettext_utf8($msgid, $msgid_plural, $count);
-print "3) $i18n\n";
 	return $i18n;
 }
 
@@ -273,15 +270,11 @@ has to be provided.
 sub init {
 	my (undef, $domain, $folder) = @_;
 	
+	# Remember the appication's domain
 	$DOMAIN = $domain;
 	
-print ">>>>i18n $domain -> $folder\n";
-#	use POSIX ':locale_h';
-#	setlocale(LC_ALL, '');
 	textdomain($DOMAIN);
 	bindtextdomain($DOMAIN, $folder);
-	printf "1) %s\n", gettext("XPath Expression...");
-	printf "2) %s\n", __("XPath Expression...");
 }
 
 
