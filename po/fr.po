@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xacobeo-i 18n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-02 20:04+0100\n"
+"POT-Creation-Date: 2009-02-04 19:44+0100\n"
 "PO-Revision-Date: 2009-01-25 11:50+0100\n"
 "Last-Translator: Emmanuel Rodriguez <emmanuel.rodriguez@gmail.com>\n"
 "Language-Team: English\n"
@@ -16,23 +16,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/Xacobeo/UI.pm:130 lib/Xacobeo/I18n.pm:284
+#: lib/Xacobeo/UI.pm:135 lib/Xacobeo/I18n.pm:284
 msgid "XPath Expression..."
 msgstr "Expression XPath..."
 
-#: lib/Xacobeo/UI.pm:334
+#: lib/Xacobeo/UI.pm:338
 msgid "Load document"
 msgstr "Chargement du document"
 
-#: lib/Xacobeo/UI.pm:346
+#: lib/Xacobeo/UI.pm:350
 msgid "Syntax Highlight"
 msgstr "Coloration syntaxique"
 
-#: lib/Xacobeo/UI.pm:351
+#: lib/Xacobeo/UI.pm:355
 msgid "DOM Tree"
 msgstr "Arbre DOM"
 
-#: lib/Xacobeo/UI.pm:365
+#: lib/Xacobeo/UI.pm:369
 #, perl-format
 msgid "Document loaded in %.3f second"
 msgid_plural "Document loaded in %.3f seconds"
@@ -50,6 +50,10 @@ msgstr "ID nom"
 #: lib/Xacobeo/DomModel.pm:144
 msgid "ID value"
 msgstr "ID valeur"
+
+#: share/xacobeo/xacobeo.glade:19
+msgid "_File"
+msgstr "_Fichier"
 
 #: share/xacobeo/xacobeo.glade:97
 msgid "_Help"
