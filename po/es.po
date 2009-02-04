@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xacobeo-i 18n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-04 19:44+0100\n"
+"POT-Creation-Date: 2009-02-04 21:44+0100\n"
 "PO-Revision-Date: 2009-01-25 11:50+0100\n"
 "Last-Translator: Emmanuel Rodriguez <emmanuel.rodriguez@gmail.com>\n"
 "Language-Team: English\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/Xacobeo/UI.pm:135 lib/Xacobeo/I18n.pm:284
+#: lib/Xacobeo/UI.pm:135
 msgid "XPath Expression..."
 msgstr "Expresión XPath..."
 
