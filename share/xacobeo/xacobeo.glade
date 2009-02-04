@@ -16,7 +16,7 @@
             <child>
               <widget class="GtkMenuItem" id="menuitem-file">
                 <property name="visible">True</property>
-                <property name="label">_File</property>
+                <property name="label" translatable="yes">_File</property>
                 <property name="use_underline">True</property>
                 <child>
                   <widget class="GtkMenu" id="menu-file">
