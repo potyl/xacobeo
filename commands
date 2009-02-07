@@ -185,19 +185,19 @@ po/xacobeo.pot: share/xacobeo/xacobeo.glade\
 	xgettext --language=Glade --join-existing -o $@ share/xacobeo/xacobeo.glade
 
 
-po/fr.po: po/xacobeo.pot
+po/%.po: po/xacobeo.pot
 	msgmerge --update $@ $<
 
 
-po/es.po: po/xacobeo.pot
-	msgmerge --update $@ $<
-
-
-target/share/locale/fr/LC_MESSAGES/xacobeo.mo: po/fr.po
-	mkdir -p `dirname $@`
+po/%.mo: po/%.po
 	msgfmt -o $@ $<  
 
 
-target/share/locale/es/LC_MESSAGES/xacobeo.mo: po/es.po
+target/share/locale/fr/LC_MESSAGES/xacobeo.mo: po/fr.mo
 	mkdir -p `dirname $@`
-	msgfmt -o $@ $<  
+	cp $< $@
+
+
+target/share/locale/es/LC_MESSAGES/xacobeo.mo: po/es.mo
+	mkdir -p `dirname $@`
+	cp $< $@
