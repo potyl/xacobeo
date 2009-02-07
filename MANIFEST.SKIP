@@ -13,3 +13,4 @@
 ^lib/Xacobeo/libxml2-perl[.]typemap$
 ^main$
 ^examples/
+^tmp/
