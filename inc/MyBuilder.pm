@@ -53,8 +53,8 @@ sub new {
 	my (%args) = @_;
 	
 	$args{extra_compiler_flags} = $CFLAGS;
-  $args{extra_linker_flags}   = $LIBS;
-  $args{c_source} = 'xs';
+	$args{extra_linker_flags}   = $LIBS;
+	$args{c_source} = 'xs';
 	
 	$class->SUPER::new(%args);
 }
@@ -129,7 +129,7 @@ sub ACTION_build {
 
 # Transform the XS into a C file to our liking
 sub process_xs_files {
-  my $self = shift;
+	my $self = shift;
 
 	ExtUtils::ParseXS::process_file(
 		filename   => $XS_FILE,
