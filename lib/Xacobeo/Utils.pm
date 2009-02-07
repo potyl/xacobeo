@@ -255,7 +255,7 @@ L<XML::LibXML::Text>).
 
 B<NOTE>: XML::LibXML considers that C<Comment> and C<CDATA> nodes are also
 C<Text> nodes. This method doesn't consider a C<Comment> nor a C<CDATA> node as
-        being C<Text> nodes.
+being C<Text> nodes.
 
 Parameters:
 
