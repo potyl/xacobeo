@@ -40,6 +40,8 @@ provides:
     file: lib/Xacobeo/Document.pm
   Xacobeo::DomModel:
     file: lib/Xacobeo/DomModel.pm
+  Xacobeo::I18n:
+    file: lib/Xacobeo/I18n.pm
   Xacobeo::Timer:
     file: lib/Xacobeo/Timer.pm
   Xacobeo::UI:
