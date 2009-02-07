@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Sun Jan 18 20:10:24 2009 -->
+<!--Generated with glade3 3.4.5 on Wed Feb  4 22:05:00 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="width_request">800</property>
@@ -24,7 +24,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="menuitem-file-open">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">gtk-open</property>
+                        <property name="label">gtk-open</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="callback_file_open"/>
@@ -38,7 +38,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="menuitem-file-close">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">gtk-close</property>
+                        <property name="label">gtk-close</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="callback_window_close"/>
@@ -50,7 +50,7 @@
             </child>
             <child>
               <widget class="GtkMenuItem" id="menuitem-edit">
-                <property name="label" translatable="yes">_Edit</property>
+                <property name="label">_Edit</property>
                 <property name="use_underline">True</property>
                 <child>
                   <widget class="GtkMenu" id="menu-edit">
@@ -58,7 +58,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="menuitem-edit-cut">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">gtk-cut</property>
+                        <property name="label">gtk-cut</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </widget>
@@ -66,7 +66,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="menuitem-edit-copy">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">gtk-copy</property>
+                        <property name="label">gtk-copy</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </widget>
@@ -74,7 +74,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="menuitem-edit-paste">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">gtk-paste</property>
+                        <property name="label">gtk-paste</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </widget>
@@ -82,7 +82,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="menuitem-edit-delete">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">gtk-delete</property>
+                        <property name="label">gtk-delete</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </widget>
@@ -102,7 +102,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="menuitem-help-about">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">gtk-about</property>
+                        <property name="label">gtk-about</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="callback_about_show"/>
@@ -317,10 +317,10 @@
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <property name="has_separator">False</property>
     <property name="program_name">Xacobeo</property>
-    <property name="copyright" translatable="yes">Copyright (C) 2008 by Emmanuel Rodriguez.</property>
+    <property name="copyright" translatable="yes">Copyright (C) 2008-2009 by Emmanuel Rodriguez.</property>
     <property name="website">http://code.google.com/p/xacobeo/</property>
-    <property name="website_label" translatable="yes">Xacobeo</property>
-    <property name="license" translatable="yes">			 The "Artistic License"
+    <property name="website_label">Xacobeo</property>
+    <property name="license">			 The "Artistic License"
 
 				Preamble
 
@@ -449,6 +449,7 @@ WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 				The End
 </property>
     <property name="authors">Emmanuel Rodriguez &lt;potyl@cpan.org&gt;</property>
+    <property name="translator_credits">Emmanuel Rodriguez &lt;potyl@cpan.org&gt;</property>
     <signal name="delete_event" handler="callback_dialog_hide"/>
     <signal name="response" handler="callback_dialog_hide"/>
     <child internal-child="vbox">
@@ -493,7 +494,7 @@ WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
               <widget class="GtkButton" id="button1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="label" translatable="yes">gtk-cancel</property>
+                <property name="label">gtk-cancel</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">-6</property>
               </widget>
@@ -509,7 +510,7 @@ WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="label" translatable="yes">gtk-open</property>
+                <property name="label">gtk-open</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">-3</property>
               </widget>

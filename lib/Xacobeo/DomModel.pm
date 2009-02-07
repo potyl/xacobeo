@@ -42,6 +42,7 @@ use Gtk2;
 
 use XML::LibXML;
 use Xacobeo::Utils qw(:dom);
+use Xacobeo::I18n;
 
 use Data::Dumper;
 
@@ -128,7 +129,7 @@ sub add_columns {
 	# Arguments
 	my ($treeview) = @_;
 
-	my $column = add_text_column($treeview, $NODE_NAME, 'Element');
+	my $column = add_text_column($treeview, $NODE_NAME, __('Element'));
 
 	# Icon
 	my $node_icon = Gtk2::CellRendererPixbuf->new();
@@ -137,10 +138,10 @@ sub add_columns {
 
 
 	# Node attribute name (ID attribute)
-	add_text_column($treeview, $NODE_ID_NAME, 'ID name');
+	add_text_column($treeview, $NODE_ID_NAME, __('ID name'));
 
 	# Node attribute value (ID attribute)
-	add_text_column($treeview, $NODE_ID_VALUE, 'ID value');
+	add_text_column($treeview, $NODE_ID_VALUE, __('ID value'));
 }
 
 

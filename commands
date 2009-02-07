@@ -57,7 +57,7 @@ Build: Build.PL
 	perl Build.PL --config ccflags="$(DEBUG_ARGS)"
 
 
-build: Build
+build: i18n Build
 	./Build
 
 
@@ -153,3 +153,33 @@ clean:
 	-rm -rf _build 2> /dev/null || true
 	-rm -f main xs/*.o  || true
 	-rm -f lib/Xacobeo/XS.xs lib/Xacobeo/XS.c lib/Xacobeo/libxml2-perl.typemap || true
+
+
+.PHONY: i18n
+i18n: po/messages.pot po/fr.po po/es.po
+
+
+po/messages.pot: share/xacobeo/xacobeo.glade\
+  bin/xacobeo \
+  lib/Xacobeo/UI.pm \
+  lib/Xacobeo/Timer.pm \
+  lib/Xacobeo/Document.pm \
+  lib/Xacobeo/DomModel.pm \
+  lib/Xacobeo/XS.pm \
+  lib/Xacobeo/I18n.pm \
+  lib/Xacobeo/Utils.pm \
+  lib/Xacobeo.pm 
+	xgettext --language=Perl \
+	  --keyword \
+	  --keyword=__ \
+	  --keyword=__x \
+	  --keyword=__n:1,2 \
+	  --keyword=__nx:1,2 \
+	  --keyword=__xn \
+	  --keyword=N__ \
+	  -o $@ bin/xacobeo `find lib/ -type f -name '*.pm'`
+	xgettext --language=Glade --join-existing -o $@ share/xacobeo/xacobeo.glade
+
+
+po/%.po: po/messages.pot
+	msgmerge --update $@ $<

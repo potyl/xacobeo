@@ -4,6 +4,7 @@ inc/MyBuilder.pm
 lib/Xacobeo.pm
 lib/Xacobeo/Document.pm
 lib/Xacobeo/DomModel.pm
+lib/Xacobeo/I18n.pm
 lib/Xacobeo/Timer.pm
 lib/Xacobeo/Utils.pm
 lib/Xacobeo/UI.pm
@@ -38,3 +39,6 @@ xs/logger.h
 xs/main.c
 xs/ppport.h
 xs/XS.xs
+po/es.po
+po/fr.po
+po/messages.pot

@@ -45,6 +45,7 @@ use Exporter 'import';
 our @EXPORT_OK = qw(
 	escape_xml_text
 	escape_xml_attribute
+	
 	isa_dom_document
 	isa_dom_element
 	isa_dom_attr
@@ -68,6 +69,7 @@ our %EXPORT_TAGS = (
 			escape_xml_attribute
 		)
 	],
+
 	'dom' => [
 		qw(
 			isa_dom_document
@@ -505,6 +507,7 @@ sub isa_dom_number {
 	my ($node) = @_;
 	return defined $node ? $node->isa('XML::LibXML::Number') : 0;
 }
+
 
 
 # A true value

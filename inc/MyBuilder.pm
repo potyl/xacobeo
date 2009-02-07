@@ -20,7 +20,7 @@ BEGIN {
 
 use base 'Module::Build';
 use File::Spec::Functions;
-
+use File::Path;
 
 my $CFLAGS;
 my $LIBS;
@@ -88,7 +88,7 @@ sub ACTION_build {
 	my $self = shift;
 
 	# Copy the files in share/
-	for my $entry (@{ $self->rscan_dir('share') }) {
+	foreach my $entry (@{ $self->rscan_dir('share') }) {
 
 		# Skip hidden entries or folders
 		next if $entry =~ m,(^|/)\., or -d $entry;
@@ -97,6 +97,19 @@ sub ACTION_build {
 			from => $entry,
 			to   => catfile($self->blib, $entry) 
 		);
+	}
+
+	# Translate the PO files into .mo files
+	foreach my $entry (@{ $self->rscan_dir('po') }) {
+		next unless $entry =~ /([a-zA-Z_]+)\.po$/;
+		my $lang = $1;
+		
+		# The .mo files go into their own folder, each language has it's own folder
+		my $dir = catdir($self->blib, 'share', 'locale', $lang, 'LC_MESSAGES');
+		mkpath($dir);
+		my $mo_file = catfile($dir, 'xacobeo.mo');
+		print "Translating $entry -> $mo_file\n";
+		system('msgfmt', '-o', $mo_file, $entry);
 	}
 
 	# Copy the XS.xs and the typemap file to the lib folder. This way 

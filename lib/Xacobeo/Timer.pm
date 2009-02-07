@@ -49,6 +49,8 @@ use warnings;
 
 use Time::HiRes qw(time);
 
+use Xacobeo::I18n;
+
 
 =head2 new
 
@@ -144,7 +146,7 @@ sub show {
 	}
 	
 	my $name = $self->{name};
-	printf "Timer %-20s %.4fs\n",
+	printf __("Time: %-20s %.4fs\n"),
 		(defined $name ? $name : 'Unnamed'),
 		$self->elapsed
 	;

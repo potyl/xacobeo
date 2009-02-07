@@ -1,0 +1,87 @@
+# English translations for xacobeo-i package.
+# Copyright (C) 2009 THE xacobeo-i'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the xacobeo-i package.
+# Emmanuel Rodriguez <emmanuel.rodriguez@gmail.com>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: xacobeo-i 18n\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-02-07 11:46+0100\n"
+"PO-Revision-Date: 2009-01-25 11:50+0100\n"
+"Last-Translator: Emmanuel Rodriguez <emmanuel.rodriguez@gmail.com>\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: lib/Xacobeo/UI.pm:135
+msgid "XPath Expression..."
+msgstr "Expresión XPath..."
+
+#: lib/Xacobeo/UI.pm:338
+msgid "Load document"
+msgstr "Lectura del documento"
+
+#: lib/Xacobeo/UI.pm:350
+msgid "Syntax Highlight"
+msgstr "Coloreado de sintaxis"
+
+#: lib/Xacobeo/UI.pm:355
+msgid "DOM Tree"
+msgstr "Arbol DOM"
+
+#: lib/Xacobeo/UI.pm:369
+msgid "Document loaded in %.3f second"
+msgid_plural "Document loaded in %.3f seconds"
+msgstr[0] "Documento leido en %.3f segundo"
+msgstr[1] "Documento leido en %.3f segundos"
+
+#: lib/Xacobeo/Timer.pm:149
+msgid "Time: %-20s %.4fs\n"
+msgstr "Tiempo: %-20s %.4fs\n"
+
+#: lib/Xacobeo/DomModel.pm:132
+msgid "Element"
+msgstr "Elemento"
+
+#: lib/Xacobeo/DomModel.pm:141
+msgid "ID name"
+msgstr "ID nombre"
+
+#: lib/Xacobeo/DomModel.pm:144
+msgid "ID value"
+msgstr "ID valor"
+
+#: share/xacobeo/xacobeo.glade:19
+msgid "_File"
+msgstr "_Archivo"
+
+#: share/xacobeo/xacobeo.glade:97
+msgid "_Help"
+msgstr "A_yuda"
+
+#: share/xacobeo/xacobeo.glade:126
+msgid "XPath:"
+msgstr "XPath:"
+
+#: share/xacobeo/xacobeo.glade:150
+msgid "Evaluate"
+msgstr "Evaluar"
+
+#: share/xacobeo/xacobeo.glade:244
+msgid "Results"
+msgstr "Resultados"
+
+#: share/xacobeo/xacobeo.glade:275
+msgid "Namespaces"
+msgstr "Espacios de nombres"
+
+#: share/xacobeo/xacobeo.glade:314
+msgid "About Xacobeo"
+msgstr "A_cerca de Xacobeo"
+
+#: share/xacobeo/xacobeo.glade:320
+msgid "Copyright (C) 2008-2009 by Emmanuel Rodriguez."
+msgstr "Copyright (C) 2008-2009 by Emmanuel Rodriguez."

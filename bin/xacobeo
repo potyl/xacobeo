@@ -74,6 +74,7 @@ at your option, any later version of Perl 5 you may have available.
 
 use strict;
 use warnings;
+use open qw(:std :utf8); # STD* in UTF-8
 
 use Gtk2 qw(-init);
 
@@ -83,6 +84,7 @@ use File::Spec::Functions;
 use FindBin;
 
 use Xacobeo::UI;
+use Xacobeo::I18n;
 
 
 exit main();
@@ -98,7 +100,10 @@ sub main {
 	
 	# Create a new instance of this application
 	my $folder = find_app_folder();
-	my $xacobeo = Xacobeo::UI->new($folder);
+	my $domain = 'xacobeo';
+	Xacobeo::I18n->init($domain => catdir($folder, 'share', 'locale'));
+
+	my $xacobeo = Xacobeo::UI->new($folder, $domain);
 	
 	if (@ARGV) {
 		my ($source, $xpath) = @ARGV;
