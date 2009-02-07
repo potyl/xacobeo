@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xacobeo-i 18n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-04 21:44+0100\n"
+"POT-Creation-Date: 2009-02-07 11:46+0100\n"
 "PO-Revision-Date: 2009-01-25 11:50+0100\n"
 "Last-Translator: Emmanuel Rodriguez <emmanuel.rodriguez@gmail.com>\n"
 "Language-Team: English\n"
@@ -33,11 +33,14 @@ msgid "DOM Tree"
 msgstr "Arbol DOM"
 
 #: lib/Xacobeo/UI.pm:369
-#, perl-format
 msgid "Document loaded in %.3f second"
 msgid_plural "Document loaded in %.3f seconds"
 msgstr[0] "Documento leido en %.3f segundo"
 msgstr[1] "Documento leido en %.3f segundos"
+
+#: lib/Xacobeo/Timer.pm:149
+msgid "Time: %-20s %.4fs\n"
+msgstr "Tiempo: %-20s %.4fs\n"
 
 #: lib/Xacobeo/DomModel.pm:132
 msgid "Element"
