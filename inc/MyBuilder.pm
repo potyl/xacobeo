@@ -108,6 +108,7 @@ sub ACTION_build {
 		my $dir = catdir($self->blib, 'share', 'locale', $lang, 'LC_MESSAGES');
 		mkpath($dir);
 		my $mo_file = catfile($dir, 'xacobeo.mo');
+		print "Translating $entry -> $mo_file\n";
 		system('msgfmt', '-o', $mo_file, $entry);
 	}
 
