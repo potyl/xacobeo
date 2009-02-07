@@ -156,10 +156,10 @@ clean:
 
 
 .PHONY: i18n
-i18n: po/xacobeo.pot po/fr.po po/es.po
+i18n: po/messages.pot po/fr.po po/es.po
 
 
-po/xacobeo.pot: share/xacobeo/xacobeo.glade\
+po/messages.pot: share/xacobeo/xacobeo.glade\
   bin/xacobeo \
   lib/Xacobeo/UI.pm \
   lib/Xacobeo/Timer.pm \
@@ -181,5 +181,5 @@ po/xacobeo.pot: share/xacobeo/xacobeo.glade\
 	xgettext --language=Glade --join-existing -o $@ share/xacobeo/xacobeo.glade
 
 
-po/%.po: po/xacobeo.pot
+po/%.po: po/messages.pot
 	msgmerge --update $@ $<
