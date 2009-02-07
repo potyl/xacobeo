@@ -57,7 +57,7 @@ Build: Build.PL
 	perl Build.PL --config ccflags="$(DEBUG_ARGS)"
 
 
-build: Build
+build: i18n Build
 	./Build
 
 
@@ -66,7 +66,6 @@ install: ${DEST}/local/bin/xacobeo
 ${DEST}/local/bin/xacobeo: build
 	rm -rf ${DEST} || true
 	./Build install --install_base ${DEST}
-	./commands i18n
 
 
 .PHONY: fakeinstall
@@ -157,10 +156,7 @@ clean:
 
 
 .PHONY: i18n
-i18n: \
-  target/share/locale/fr/LC_MESSAGES/xacobeo.mo \
-  target/share/locale/es/LC_MESSAGES/xacobeo.mo \
-  po/xacobeo.pot
+i18n: po/xacobeo.pot po/fr.po po/es.po
 
 
 po/xacobeo.pot: share/xacobeo/xacobeo.glade\
@@ -187,17 +183,3 @@ po/xacobeo.pot: share/xacobeo/xacobeo.glade\
 
 po/%.po: po/xacobeo.pot
 	msgmerge --update $@ $<
-
-
-po/%.mo: po/%.po
-	msgfmt -o $@ $<  
-
-
-target/share/locale/fr/LC_MESSAGES/xacobeo.mo: po/fr.mo
-	mkdir -p `dirname $@`
-	cp $< $@
-
-
-target/share/locale/es/LC_MESSAGES/xacobeo.mo: po/es.mo
-	mkdir -p `dirname $@`
-	cp $< $@
