@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-07 11:46+0100\n"
+"POT-Creation-Date: 2009-02-10 22:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,29 +17,47 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: lib/Xacobeo/UI.pm:135
+#: lib/Xacobeo/UI.pm:136
 msgid "XPath Expression..."
 msgstr ""
 
-#: lib/Xacobeo/UI.pm:338
+#: lib/Xacobeo/UI.pm:342
 msgid "Load document"
 msgstr ""
 
-#: lib/Xacobeo/UI.pm:350
+#: lib/Xacobeo/UI.pm:354
 msgid "Syntax Highlight"
 msgstr ""
 
-#: lib/Xacobeo/UI.pm:355
+#: lib/Xacobeo/UI.pm:359
 msgid "DOM Tree"
 msgstr ""
 
-#: lib/Xacobeo/UI.pm:369
+#: lib/Xacobeo/UI.pm:373
+#, perl-format
 msgid "Document loaded in %.3f second"
 msgid_plural "Document loaded in %.3f seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/Xacobeo/Timer.pm:149
+#: lib/Xacobeo/UI.pm:588
+msgid "XPath query issued an error"
+msgstr ""
+
+#: lib/Xacobeo/UI.pm:592
+#, perl-format
+msgid "Found %d result in %0.3fs"
+msgid_plural "Found %d results in %0.3fs"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/Xacobeo/UI.pm:815
+#, perl-brace-format
+msgid "Can't create widget {name} because method {function} is missing"
+msgstr ""
+
+#: lib/Xacobeo/Timer.pm:147
+#, perl-format
 msgid "Time: %-20s %.4fs\n"
 msgstr ""
 
