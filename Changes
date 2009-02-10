@@ -1,4 +1,11 @@
-Revision history for Xacobeo.
+Changelog for Xacobeo.
+
+
+0.06_03 Tue Feb 10 22:18:29 CET 2009
+	- Issue 23: Results view loses the syntax highliting.
+	- Issue 26: Tests require File::Slurp.
+	- Updated the translations.
+	- Build.PL is using both configure_requires and build_requires.
 
 
 0.06_02 Sat Feb  7 11:57:57 CET 2009
