@@ -852,6 +852,7 @@ sub create_xpath_results_view {
 	my $tag_table = populate_tag_table(Gtk2::TextTagTable->new());
 	my $buffer = Gtk2::TextBuffer->new($tag_table);
 	my $widget = Gtk2::TextView->new_with_buffer($buffer);
+	$widget->set_editable(FALSE);
 	
 	return $widget;
 }
