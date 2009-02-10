@@ -83,9 +83,11 @@ Runs the given XPath query on the document and returns the results. The results
 could be a node list or a single value like a boolean, a number or a scalar if
 an expression is passed.
 
+This method croaks if the expression can't be evaluated.
+
 Parameters:
 
-	$xpath: a valid XPath expression.
+	$xpath: the XPath expression to execute.
 
 =cut
 
@@ -98,7 +100,7 @@ sub find {
 		$result = $self->xpath->find($xpath, $self->xml);
 	};
 	if (my $error = $@) {
-		return;
+		croak $error;
 	}
 	
 	return $result;
@@ -111,9 +113,12 @@ Validates the syntax of the given XPath query. The syntax is validated within a
 context that has the same namespaces as the ones defined in the current XML
 document.
 
+B<NOTE>: This method can't validate if undefined functions or variables are
+used.
+
 Parameters:
 
-	$xpath: a valid XPath expression.
+	$xpath: the XPath expression to validate.
 
 =cut
 
