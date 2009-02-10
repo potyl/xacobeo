@@ -41,6 +41,7 @@ use Xacobeo::Document;
 use Xacobeo::Utils qw(:xml :dom);
 use Xacobeo::I18n;
 use Xacobeo::Timer;
+use Xacobeo::Error;
 use Xacobeo::XS qw(
 	xacobeo_populate_gtk_text_buffer
 	xacobeo_populate_gtk_tree_store
@@ -201,7 +202,11 @@ sub display_xml_node {
 
 
 	# A NodeList
-	if (isa_dom_nodelist($node)) {
+	if (ref($node) eq 'Xacobeo::Error') {
+		print "Got an error!\n";
+		buffer_add($buffer, error => $node->message);
+	}
+	elsif (isa_dom_nodelist($node)) {
 		my @children = $node->get_nodelist;
 		my $count = scalar @children;
 
@@ -252,7 +257,13 @@ sub display_xml_node {
 
 	else {
 		# Any kind of XML node (XS call)
-		xacobeo_populate_gtk_text_buffer($buffer, $node, $namespaces);
+		print "=== node is ", Dumper($node), "\n";
+#		eval {
+			xacobeo_populate_gtk_text_buffer($buffer, $node, $namespaces);
+#		};
+		if (my $error = $@) {
+			print "Error: $error for node $node";
+		}
 	}
 
 
@@ -518,6 +529,10 @@ sub populate_tag_table {
 		weight     => PANGO_WEIGHT_BOLD,
 	);
 	
+	add_tag($tag_table, error =>
+		foreground => 'red',
+	);
+	
 	return $tag_table;
 }
 
@@ -568,14 +583,25 @@ sub callback_run_xpath {
 	# Run the XPath expression
 	my $xpath = $glade->get_widget('xpath-entry')->get_text;
 	my $timer = Xacobeo::Timer->start();
-	my $result = $self->document->find($xpath);
+	my $result;
+	eval {
+		$result = $self->document->find($xpath);
+	};
+	my $error = $@;
 	$timer->stop();
 	
-	my $count = isa_dom_nodelist($result) ? $result->size : 1;
-	$self->display_statusbar_message(
-		sprintf "Found %d results in %0.3f s", $count, $timer->elapsed
-	);
-	
+	if ($error) {
+		$result = Xacobeo::Error->new(xpath => $error);
+		$self->display_statusbar_message(__("XPath query issued an error"));
+	}
+	else {
+		my $count = isa_dom_nodelist($result) ? $result->size : 1;
+		$self->display_statusbar_message(
+# FIXME use __n instead of __
+			sprintf __("Found %d results in %0.3fs"), $count, $timer->elapsed
+		);
+	}
+
 	# Display the results
 	$self->display_results($result);
 }
@@ -787,13 +813,13 @@ sub display_statusbar_message {
 sub glade_custom_handler {
 	my ($glade, $function, $name, $str1, $str2, $int1, $int2, $data) = @_;
 	my $self = $data;
-	print "Called $name->$function\n";
 	
 	my $widget;
 	if ($self->can($function)) {
 		$widget = $self->$function();
 	}
 	else {
+		# FIXME use i18n here
 		my $message = "Missing method $function for creating widget $name";
 		warn $message;
 		$widget = Gtk2::Label->new($message);
