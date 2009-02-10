@@ -203,7 +203,6 @@ sub display_xml_node {
 
 	# A NodeList
 	if (ref($node) eq 'Xacobeo::Error') {
-		print "Got an error!\n";
 		buffer_add($buffer, error => $node->message);
 	}
 	elsif (isa_dom_nodelist($node)) {
@@ -257,13 +256,7 @@ sub display_xml_node {
 
 	else {
 		# Any kind of XML node (XS call)
-		print "=== node is ", Dumper($node), "\n";
-#		eval {
-			xacobeo_populate_gtk_text_buffer($buffer, $node, $namespaces);
-#		};
-		if (my $error = $@) {
-			print "Error: $error for node $node";
-		}
+		xacobeo_populate_gtk_text_buffer($buffer, $node, $namespaces);
 	}
 
 
@@ -596,9 +589,9 @@ sub callback_run_xpath {
 	}
 	else {
 		my $count = isa_dom_nodelist($result) ? $result->size : 1;
+		my $format = __n("Found %d result in %0.3fs", "Found %d results in %0.3fs", $count);
 		$self->display_statusbar_message(
-# FIXME use __n instead of __
-			sprintf __("Found %d results in %0.3fs"), $count, $timer->elapsed
+			sprintf $format, $count, $timer->elapsed
 		);
 	}
 
@@ -819,8 +812,7 @@ sub glade_custom_handler {
 		$widget = $self->$function();
 	}
 	else {
-		# FIXME use i18n here
-		my $message = "Missing method $function for creating widget $name";
+		my $message = __x("Can't create widget {name} because method {function} is missing", function => $function, name => $name);
 		warn $message;
 		$widget = Gtk2::Label->new($message);
 	}
