@@ -20,8 +20,6 @@ Xacobeo::Timer - A custom made timer.
 		# Very slow stuff here
 		$TIMER->stop();
 	}
-	
-	# As a one time use
 
 =head1 DESCRIPTION
 
