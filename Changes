@@ -1,6 +1,10 @@
 Changelog for Xacobeo.
 
 
+0.06 Wed Feb 11 19:45:58 CET 2009
+	-  New release with all the changes from the 0.06_XX releases.
+
+
 0.06_03 Tue Feb 10 22:18:29 CET 2009
 	- Issue 23: Results view loses the syntax highliting.
 	- Issue 26: Tests require File::Slurp.
