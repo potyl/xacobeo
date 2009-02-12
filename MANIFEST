@@ -30,6 +30,8 @@ tests/sample.xml
 tests/sample.xml.expected
 tests/stocks.xml
 tests/countries.xml
+tests/empty-pi.xml
+tests/empty.xml
 xs/code.c
 xs/code.h
 xs/libxml2-perl.typemap
