@@ -106,7 +106,7 @@ upload: dist
 
 
 .PHONY: release
-release: clean dist distcheck tag upload
+release: clean test dist distcheck tag upload
 	@echo "Release ${PACKAGE} ${VERSION} done."
 	
 
