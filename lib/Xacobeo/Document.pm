@@ -81,7 +81,7 @@ sub new {
 
 Runs the given XPath query on the document and returns the results. The results
 could be a node list or a single value like a boolean, a number or a scalar if
-an expression is passed.
+an expression is passed. This method always return its values in scalar context.
 
 This method croaks if the expression can't be evaluated.
 
@@ -94,6 +94,7 @@ Parameters:
 sub find {
 	my $self = shift;
 	my ($xpath) = @_;
+	croak "Document node is missing" unless defined $self->xml;
 	
 	my $result;
 	eval {
@@ -242,9 +243,11 @@ sub _get_all_namespaces {
 	my %namespaces = (
 		XML_XML_NS() => 'xml',
 	);
-	foreach my $namespace ($node->findnodes('.//namespace::*')) {
-		my $uri = $namespace->getData;
-		$namespaces{$uri} ||= $namespace->getLocalName;
+	if ($node) {
+		foreach my $namespace ($node->findnodes('.//namespace::*')) {
+			my $uri = $namespace->getData;
+			$namespaces{$uri} ||= $namespace->getLocalName;
+		}
 	}
 	
 	# Reverse the namespaces ($prefix -> $uri) and make sure that the prefixes
