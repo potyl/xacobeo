@@ -42,6 +42,7 @@ use Data::Dumper;
 use Carp;
 
 use Xacobeo::Utils qw(:dom);
+use Xacobeo::I18n;
 
 
 use base qw(Class::Accessor::Fast);
@@ -94,7 +95,7 @@ Parameters:
 sub find {
 	my $self = shift;
 	my ($xpath) = @_;
-	croak "Document node is missing" unless defined $self->xml;
+	croak __("Document node is missing") unless defined $self->xml;
 	
 	my $result;
 	eval {
