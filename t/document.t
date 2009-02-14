@@ -3,8 +3,9 @@
 use strict;
 use warnings;
 
-use Test::More tests => 21;
+use Test::More tests => 33;
 use Data::Dumper;
+use Carp;
 
 BEGIN {
 	use_ok('Xacobeo::Document');
@@ -25,6 +26,9 @@ sub main {
 	test_namespaces1();
 	test_namespaces2();
 	test_namespaces3();
+	
+	test_empty_document();
+	test_empty_pi_document();
 	
 	return 0;
 }
@@ -52,12 +56,10 @@ sub test_without_namespaces {
 	);
 
 	
-	# Test that an invalid xpath expression doesn't throw an error
-	$got = $document->find('//x/');
-	is_deeply(
-		$got,
-		undef,
-		'Nodes from an invalid XPath expression'
+	# Test that an invalid xpath expression throws an error
+	test_die(
+		sub {$document->find('//x/')},
+		qr/^Invalid expression/
 	);
 
 
@@ -67,18 +69,23 @@ sub test_without_namespaces {
 	
 
 	# Fails because the namespace doesn't exist
-	$got = $document->find('/x:html//x:a[@href]');
-	is($got, undef, 'XPath query uses undefined namespaces');
-
+	test_die(
+		sub {$document->find('/x:html//x:a[@href]')},
+		qr/^Undefined namespace prefix\nxmlXPathCompiledEval: evaluation failed/
+	);
 	
 	# Fails because the syntax is invalid
-	$got = $document->find('/html//a[@href');
-	is($got, undef, 'Invalid XPath syntax');
+	test_die(
+		sub {$document->find('/html//a[@href')},
+		qr/^Invalid predicate/
+	);
 
 	
 	# Fails because the function aaa() is not defined
-	$got = $document->find('aaa(1)');
-	is($got, undef, 'Undefined XPath function');
+	test_die(
+		sub {$document->find('aaa(1)')},
+		qr/^xmlXPathCompOpEval: function aaa not found/
+	);
 
 	
 	# This is fine
@@ -196,3 +203,74 @@ sub test_namespaces3 {
 	);
 }
 
+
+# Reads an empty file (there's no document)
+sub test_empty_document {
+	my $document = Xacobeo::Document->new("$FOLDER/empty.xml");
+	isa_ok($document, 'Xacobeo::Document');
+	
+	is_deeply(
+		$document->namespaces(),
+		{@XML_NS},
+		'Document without namespaces'
+	);
+	
+	
+	is($document->xml, undef);
+	test_die(
+		sub {$document->find('/')},
+		qr/^Document node is missing/
+	);
+	test_die(
+		sub {$document->find('42')},
+		qr/^Document node is missing/
+	);
+}
+
+
+# Reads a document that has only the XML PI (Document without root element)
+sub test_empty_pi_document {
+	my $document = Xacobeo::Document->new("$FOLDER/empty-pi.xml");
+	isa_ok($document, 'Xacobeo::Document');
+	
+	is_deeply(
+		$document->namespaces(),
+		{@XML_NS},
+		'Document without namespaces'
+	);
+
+	
+	isa_ok($document->xml, 'XML::LibXML::Document', "Parsed an XML document");
+	is($document->xml->getDocumentElement, undef);
+
+	my $list = $document->find('/');
+	is($list->size, 1);
+	my $root = $list->get_node(0);
+	
+	isa_ok($root, 'XML::LibXML::Document');
+	my @child = $root->childNodes;
+	is(scalar(@child), 0);
+}
+
+
+# Test that an error is thrown
+sub test_die {
+  my ($code, $regexp) = @_;
+  croak "usage(code, regexp)" unless ref $code eq 'CODE';
+	
+  my $passed = 0;
+  local $@ = undef;
+	eval {
+    $code->();
+  };
+  if (my $error = $@) {
+    if ($error =~ /$regexp/) {
+      $passed = 1;
+    }
+    else {
+      diag("Expected $regexp but got $error");
+    }
+  }
+
+  return Test::More->builder->ok($passed);
+}
