@@ -48,6 +48,7 @@ typedef struct _MarkupTags {
 	GtkTextTag *namespace_name;
 	GtkTextTag *namespace_uri;
 	GtkTextTag *entity_ref;
+	GtkTextTag *error;
 } MarkupTags;
 
 
@@ -149,9 +150,32 @@ static void         my_XML_NAMESPACE_DECL      (TextRenderCtx *xargs, xmlNs *ns)
 // through the DTD) then the ID will be displayed.
 //
 void xacobeo_populate_gtk_tree_store (GtkTreeStore *store, xmlNode *node, HV *namespaces) {
-
+	
+	////
+	// Parameters validation
+	
+	// Initialize the tree store
+	if (store == NULL) {
+		WARN("GtkTreeStore is NULL");
+		return;
+	}
 	gtk_tree_store_clear(store);
+	
 
+	// Get the root element
+	if (node == NULL) {
+		WARN("XML node is NULL");
+		return;
+	}
+	xmlNode *root = xmlDocGetRootElement(node->doc);
+	if (root == NULL) {
+		WARN("Document has no root element");
+		return;
+	}
+	DEBUG("Adding root element %s", root->name);
+	
+	
+	// The argument contenxt
 	TreeRenderCtx xargs = {
 		.store      = store,
 		.namespaces = namespaces,
@@ -160,20 +184,13 @@ void xacobeo_populate_gtk_tree_store (GtkTreeStore *store, xmlNode *node, HV *na
 	};
 	
 
-	// Get the root element
-	xmlNode *root = xmlDocGetRootElement(node->doc);
-	DEBUG("Adding root element %s", root->name);
-	
-
+	// Populate the DOM tree (timed)
 	DEBUG("Populating DOM tree");
-	GTimeVal start;
+	GTimeVal start, end;
 	g_get_current_time(&start);
-
-	// Populate the DOM tree	
 	my_populate_tree_store(&xargs, root, NULL, 0);
-
-	GTimeVal end;
 	g_get_current_time(&end);
+
 
 	// Calculate the number of micro seconds spent since the last time
 	glong elapsed = (end.tv_sec - start.tv_sec) * 1000000; // Seconds
@@ -293,9 +310,17 @@ static void my_populate_tree_store (TreeRenderCtx *xargs, xmlNode *node, GtkTree
 //
 void xacobeo_populate_gtk_text_buffer (GtkTextBuffer *buffer, xmlNode *node, HV *namespaces) {
 
+	////
+	// Parameters validation
+	if (buffer == NULL) {
+		WARN("GtkTextBuffer is NULL");
+		return;
+	}
+
+	
 	TextRenderCtx xargs = {
 		.buffer = buffer,
-		.markup = NULL,
+		.markup = my_get_buffer_tags(buffer),
 		.namespaces = namespaces,
 		.xml_data = g_string_sized_new(5 * 1024),
 		.buffer_pos = 0,
@@ -303,10 +328,7 @@ void xacobeo_populate_gtk_text_buffer (GtkTextBuffer *buffer, xmlNode *node, HV 
 		.tags = g_array_sized_new(TRUE, TRUE, sizeof(ApplyTag), 200 * 1000),
 		.calls = 0,
 	};
-	
-	// Get the tags used by the buffer
-	xargs.markup = my_get_buffer_tags(buffer);
-	
+
 	// Compute the current position in the buffer
 	GtkTextIter iter;
 	gtk_text_buffer_get_end_iter(buffer, &iter);
@@ -386,8 +408,14 @@ static void my_render_buffer (TextRenderCtx *xargs) {
 // displayed in a GtkTextBuffer and rendered with a corresponding markup rule.
 //
 static void my_display_document_syntax (TextRenderCtx *xargs, xmlNode *node) {
+	
+	if (node == NULL) {
+		buffer_add(xargs, xargs->markup->error, "\n");
+	}
+	
 	switch (node->type) {
-		
+			buffer_add(xargs, xargs->markup->syntax, "\n");
+
 		case XML_DOCUMENT_NODE:
 			my_XML_DOCUMENT_NODE(xargs, node);
 		break;
@@ -907,6 +935,7 @@ static MarkupTags* my_get_buffer_tags (GtkTextBuffer *buffer) {
 
 	markup->namespace_name = gtk_text_tag_table_lookup(table, "namespace_name");
 	markup->namespace_uri  = gtk_text_tag_table_lookup(table, "namespace_uri");
+	markup->error  = gtk_text_tag_table_lookup(table, "error");
 
 	return markup;
 }

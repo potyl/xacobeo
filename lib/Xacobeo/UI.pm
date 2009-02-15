@@ -202,7 +202,10 @@ sub display_xml_node {
 
 
 	# A NodeList
-	if (ref($node) eq 'Xacobeo::Error') {
+	if (! defined $node) {
+		buffer_add($buffer, error => __("Node is undef"));
+	}
+	elsif (ref($node) eq 'Xacobeo::Error') {
 		buffer_add($buffer, error => $node->message);
 	}
 	elsif (isa_dom_nodelist($node)) {
@@ -392,7 +395,12 @@ sub populate_treeview {
 	my $store = $treeview->get_model;
 	
 	$treeview->set_model(undef);
-	xacobeo_populate_gtk_tree_store($store, $node, $self->document->namespaces);
+	if (defined $node and defined $store) {
+		xacobeo_populate_gtk_tree_store($store, $node, $self->document->namespaces);
+	}
+	elsif (defined $store) {
+		$store->clear();
+	}
 	$treeview->set_model($store);
 }
 
