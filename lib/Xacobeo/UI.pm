@@ -192,7 +192,7 @@ sub display_xml_node {
 	my $self = shift;
 	my ($widget_name, $node) = @_;
 	
-	my $namespaces = $self->document->namespaces;
+	my $namespaces = $self->document ? $self->document->namespaces : undef;
 	my $textview = $self->glade->get_widget($widget_name);
 
 	# It's faster to disconnect the buffer from the view and to reconnect it back
@@ -343,26 +343,61 @@ sub load_file {
 	
 	# Parse the content
 	my $t_load = Xacobeo::Timer->start(__('Load document'));
-	my $document = Xacobeo::Document->new($file);
+	my $document;
+	eval {
+		$document = Xacobeo::Document->new($file);
+	};
+	if (my $error = $@) {
+		my $message = __x("Can't read {file}: {error}", file => $file, error => $error);
+		$self->display_statusbar_message($message);
+	}
 	$self->document($document);
 	undef $t_load;
+	
+	$self->populate_widgets($file);
+	
+	$timer->stop();
+	if ($document) {
+		my $format = __n(
+			"Document loaded in %.3f second", 
+			"Document loaded in %.3f seconds", 
+			int($timer->elapsed),
+		);
+		$self->display_statusbar_message(sprintf $format, $timer->elapsed);
+	}
+	else {
+		# Invoke the time elapsed this way the value is not printed to the console
+		$timer->elapsed;
+	}
+	
+}
+
+
+#
+# Populates the different widgets after a document has been loaded
+#
+sub populate_widgets {
+	my $self = shift;
+	my ($file) = @_;
 
 	my $glade = $self->glade;
 	$glade->get_widget('window')->set_title("$APP_NAME - $file");
-
-	my $xml = $document->xml;
-	my $namespaces = $document->namespaces;
+	
+	my $document = $self->document;
+	my ($xml, $namespaces) = $document ? ($document->xml, $document->namespaces) : (undef, {});
 
 	# Update the text widget
 	my $t_syntax = Xacobeo::Timer->start(__('Syntax Highlight'));
 	$self->display_xml_node('xml-document', $xml);
 	undef $t_syntax;
+	
+	# Clear the previous results
+	$glade->get_widget('xpath-results')->get_buffer->set_text('');
 
 	# Populate the DOM view tree
 	my $t_dom = Xacobeo::Timer->start(__('DOM Tree'));
 	$self->populate_treeview($xml);
 	undef $t_dom;
-	$timer->stop();
 	
 	
 	# Populate the Namespaces view
@@ -372,16 +407,8 @@ sub load_file {
 	}
 	@{ $self->namespaces_view->{data} } = @namespaces;
 
-	my $format = __n(
-		"Document loaded in %.3f second", 
-		"Document loaded in %.3f seconds", 
-		int($timer->elapsed),
-	);
-	$self->display_statusbar_message(sprintf $format, $timer->elapsed);
-	
 	$glade->get_widget('xpath-entry')->set_sensitive(TRUE);
 }
-
 
 
 #
