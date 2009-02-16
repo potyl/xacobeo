@@ -57,7 +57,7 @@ msgstr "La requête XPath a retournée une erreur"
 msgid "Found %d result in %0.3fs"
 msgid_plural "Found %d results in %0.3fs"
 msgstr[0] "%d résultat a été trouvé en %0.3fs"
-msgstr[1] "%d résultats ont été trouvésen %0.3fs"
+msgstr[1] "%d résultats ont été trouvés en %0.3fs"
 
 #: lib/Xacobeo/UI.pm:850
 #, perl-brace-format
