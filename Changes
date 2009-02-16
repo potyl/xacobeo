@@ -1,6 +1,10 @@
 Changelog for Xacobeo.
 
 
+0.07_02 Mon Feb 16 09:26:49 CET 2009
+	- Corrected a typo in the French translation.
+
+
 0.07_01 Sun Feb 15 13:58:14 CET 2009
 	- Issue 30: Crashes when reading non XML files.
 	- Issue 20: Clear the XPath results when loading a new document.

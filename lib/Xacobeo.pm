@@ -72,7 +72,7 @@ use strict;
 use warnings;
 use 5.006;
 
-our $VERSION = '0.07_01';
+our $VERSION = '0.07_02';
 
 
 # A true value
