@@ -14,3 +14,4 @@
 ^main$
 ^examples/
 ^tmp/
+^debian/
