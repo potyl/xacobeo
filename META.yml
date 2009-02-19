@@ -1,12 +1,18 @@
 ---
 name: Xacobeo
-version: 0.07_02
+version: 0.07
 author:
   - 'Emmanuel Rodriguez <potyl@cpan.org>'
 abstract: XPath (XML Path Language) visualizer.
 license: perl
 resources:
   license: http://dev.perl.org/licenses/
+configure_requires:
+  ExtUtils::Depends: 0
+  ExtUtils::ParseXS: 0
+  ExtUtils::PkgConfig: 0
+  File::Path: 0
+  File::Spec::Functions: 0
 requires:
   Carp: 0
   Class::Accessor::Fast: 0
@@ -31,7 +37,7 @@ build_requires:
 provides:
   Xacobeo:
     file: lib/Xacobeo.pm
-    version: 0.07_02
+    version: 0.07
   Xacobeo::Document:
     file: lib/Xacobeo/Document.pm
   Xacobeo::DomModel:
@@ -48,7 +54,7 @@ provides:
     file: lib/Xacobeo/Utils.pm
   Xacobeo::XS:
     file: lib/Xacobeo/XS.pm
-generated_by: Module::Build version 0.2808
+generated_by: Module::Build version 0.280801
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html
   version: 1.2
