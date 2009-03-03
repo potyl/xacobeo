@@ -127,6 +127,7 @@ static void         my_add_text_and_entity     (TextRenderCtx *xargs, GString *b
 static void         my_populate_tree_store     (TreeRenderCtx *xargs, xmlNode *node, GtkTreeIter *parent, gint pos);
 
 static void         my_XML_DOCUMENT_NODE       (TextRenderCtx *xargs, xmlNode *node);
+static void         my_XML_HTML_DOCUMENT_NODE  (TextRenderCtx *xargs, xmlNode *node);
 static void         my_XML_ELEMENT_NODE        (TextRenderCtx *xargs, xmlNode *node);
 static void         my_XML_ATTRIBUTE_NODE      (TextRenderCtx *xargs, xmlNode *node);
 static void         my_XML_ATTRIBUTE_VALUE     (TextRenderCtx *xargs, xmlNode *node);
@@ -316,7 +317,6 @@ void xacobeo_populate_gtk_text_buffer (GtkTextBuffer *buffer, xmlNode *node, HV 
 		WARN("GtkTextBuffer is NULL");
 		return;
 	}
-
 	
 	TextRenderCtx xargs = {
 		.buffer = buffer,
@@ -414,10 +414,13 @@ static void my_display_document_syntax (TextRenderCtx *xargs, xmlNode *node) {
 	}
 	
 	switch (node->type) {
-			buffer_add(xargs, xargs->markup->syntax, "\n");
 
 		case XML_DOCUMENT_NODE:
 			my_XML_DOCUMENT_NODE(xargs, node);
+		break;
+
+		case XML_HTML_DOCUMENT_NODE:
+			my_XML_HTML_DOCUMENT_NODE(xargs, node);
 		break;
 
 		case XML_ELEMENT_NODE:
@@ -453,7 +456,7 @@ static void my_display_document_syntax (TextRenderCtx *xargs, xmlNode *node) {
 		break;
 		
 		default:
-			WARN("Unknown XML type %d for %s = %s", node->type, node->name, node->content);
+			WARN("Unknown XML type %d for %s", node->type, node->name);
 		break;
 	}
 }
@@ -479,6 +482,20 @@ static void my_XML_DOCUMENT_NODE (TextRenderCtx *xargs, xmlNode *node) {
 	buffer_add(xargs, xargs->markup->syntax, "\n");
 
 
+	for (xmlNode *child = node->children; child; child = child->next) {
+		my_display_document_syntax(xargs, child);
+		// Add some new lines between the elements of the prolog. Libxml removes
+		// the white spaces in the prolog.
+		if (child != node->last) {
+			buffer_add(xargs, xargs->markup->syntax, "\n");
+		}
+	}
+}
+
+
+
+// Displays an HTML 'Document' node.
+static void my_XML_HTML_DOCUMENT_NODE (TextRenderCtx *xargs, xmlNode *node) {
 	for (xmlNode *child = node->children; child; child = child->next) {
 		my_display_document_syntax(xargs, child);
 		// Add some new lines between the elements of the prolog. Libxml removes
