@@ -247,7 +247,12 @@ sub _get_all_namespaces {
 	if ($node) {
 		foreach my $namespace ($node->findnodes('.//namespace::*')) {
 			my $uri = $namespace->getData;
-			$namespaces{$uri} ||= $namespace->getLocalName;
+			my $name = $namespace->getLocalName;
+			if (! defined $uri) {
+				warn __x("Namespace {name} has no URI", name => $name);
+				$uri = '';
+			}
+			$namespaces{$uri} ||= $name;
 		}
 	}
 	
