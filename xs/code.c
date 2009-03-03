@@ -900,12 +900,14 @@ static gchar* my_to_string (xmlNode *node) {
 //
 static void my_buffer_add (TextRenderCtx *xargs, GtkTextTag *tag, const gchar *text) {
 
+	const gchar *content = text ? text : "";
+
 	++xargs->calls;
-	g_string_append(xargs->xml_data, text);
+	g_string_append(xargs->xml_data, content);
 	
 	// We don't want the length of the string but the number of characters.
 	// UTF-8 may encode one character as multiple bytes.
-	glong end = xargs->buffer_pos + g_utf8_strlen(text, -1);
+	glong end = xargs->buffer_pos + g_utf8_strlen(content, -1);
 
 	// Apply the markup if there's a tag
 	if (tag) {
