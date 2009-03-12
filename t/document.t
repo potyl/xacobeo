@@ -199,7 +199,7 @@ sub test_namespaces3 {
 			'urn:schemas-microsoft-com:office:spreadsheet' => 'ss',
 			@XML_NS,
 		},
-		'Stocks namespaces'
+		'Stocks ntramespaces'
 	);
 }
 
@@ -216,7 +216,7 @@ sub test_empty_document {
 	);
 	
 	
-	is($document->xml, undef);
+	is($document->documentNode, undef);
 	test_die(
 		sub {$document->find('/')},
 		qr/^Document node is missing/
@@ -240,8 +240,8 @@ sub test_empty_pi_document {
 	);
 
 	
-	isa_ok($document->xml, 'XML::LibXML::Document', "Parsed an XML document");
-	is($document->xml->getDocumentElement, undef);
+	isa_ok($document->documentNode, 'XML::LibXML::Document', "Parsed an XML document");
+	is($document->documentNode->getDocumentElement, undef);
 
 	my $list = $document->find('/');
 	is($list->size, 1);

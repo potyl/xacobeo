@@ -49,7 +49,7 @@ use base qw(Class::Accessor::Fast);
 __PACKAGE__->mk_accessors(
 	qw(
 		source
-		xml
+		documentNode
 		xpath
 	)
 );
@@ -95,11 +95,11 @@ Parameters:
 sub find {
 	my $self = shift;
 	my ($xpath) = @_;
-	croak __("Document node is missing") unless defined $self->xml;
+	croak __("Document node is missing") unless defined $self->documentNode;
 	
 	my $result;
 	eval {
-		$result = $self->xpath->find($xpath, $self->xml);
+		$result = $self->xpath->find($xpath, $self->documentNode);
 	};
 	if (my $error = $@) {
 		croak $error;
@@ -198,11 +198,11 @@ sub _load_document {
 	
 	# Parse the document
 	my $parser = _construct_xml_parser();
-	my $xml = $parser->parse_file($source);
-	$self->xml($xml);
+	my $documentNode = $parser->parse_file($source);
+	$self->documentNode($documentNode);
 	
 	# Find the namespaces
-	$self->namespaces(_get_all_namespaces($xml));
+	$self->namespaces(_get_all_namespaces($documentNode));
 	
 	# Create the XPath context
 	$self->xpath(
