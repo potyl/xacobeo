@@ -11,6 +11,7 @@ xacobeo [OPTION]... [file [xpath]]
 Options:
 
    -h, --help            brief help message
+   --html                use the HTML parser with the provided file
 
 Where I<file> is a valid XML document and I<xpath> a valid XPath query.
 
@@ -21,6 +22,10 @@ Where I<file> is a valid XML document and I<xpath> a valid XPath query.
 =item B<--help>
 
 Print a brief help message and exits.
+
+=item B<--html>
+
+Parse the file in the command line using the HTML parser.
 
 =back
 
@@ -96,7 +101,10 @@ exit main();
 sub main {
 
 	# Parse the command line options
-	GetOptions() or pod2usage(2);
+	my $type = 'xml';
+	GetOptions(
+		'html' => sub { $type = 'html' },
+	) or pod2usage(2);
 	
 	# Create a new instance of this application
 	my $folder = find_app_folder();
