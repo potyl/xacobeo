@@ -35,7 +35,7 @@ sub main {
 
 
 sub test_without_namespaces {
-	my $document = Xacobeo::Document->new("$FOLDER/xorg.xml");
+	my $document = Xacobeo::Document->new("$FOLDER/xorg.xml", 'xml');
 	isa_ok($document, 'Xacobeo::Document');
 	
 	is_deeply(
@@ -96,7 +96,7 @@ sub test_without_namespaces {
 
 
 sub test_namespaces1 {
-	my $document = Xacobeo::Document->new("$FOLDER/SVG.svg");
+	my $document = Xacobeo::Document->new("$FOLDER/SVG.svg", 'xml');
 	isa_ok($document, 'Xacobeo::Document');
 	
 	is_deeply(
@@ -156,7 +156,7 @@ sub test_namespaces1 {
 
 
 sub test_namespaces2 {
-	my $document = Xacobeo::Document->new("$FOLDER/beers.xml");
+	my $document = Xacobeo::Document->new("$FOLDER/beers.xml", 'xml');
 	isa_ok($document, 'Xacobeo::Document');
 
 	is_deeply(
@@ -187,7 +187,7 @@ sub test_namespaces2 {
 
 
 sub test_namespaces3 {
-	my $document = Xacobeo::Document->new("$FOLDER/stocks.xml");
+	my $document = Xacobeo::Document->new("$FOLDER/stocks.xml", 'xml');
 	isa_ok($document, 'Xacobeo::Document');
 
 	is_deeply(
@@ -206,7 +206,7 @@ sub test_namespaces3 {
 
 # Reads an empty file (there's no document)
 sub test_empty_document {
-	my $document = Xacobeo::Document->new("$FOLDER/empty.xml");
+	my $document = Xacobeo::Document->new("$FOLDER/empty.xml", 'xml');
 	isa_ok($document, 'Xacobeo::Document');
 	
 	is_deeply(
@@ -230,7 +230,7 @@ sub test_empty_document {
 
 # Reads a document that has only the XML PI (Document without root element)
 sub test_empty_pi_document {
-	my $document = Xacobeo::Document->new("$FOLDER/empty-pi.xml");
+	my $document = Xacobeo::Document->new("$FOLDER/empty-pi.xml", 'xml');
 	isa_ok($document, 'Xacobeo::Document');
 	
 	is_deeply(
