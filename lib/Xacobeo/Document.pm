@@ -6,7 +6,7 @@ Xacobeo::Document - An XML document and it's related information.
 
 	use Xacobeo::Document;
 	
-	my $document = Xacobeo::Document->new('file.xml');
+	my $document = Xacobeo::Document->new('file.xml', 'xml');
 	
 	my $namespaces = $document->namespaces(); # Hashref
 	while (my ($uri, $prefix) = each %{ $namespaces }) {
@@ -66,7 +66,7 @@ Parameters:
 =cut
 
 sub new {
-	croak 'Usage: ', __PACKAGE__, '->new($source, $type)' unless @_ > 1;
+	croak 'Usage: ', __PACKAGE__, '->new($source, $type)' unless @_ == 3;
 	my $class = shift;
 	my ($source, $type) = @_;
 	
@@ -200,7 +200,7 @@ sub _load_document {
 	my $parser = _construct_xml_parser();
 	my $documentNode;
 	if (! defined $type) {
-		carp "Parameter type must be defined";
+		croak "Parameter type must be defined";
 	}
 	elsif ($type eq 'xml') {
 		$documentNode = $parser->parse_file($source);
@@ -209,7 +209,7 @@ sub _load_document {
 		$documentNode = $parser->parse_html_file($source);
 	}
 	else {
-		carp __x("Unsupported document type {type}", type => $type);
+		croak __x("Unsupported document type {type}", type => $type);
 	}
 	$self->documentNode($documentNode);
 	
