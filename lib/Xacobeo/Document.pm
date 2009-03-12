@@ -66,13 +66,13 @@ Parameters:
 =cut
 
 sub new {
-	croak 'Usage: ', __PACKAGE__, '->new($source)' unless @_ > 1;
+	croak 'Usage: ', __PACKAGE__, '->new($source, $type)' unless @_ > 1;
 	my $class = shift;
-	my ($source) = @_;
+	my ($source, $type) = @_;
 	
 	my $self = bless {}, ref($class) || $class;
 	
-	$self->_load_document($source);
+	$self->_load_document($source, $type);
 
 	return $self;	
 }
@@ -191,14 +191,26 @@ sub namespaces {
 #
 sub _load_document {
 	my $self = shift;
-	my ($source) = @_;
+	my ($source, $type) = @_;
 	
 	$self->source($source);
 
 	
 	# Parse the document
 	my $parser = _construct_xml_parser();
-	my $documentNode = $parser->parse_file($source);
+	my $documentNode;
+	if (! defined $type) {
+		carp "Parameter type must be defined";
+	}
+	elsif ($type eq 'xml') {
+		$documentNode = $parser->parse_file($source);
+	}
+	elsif ($type eq 'html') {
+		$documentNode = $parser->parse_html_file($source);
+	}
+	else {
+		carp __x("Unsupported document type {type}", type => $type);
+	}
 	$self->documentNode($documentNode);
 	
 	# Find the namespaces

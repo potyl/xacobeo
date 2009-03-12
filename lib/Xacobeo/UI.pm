@@ -338,6 +338,7 @@ sub load_file {
 	# Arguments
 	my $self = shift;
 	my ($file, $type) = @_;
+	$type ||= 'xml';
 	
 	my $timer = Xacobeo::Timer->start();
 	
@@ -345,7 +346,7 @@ sub load_file {
 	my $t_load = Xacobeo::Timer->start(__('Load document'));
 	my $document;
 	eval {
-		$document = Xacobeo::Document->new($file);
+		$document = Xacobeo::Document->new($file, $type);
 	};
 	if (my $error = $@) {
 		my $message = __x("Can't read {file}: {error}", file => $file, error => $error);
