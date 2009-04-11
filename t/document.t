@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 41;
+use Test::More tests => 53;
 use Data::Dumper;
 use Carp;
 
@@ -28,7 +28,6 @@ sub main {
 	test_namespaces4();
 	test_namespaces5();
 
-return 0;
 	test_empty_document();
 	test_empty_pi_document();
 	
@@ -164,8 +163,7 @@ sub test_namespaces2 {
 	is_deeply(
 		$document->namespaces(),
 		{
-			'' => 'default',
-			'http://www.w3.org/1999/xhtml' => 'default1',
+			'http://www.w3.org/1999/xhtml' => 'default',
 			@XML_NS,
 		},
 		'Beers namespaces'
@@ -174,7 +172,7 @@ sub test_namespaces2 {
 	my $got;
 	
 	# Find the table header
-	$got = $document->find('//default1:th/default1:td[count(.//node()) = 1]/text()');
+	$got = $document->find('//default:th/default:td[count(.//node()) = 1]/text()');
 	is_deeply(
 		[ map { $_->data } $got->get_nodelist ],
 		[ qw(Name Origin Description) ],
@@ -182,9 +180,9 @@ sub test_namespaces2 {
 	);
 
 
-	# Try to find all nodes in the default namespace (there are none)
+	# Try to find all nodes in the default namespace
 	$got = $document->find('//default:*');
-	is($got->size, 0, "Beers had no elements under the default namespace");
+	is($got->size, 9, "Got 9 in the default namespace");
 }
 
 
@@ -257,7 +255,7 @@ sub test_namespaces5 {
 	
 	# Find some stuff
 	$got = $document->find('//*');
-	is($got->size, 16, "Find all elements");
+	is($got->size, 17, "Find all elements");
 	
 	$got = $document->find('//a:*');
 	is($got->size, 5, "Find all elements in the namespace 'a'");
