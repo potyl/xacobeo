@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 33;
+use Test::More tests => 40;
 use Data::Dumper;
 use Carp;
 
@@ -26,7 +26,8 @@ sub main {
 	test_namespaces1();
 	test_namespaces2();
 	test_namespaces3();
-	
+	test_namespaces4();
+
 	test_empty_document();
 	test_empty_pi_document();
 	
@@ -199,8 +200,38 @@ sub test_namespaces3 {
 			'urn:schemas-microsoft-com:office:spreadsheet' => 'ss',
 			@XML_NS,
 		},
-		'Stocks ntramespaces'
+		"Extract 'stocks.xml' namespaces"
 	);
+}
+
+
+sub test_namespaces4 {
+	my $document = Xacobeo::Document->new("$FOLDER/sample.xml", 'xml');
+	isa_ok($document, 'Xacobeo::Document');
+
+	is_deeply(
+		$document->namespaces(),
+		{
+			'urn:x-is-simple' => 'x',
+			'urn:m&n' => 'default',
+			@XML_NS,
+		},
+		"Extract 'sample.xml' namespaces"
+	);
+	
+	my $got;
+	
+	# Find some stuff
+	$got = $document->find('//*');
+	is($got->size, 11, "Find all elements");
+	
+	$got = $document->find('//default:*');
+	is($got->size, 1, "Find all elements in the default namespace");
+	is($got->[0]->nodeName, 'no-content');
+	
+	$got = $document->find('//x:*');
+	is($got->size, 1, "Find all elements in the namespace 'x'");
+	is($got->[0]->nodeName, 'x:div');
 }
 
 
