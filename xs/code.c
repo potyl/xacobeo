@@ -834,26 +834,22 @@ static gchar* my_get_node_name_prefixed (xmlNode *node, HV *namespaces) {
 //
 static const gchar* my_get_uri_prefix (const xmlChar *uri, HV *namespaces) {
 
-	const gchar *prefix = NULL;
-	
 	// Get the prefix corresponding to the namespace
 	SV **svPtr = hv_fetch(namespaces, (gchar *) uri, xmlStrlen(uri), FALSE);
-	if (svPtr) {
-		if (SvTYPE(*svPtr) == SVt_PV) {
-			// Ok found the prefix!
-			prefix = SvPVX(*svPtr);
-		}
-		else {
-			// Prefix isn't a string, something else was stored in the hash
-			WARN("No valid namespace associated with URI %s", uri);
-		}
-	}
-	else {
+	if (!svPtr) {
 		// Can't find the prefix of the URI
 		WARN("Can't find namespace for URI %s", uri);
+		return NULL;
+	}
+	
+	if (SvTYPE(*svPtr) != SVt_PV) {
+		// Prefix isn't a string, something else was stored in the hash
+		WARN("No valid namespace associated with URI %s, got: '%s'", uri, SvPV_nolen(*svPtr));
+		return NULL;
 	}
 
-	return prefix;
+	// Ok found the prefix!
+	return SvPVX(*svPtr);
 }
 
 
