@@ -172,7 +172,7 @@ sub get_prefixed_name {
 =head2 namespaces
 
 Returns the namespaces declared in the document. The namespaces are returned in
-a hash REF where the URIs are used as a key and the prefix as a value.
+a hashref where the URIs are used as a key and the prefix as a value.
 
 =cut
 
