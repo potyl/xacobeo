@@ -129,7 +129,7 @@ sub main {
 	
 	if (@ARGV) {
 		my ($source, $xpath) = @ARGV;
-		$xacobeo->load_file($source);
+		$xacobeo->load_file($source, $type);
 		$xacobeo->set_xpath($xpath) if defined $xpath;
 	}
 	
