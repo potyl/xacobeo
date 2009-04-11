@@ -1,0 +1,118 @@
+# German translations for Xacobeo
+# Copyright (C) 2009, the Xacobeo contributors
+# This file is distributed under the same license as the Xacobeo package.
+#
+# Lars Dɪᴇᴄᴋᴏᴡ 迪拉斯 <daxim@cpan.org>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: de\n"
+"POT-Creation-Date: 2009-02-15 15:54+0100\n"
+"PO-Revision-Date: 2009-04-08 16:33+0200\n"
+"Last-Translator: Lars Dɪᴇᴄᴋᴏᴡ 迪拉斯 <daxim@cpan.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: lib/Xacobeo/UI.pm:136
+msgid "XPath Expression..."
+msgstr "XPath-Ausdruck..."
+
+#: lib/Xacobeo/UI.pm:206
+msgid "Node is undef"
+msgstr "Knoten ist undef"
+
+#: lib/Xacobeo/UI.pm:345
+msgid "Load document"
+msgstr "Dokument laden"
+
+#: lib/Xacobeo/UI.pm:351
+#, perl-brace-format
+msgid "Can't read {file}: {error}"
+msgstr "{file} kann nicht gelesen werden: {error}"
+
+#: lib/Xacobeo/UI.pm:362
+#, perl-format
+msgid "Document loaded in %.3f second"
+msgid_plural "Document loaded in %.3f seconds"
+msgstr[0] "Dokument wurde in %.3f Sekunde geladen"
+msgstr[1] "Dokument wurde in %.3f Sekunden geladen"
+
+#: lib/Xacobeo/UI.pm:390
+msgid "Syntax Highlight"
+msgstr "Syntaxhervorhebung"
+
+#: lib/Xacobeo/UI.pm:398
+msgid "DOM Tree"
+msgstr "DOM-Baum"
+
+#: lib/Xacobeo/UI.pm:623
+msgid "XPath query issued an error"
+msgstr "Fehler bei der XPath-Abfrage"
+
+#: lib/Xacobeo/UI.pm:627
+#, perl-format
+msgid "Found %d result in %0.3fs"
+msgid_plural "Found %d results in %0.3fs"
+msgstr[0] "%d Ergebnis in %0.3fs gefunden"
+msgstr[1] "%d Ergebnisse in %0.3fs gefunden"
+
+#: lib/Xacobeo/UI.pm:850
+#, perl-brace-format
+msgid "Can't create widget {name} because method {function} is missing"
+msgstr "Widget {name} konnte nicht erzeugt werden, weil die Funktion {function} fehlt"
+
+#: lib/Xacobeo/Timer.pm:147
+#, perl-format
+msgid "Time: %-20s %.4fs\n"
+msgstr "Zeit: %-20s %.4fs\n"
+
+#: lib/Xacobeo/Document.pm:98
+msgid "Document node is missing"
+msgstr "Dokumentenknoten fehlt"
+
+#: lib/Xacobeo/DomModel.pm:132
+msgid "Element"
+msgstr "Element"
+
+#: lib/Xacobeo/DomModel.pm:141
+msgid "ID name"
+msgstr "ID-Name"
+
+#: lib/Xacobeo/DomModel.pm:144
+msgid "ID value"
+msgstr "ID-Wert"
+
+#: share/xacobeo/xacobeo.glade:19
+msgid "_File"
+msgstr "_Datei"
+
+#: share/xacobeo/xacobeo.glade:97
+msgid "_Help"
+msgstr "_Hilfe"
+
+#: share/xacobeo/xacobeo.glade:126
+msgid "XPath:"
+msgstr "XPath:"
+
+#: share/xacobeo/xacobeo.glade:150
+msgid "Evaluate"
+msgstr "Auswerten"
+
+#: share/xacobeo/xacobeo.glade:244
+msgid "Results"
+msgstr "Ergebnisse"
+
+#: share/xacobeo/xacobeo.glade:275
+msgid "Namespaces"
+msgstr "Namensräume"
+
+#: share/xacobeo/xacobeo.glade:314
+msgid "About Xacobeo"
+msgstr "Ü_ber Xacobeo"
+
+#: share/xacobeo/xacobeo.glade:320
+msgid "Copyright (C) 2008-2009 by Emmanuel Rodriguez."
+msgstr "Copyright (C) 2008-2009, Emmanuel Rodriguez"
+
