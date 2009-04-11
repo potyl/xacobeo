@@ -253,9 +253,11 @@ sub _get_all_namespaces {
 	my ($node) = @_;
 
 	# Find the namespaces ($uri -> $prefix)
-	my %namespaces = (
-		XML_XML_NS() => 'xml',
+	my %seen = (
+		XML_XML_NS() => [xml => XML_XML_NS()],
 	);
+	# Namespaces found following the document order
+	my @namespaces = (values %seen);
 	if ($node) {
 		foreach my $namespace ($node->findnodes('.//namespace::*')) {
 			my $uri = $namespace->getData;
@@ -264,29 +266,42 @@ sub _get_all_namespaces {
 				warn __x("Namespace {name} has no URI", name => $name);
 				$uri = '';
 			}
-			$namespaces{$uri} ||= $name;
+			
+			# If the namespace was seen before make sure that we have a decent prefix.
+			# Maybe the previous time there was no prefix associated.
+			if (my $record = $seen{$uri}) {
+				$record->[0] ||= $name; 
+				next;
+			}
+
+			# First time that this namespace is seen
+			my $record = [$name => $uri];
+			$seen{$uri} = $record;
+			push @namespaces, $record;
 		}
 	}
-	
-	# Reverse the namespaces ($prefix -> $uri) and make sure that the prefixes
-	# don't clash with each other.
-	my $cleaned = {};
+
+	# Make sure that the prefixes are unique.
+	my %cleaned = ();
 	my $namespaces = {};
 	my $index = 0;
-	while (my ($uri, $prefix) = each %namespaces) {
+	foreach my $record (@namespaces) {
+		my ($prefix, $uri) = @{ $record };
+
+		# Don't provide a namespace prefix for the default namespace (xmlns="")
+		next if ! defined $prefix && $uri eq "";
 
 		# Make sure that the prefixes are unique
-		if (! defined $prefix or exists $cleaned->{$prefix}) {
+		if (! defined $prefix or exists $cleaned{$prefix}) {
 			# Assign a new prefix until unique
 			do {
-				$prefix = 'default' . ($index ? $index : '');
+				$prefix = 'default' . ($index || '');
 				++$index;
-			} while (exists $cleaned->{$prefix});
+			} while (exists $cleaned{$prefix});
 		}
-		$cleaned->{$prefix} = $uri;
+		$cleaned{$prefix} = $uri;
 		$namespaces->{$uri} = $prefix;
 	}
-
 	return $namespaces;
 }
 
