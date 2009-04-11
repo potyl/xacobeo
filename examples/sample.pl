@@ -2,7 +2,7 @@
 
 use blib;
 use FindBin;
-use lib "$FindBin::Bin/t";
+use lib "$FindBin::Bin/../t";
 
 use strict;
 use warnings;
@@ -18,7 +18,7 @@ sub main {
 
 	my ($filename) = @ARGV;
 	if (! defined $filename) {
-		$filename = "$FindBin::Bin/tests/sample.xml";
+		$filename = "$FindBin::Bin/../tests/sample.xml";
 	}
 
 	Xacobeo::Simple::render_document($filename);
