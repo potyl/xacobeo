@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xacobeo-i 18n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-10 17:05+0100\n"
+"POT-Creation-Date: 2009-04-11 13:32+0200\n"
 "PO-Revision-Date: 2009-01-25 11:50+0100\n"
 "Last-Translator: Emmanuel Rodriguez <emmanuel.rodriguez@gmail.com>\n"
 "Language-Team: English\n"
@@ -28,42 +28,47 @@ msgstr "Nudo es undef"
 msgid "Load document"
 msgstr "Lectura del documento"
 
-#: lib/Xacobeo/UI.pm:353
+#: lib/Xacobeo/UI.pm:352
 #, perl-brace-format
 msgid "Can't read {file}: {error}"
 msgstr "Imposible de leer {file}: {error}"
 
-#: lib/Xacobeo/UI.pm:364
+#: lib/Xacobeo/UI.pm:363
 #, perl-format
 msgid "Document loaded in %.3f second"
 msgid_plural "Document loaded in %.3f seconds"
 msgstr[0] "Documento leido en %.3f segundo"
 msgstr[1] "Documento leido en %.3f segundos"
 
-#: lib/Xacobeo/UI.pm:392
+#: lib/Xacobeo/UI.pm:391
 msgid "Syntax Highlight"
 msgstr "Coloreado de sintaxis"
 
-#: lib/Xacobeo/UI.pm:400
+#: lib/Xacobeo/UI.pm:399
 msgid "DOM Tree"
 msgstr "Arbol DOM"
 
-#: lib/Xacobeo/UI.pm:625
+#: lib/Xacobeo/UI.pm:624
 msgid "XPath query issued an error"
 msgstr "La expression XPath dió con un error"
 
-#: lib/Xacobeo/UI.pm:629
+#: lib/Xacobeo/UI.pm:628
 #, perl-format
 msgid "Found %d result in %0.3fs"
 msgid_plural "Found %d results in %0.3fs"
 msgstr[0] "%d resultado encotrado en %0.3fs"
 msgstr[1] "%d resultados encotrados en %0.3fs"
 
-#: lib/Xacobeo/UI.pm:852
+#: lib/Xacobeo/UI.pm:851
 #, perl-brace-format
 msgid "Can't create widget {name} because method {function} is missing"
 msgstr ""
 "Imposible de crear el widget {name} porque la funcción {function} no existe"
+
+#: lib/Xacobeo/Timer.pm:147
+#, perl-format
+msgid "Time: %-20s %.4fs\n"
+msgstr "Tiempo: %-20s %.4fs\n"
 
 #: lib/Xacobeo/Document.pm:98
 #, fuzzy
@@ -75,7 +80,7 @@ msgstr "Documento leido en %.3f segundo"
 msgid "Unsupported document type {type}"
 msgstr "El typo de documento {type} no esta suportado"
 
-#: lib/Xacobeo/Document.pm:264
+#: lib/Xacobeo/Document.pm:266
 #, perl-brace-format
 msgid "Namespace {name} has no URI"
 msgstr "El espacio de nombre {name} no tiene URI"
@@ -91,11 +96,6 @@ msgstr "ID nombre"
 #: lib/Xacobeo/DomModel.pm:144
 msgid "ID value"
 msgstr "ID valor"
-
-#: lib/Xacobeo/Timer.pm:147
-#, perl-format
-msgid "Time: %-20s %.4fs\n"
-msgstr "Tiempo: %-20s %.4fs\n"
 
 #: share/xacobeo/xacobeo.glade:19
 msgid "_File"
