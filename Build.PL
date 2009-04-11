@@ -52,8 +52,9 @@ my $build = inc::MyBuilder->new(
 	configure_requires => \%configure_requires,
 	
 	build_requires => {
-		'Test::More'  => '0',
-		'File::Slurp' => '0',
+		'Test::More'      => 0,
+		'File::Slurp'     => 0,
+		'Test::Exception' => 0,
 		%configure_requires,
 	},
 	
