@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Test::More tests => 53;
+use Test::Exception;
 use Data::Dumper;
 use Carp;
 
@@ -58,10 +59,10 @@ sub test_without_namespaces {
 
 	
 	# Test that an invalid xpath expression throws an error
-	test_die(
-		sub {$document->find('//x/')},
-		qr/^Invalid expression/
-	);
+	throws_ok
+		{$document->find('//x/')}
+		qr/^(XPath error : )?Invalid expression/,
+		q(throws 'invalid expression');
 
 
 	# Find a existing node set
@@ -70,23 +71,23 @@ sub test_without_namespaces {
 	
 
 	# Fails because the namespace doesn't exist
-	test_die(
-		sub {$document->find('/x:html//x:a[@href]')},
-		qr/^Undefined namespace prefix\nxmlXPathCompiledEval: evaluation failed/
-	);
+	throws_ok
+		{$document->find('/x:html//x:a[@href]')}
+		qr/^(?:Undefined namespace prefix\n| error : )xmlXPathCompiledEval: evaluation failed/,
+		q(throws 'evaluation failed');
 	
 	# Fails because the syntax is invalid
-	test_die(
-		sub {$document->find('/html//a[@href')},
-		qr/^Invalid predicate/
-	);
+	throws_ok
+		{$document->find('/html//a[@href')}
+		qr/^(?:XPath error : )?Invalid predicate/,
+		q(throws 'Invalid predicate');
 
 	
 	# Fails because the function aaa() is not defined
-	test_die(
-		sub {$document->find('aaa(1)')},
-		qr/^xmlXPathCompOpEval: function aaa not found/
-	);
+	throws_ok
+		{$document->find('aaa(1)')}
+		qr/^(?:xmlXPathCompOpEval: function aaa not found|XPath error : Unregistered function)/,
+		q(throws 'Unregistered function/function not found');
 
 	
 	# This is fine
@@ -299,15 +300,15 @@ sub test_empty_document {
 	);
 	
 	
-	is($document->documentNode, undef);
-	test_die(
-		sub {$document->find('/')},
-		qr/^Document node is missing/
-	);
-	test_die(
-		sub {$document->find('42')},
-		qr/^Document node is missing/
-	);
+	is($document->documentNode, undef, 'there is no node');
+	throws_ok
+		{$document->find('/')}
+		qr/^Document node is missing/,
+		q(throws 'Document node is missing');
+	throws_ok
+		{$document->find('42')}
+		qr/^Document node is missing/,
+		q(again throws 'Document node is missing');
 }
 
 
@@ -333,27 +334,4 @@ sub test_empty_pi_document {
 	isa_ok($root, 'XML::LibXML::Document');
 	my @child = $root->childNodes;
 	is(scalar(@child), 0);
-}
-
-
-# Test that an error is thrown
-sub test_die {
-  my ($code, $regexp) = @_;
-  croak "usage(code, regexp)" unless ref $code eq 'CODE';
-	
-  my $passed = 0;
-  local $@ = undef;
-	eval {
-    $code->();
-  };
-  if (my $error = $@) {
-    if ($error =~ /$regexp/) {
-      $passed = 1;
-    }
-    else {
-      diag("Expected $regexp but got $error");
-    }
-  }
-
-  return Test::More->builder->ok($passed);
 }
