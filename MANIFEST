@@ -43,6 +43,7 @@ xs/logger.h
 xs/main.c
 xs/ppport.h
 xs/XS.xs
+po/de.po
 po/es.po
 po/fr.po
 po/messages.pot
