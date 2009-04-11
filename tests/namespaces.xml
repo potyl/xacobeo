@@ -25,6 +25,7 @@
 	<g3 xmlns:a="http://www.example.org/c"  xmlns:c="http://www.example.org/a">
 		<a:pre>This is in the namespace 'c' even if the prefix tells 'a'</a:pre>
 		<c:div>and this is in the namespace 'a' even if the prefix tells 'c'</c:div>
+		<reset xmlns="">while this is back into the default namespace</reset>
 	</g3>
 
 	<!-- Reuse a NS as a default (new: a) -->
