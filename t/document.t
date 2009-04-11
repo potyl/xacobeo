@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 40;
+use Test::More tests => 41;
 use Data::Dumper;
 use Carp;
 
@@ -20,14 +20,15 @@ exit main();
 
 
 sub main {
-	
 	test_without_namespaces();
 	
 	test_namespaces1();
 	test_namespaces2();
 	test_namespaces3();
 	test_namespaces4();
+	test_namespaces5();
 
+return 0;
 	test_empty_document();
 	test_empty_pi_document();
 	
@@ -232,6 +233,59 @@ sub test_namespaces4 {
 	$got = $document->find('//x:*');
 	is($got->size, 1, "Find all elements in the namespace 'x'");
 	is($got->[0]->nodeName, 'x:div');
+}
+
+
+sub test_namespaces5 {
+	my $document = Xacobeo::Document->new("$FOLDER/namespaces.xml", 'xml');
+	isa_ok($document, 'Xacobeo::Document');
+
+	is_deeply(
+		$document->namespaces(),
+		{
+			'http://www.example.org/a' => 'a',
+			'http://www.example.org/b' => 'b',
+			'http://www.example.org/c' => 'c',
+			'http://www.example.org/x' => 'default',
+			'http://www.example.org/y' => 'default1',
+			@XML_NS,
+		},
+		"Extract 'namespaces.xml' namespaces"
+	);
+	
+	my $got;
+	
+	# Find some stuff
+	$got = $document->find('//*');
+	is($got->size, 16, "Find all elements");
+	
+	$got = $document->find('//a:*');
+	is($got->size, 5, "Find all elements in the namespace 'a'");
+	is_deeply(
+		[ map { $_->nodeName }  $got->get_nodelist ],
+		[ qw(a:p a:span c:div g4 a:p) ],
+		"Match element names for namespace 'a'"
+	);
+	
+	$got = $document->find('//b:*');
+	is($got->size, 1, "Find all elements in the namespace 'b'");
+	is($got->[0]->nodeName, 'b:i');
+	
+	$got = $document->find('//c:tag');
+	is($got->size, 1, "Find all elements in the namespace 'c'");
+	is($got->[0]->nodeName, 'c:tag');
+	
+	$got = $document->find('//default:*');
+	is($got->size, 2, "Find all elements in the default namespace");
+	is($got->[0]->nodeName, 'g1');
+	
+	$got = $document->find('//default1:*');
+	is($got->size, 2, "Find all elements in the default1 namespace");
+	is_deeply(
+		[ map { $_->nodeName }  $got->get_nodelist ],
+		[ qw(g2 b) ],
+		"Match element names for namespace 'default1'"
+	);
 }
 
 
