@@ -1,6 +1,11 @@
 Changelog for Xacobeo.
 
 
+0.08_01 Sat Apr 11 14:33:14 CEST 2009
+	- Added support for HTML documents (command line only).
+	- The default namespace (xmlns="") is no longer registered.
+
+
 0.07 Thu Feb 19 20:20:00 CET 2009
 	- New release with all the changes from the 0.07_XX releases.
 
@@ -19,7 +24,7 @@ Changelog for Xacobeo.
 
 
 0.06_03 Tue Feb 10 22:18:29 CET 2009
-	- Issue 23: Results view loses the syntax highliting.
+	- Issue 23: Results view loses the syntax highlighting.
 	- Issue 26: Tests require File::Slurp.
 	- Issue 29: Results view is editable.
 	- Updated the translations.
