@@ -11,6 +11,8 @@ xacobeo [OPTION]... [file [xpath]]
 Options:
 
    -h, --help            brief help message
+   -v, --version         display the version of Xacobeo, XML::LibXML and libxml2
+                         that are used and exit
    --html                use the HTML parser with the provided file
 
 Where I<file> is a valid XML document and I<xpath> a valid XPath query.
@@ -87,7 +89,9 @@ use Pod::Usage;
 use Getopt::Long qw(:config auto_help);
 use File::Spec::Functions;
 use FindBin;
+use XML::LibXML;
 
+use Xacobeo;
 use Xacobeo::UI;
 use Xacobeo::I18n;
 
@@ -102,9 +106,19 @@ sub main {
 
 	# Parse the command line options
 	my $type = 'xml';
+	my $do_version = 0;
 	GetOptions(
 		'html' => sub { $type = 'html' },
+		'version|v' => \$do_version,
 	) or pod2usage(2);
+	
+	if ($do_version) {
+		printf "Xacobeo version:      %8s\n", $Xacobeo::VERSION;
+		printf "Compiled with libxml: %8s\n", XML::LibXML::LIBXML_DOTTED_VERSION;
+		printf "Running with libxml:  %8s\n", XML::LibXML::LIBXML_RUNTIME_VERSION;
+		printf "XML::LibXML version:  %8s\n", $XML::LibXML::VERSION;
+		return 0;
+	}
 	
 	# Create a new instance of this application
 	my $folder = find_app_folder();
