@@ -5,6 +5,8 @@ Changelog for Xacobeo.
 	- Added support for HTML documents (command line only).
 	- The default namespace (xmlns="") is no longer registered.
 	- Namespaces are found in the right order (affects default, default1, etc).
+	- German translation by Lars Dieckow.
+	- Fixed the build dependencies.
 
 
 0.07 Thu Feb 19 20:20:00 CET 2009
