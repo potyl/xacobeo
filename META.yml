@@ -16,6 +16,7 @@ configure_requires:
   ExtUtils::PkgConfig: 0
   File::Path: 0
   File::Spec::Functions: 0
+  Gtk2: 0
 requires:
   Carp: 0
   Class::Accessor::Fast: 0
@@ -35,7 +36,13 @@ requires:
   XML::LibXML: 0
   perl: 5.6.1
 build_requires:
+  ExtUtils::Depends: 0
+  ExtUtils::ParseXS: 0
+  ExtUtils::PkgConfig: 0
+  File::Path: 0
   File::Slurp: 0
+  File::Spec::Functions: 0
+  Gtk2: 0
   Test::More: 0
 provides:
   Xacobeo:
