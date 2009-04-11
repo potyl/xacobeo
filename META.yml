@@ -6,7 +6,10 @@ author:
 abstract: XPath (XML Path Language) visualizer.
 license: perl
 resources:
+  bugtracker: http://code.google.com/p/xacobeo/issues/list
+  homepage: http://code.google.com/p/xacobeo/
   license: http://dev.perl.org/licenses/
+  repository: http://code.google.com/p/xacobeo/source/browse/
 configure_requires:
   ExtUtils::Depends: 0
   ExtUtils::ParseXS: 0
