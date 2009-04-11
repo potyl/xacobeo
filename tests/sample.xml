@@ -18,7 +18,7 @@
 
 	<p>></p>
 
-	<x:div>This is an embeded tag: &lt;tag&gt;</x:div>
+	<x:div>This is an embedded tag: &lt;tag&gt;</x:div>
 
 	<p attribute="escaped &quot; XML in an attribute.">Is the attribute escaped?</p>
 	<p eval="$var &gt; 4 ? &apos;bigger&apos; : &quot;smaller&quot; ">Is the attribute escaped? we got </p>
@@ -30,7 +30,7 @@
 
 <![CDATA[<greeting>Hello, world!</greeting>]]> 
 
-<!-- should we  escape stuff & bad thigs < > in a comment? -->
+<!-- should we  escape stuff & bad things < > in a comment? -->
 
 <?magnum <insane> pi="a&b"?>
 
