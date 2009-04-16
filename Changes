@@ -1,6 +1,10 @@
 Changelog for Xacobeo.
 
 
+0.08 Thu Apr 16 21:20:01 CEST 2009
+	- New release with all the changes from the 0.08_XX releases.
+
+
 0.08_01 Sat Apr 11 14:33:14 CEST 2009
 	- Added support for HTML documents (command line only).
 	- The default namespace (xmlns="") is no longer registered.
