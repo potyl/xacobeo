@@ -43,6 +43,7 @@ build_requires:
   File::Slurp: 0
   File::Spec::Functions: 0
   Gtk2: 0
+  Test::Exception: 0
   Test::More: 0
 provides:
   Xacobeo:
