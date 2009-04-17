@@ -48,7 +48,7 @@ L<XML::LibXML::Node>.
 The namespaces declared in the document. Must be an hash ref where the keys are
 the URIs and the values the prefixes of the namespaces.
 
-=back	
+=back
 
 =head2 xacobeo_populate_gtk_tree_store
 
@@ -74,7 +74,7 @@ L<XML::LibXML::Node>.
 The namespaces declared in the document. Must be an hash ref where the keys are
 the URIs and the values the prefixes of the namespaces.
 
-=back	
+=back
 
 =cut
 

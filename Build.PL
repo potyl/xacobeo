@@ -42,22 +42,22 @@ my $build = inc::MyBuilder->new(
 	license           => 'perl',
 	dist_author       => 'Emmanuel Rodriguez <potyl@cpan.org>',
 	dist_version_from => catfile('lib', 'Xacobeo.pm'),
-	
+
 	# Installation files
 	script_file => [ catfile('bin', 'xacobeo') ],
 
 	# Dependencies
 	requires => \%requires,
-	
+
 	configure_requires => \%configure_requires,
-	
+
 	build_requires => {
 		'Test::More'      => 0,
 		'File::Slurp'     => 0,
 		'Test::Exception' => 0,
 		%configure_requires,
 	},
-	
+
 	meta_merge => {
 		resources => {
 			homepage   => 'http://code.google.com/p/xacobeo/',

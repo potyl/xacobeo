@@ -69,12 +69,12 @@ sub new {
 	croak 'Usage: ', __PACKAGE__, '->new($source, $type)' unless @_ == 3;
 	my $class = shift;
 	my ($source, $type) = @_;
-	
+
 	my $self = bless {}, ref($class) || $class;
-	
+
 	$self->_load_document($source, $type);
 
-	return $self;	
+	return $self;
 }
 
 
@@ -96,7 +96,7 @@ sub find {
 	my $self = shift;
 	my ($xpath) = @_;
 	croak __("Document node is missing") unless defined $self->documentNode;
-	
+
 	my $result;
 	eval {
 		$result = $self->xpath->find($xpath, $self->documentNode);
@@ -104,7 +104,7 @@ sub find {
 	if (my $error = $@) {
 		croak $error;
 	}
-	
+
 	return $result;
 }
 
@@ -192,10 +192,10 @@ sub namespaces {
 sub _load_document {
 	my $self = shift;
 	my ($source, $type) = @_;
-	
+
 	$self->source($source);
 
-	
+
 	# Parse the document
 	my $parser = _construct_xml_parser();
 	my $documentNode;
@@ -212,10 +212,10 @@ sub _load_document {
 		croak __x("Unsupported document type {type}", type => $type);
 	}
 	$self->documentNode($documentNode);
-	
+
 	# Find the namespaces
 	$self->namespaces(_get_all_namespaces($documentNode));
-	
+
 	# Create the XPath context
 	$self->xpath(
 		$self->_create_xpath_context()
@@ -232,7 +232,7 @@ sub _construct_xml_parser {
 	$parser->line_numbers(1);
 	$parser->recover_silently(1);
 	$parser->complete_attributes(0);
-	
+
 	return $parser;
 }
 
@@ -266,11 +266,11 @@ sub _get_all_namespaces {
 				warn __x("Namespace {name} has no URI", name => $name);
 				$uri = '';
 			}
-			
+
 			# If the namespace was seen before make sure that we have a decent prefix.
 			# Maybe the previous time there was no prefix associated.
 			if (my $record = $seen{$uri}) {
-				$record->[0] ||= $name; 
+				$record->[0] ||= $name;
 				next;
 			}
 
@@ -312,14 +312,14 @@ sub _get_all_namespaces {
 #
 sub _create_xpath_context {
 	my $self = shift;
-	
+
 	my $context = XML::LibXML::XPathContext->new();
 
 	# Add the namespaces to the XPath context
 	while (my ($uri, $prefix) = each %{ $self->namespaces }) {
 		$context->registerNs($prefix, $uri);
 	}
-	
+
 	return $context;
 }
 
