@@ -54,7 +54,7 @@ our @EXPORT_OK = qw(
 
 
 # The text domain of the application.
-my $DOMAIN = '';
+my $DOMAIN = q{};
 
 
 

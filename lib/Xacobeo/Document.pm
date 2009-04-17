@@ -267,7 +267,7 @@ sub _get_all_namespaces {
 			my $name = $namespace->getLocalName;
 			if (! defined $uri) {
 				warn __x("Namespace {name} has no URI", name => $name);
-				$uri = '';
+				$uri = q{};
 			}
 
 			# If the namespace was seen before make sure that we have a decent prefix.
@@ -292,13 +292,13 @@ sub _get_all_namespaces {
 		my ($prefix, $uri) = @{ $namespace_record };
 
 		# Don't provide a namespace prefix for the default namespace (xmlns="")
-		next if ! defined $prefix && $uri eq "";
+		next if ! defined $prefix && $uri eq q{};
 
 		# Make sure that the prefixes are unique
 		if (not defined $prefix or exists $cleaned{$prefix}) {
 			# Assign a new prefix until unique
 			do {
-				$prefix = 'default' . ($index || '');
+				$prefix = 'default' . ($index || q{});
 				++$index;
 			} while (exists $cleaned{$prefix});
 		}
