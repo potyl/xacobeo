@@ -42,7 +42,7 @@ use Locale::Messages qw(dgettext dngettext textdomain bindtextdomain);
 use Encode qw(decode);
 
 use Exporter 'import';
-our @EXPORT = qw(
+our @EXPORT_OK = qw(
 	__
 	__x
 	__n

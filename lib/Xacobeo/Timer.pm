@@ -47,7 +47,7 @@ use warnings;
 
 use Time::HiRes qw(time);
 
-use Xacobeo::I18n;
+use Xacobeo::I18n qw(__);
 
 
 =head2 new
