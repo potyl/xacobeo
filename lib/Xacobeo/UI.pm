@@ -871,7 +871,11 @@ sub glade_custom_handler {
 		$widget = $self->$function();
 	}
 	else {
-		my $message = __x("Can't create widget {name} because method {function} is missing", function => $function, name => $name);
+		my $message = __x(
+			"Can't create widget {name} because method {function} is missing",
+			function => $function,
+			name     => $name
+		);
 		warn "$message\n";
 		$widget = Gtk2::Label->new($message);
 	}

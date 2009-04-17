@@ -35,8 +35,9 @@ use Glib;
 BEGIN {
 	my $enum = __PACKAGE__ . 'Code';
 	Glib::Type->register_enum($enum, 'xpath');
-	Glib::Error::register(__PACKAGE__, $enum); ##no critic (ProhibitCallsToUnexportedSubs)
-	# it is supposed to be called that way
+	Glib::Error::register(    ##no critic (ProhibitCallsToUnexportedSubs)
+		__PACKAGE__, $enum    # it is supposed to be called that way
+	);
 }
 
 
