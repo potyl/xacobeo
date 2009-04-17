@@ -238,12 +238,12 @@ sub display_xml_node {
 				# work with the XS code, we deal with them manually
 				buffer_add($buffer, syntax => q{ });
 				buffer_add($buffer, namespace_name => $child->nodeName);
-				buffer_add($buffer, syntax => '="');
+				buffer_add($buffer, syntax => q{="});
 
 				my $uri = escape_xml_attribute($child->getData);
 				buffer_add($buffer, namespace_uri => $uri);
 
-				buffer_add($buffer, syntax => '"');
+				buffer_add($buffer, syntax => q{"});
 			}
 			else {
 				# Performed through XS

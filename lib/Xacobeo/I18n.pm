@@ -216,7 +216,7 @@ sub __xn {
 #
 sub expand {
 	my ($i18n, %args) = @_;
-	my $re = join '|', map { quotemeta $_ } keys %args;
+	my $re = join q{|}, map { quotemeta $_ } keys %args;
 	$i18n =~ s{
 		[{] ($re) [}] # capture expressions in literal curlies
 	}{
