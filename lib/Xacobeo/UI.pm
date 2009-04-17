@@ -492,7 +492,7 @@ sub populate_tag_table {
 		family     => 'Courier 10 Pitch',
 		background => '#EDE9E3',
 		foreground => 'black',
-		style      => 'italic',,
+		style      => 'italic',
 		weight     => PANGO_WEIGHT_LIGHT
 	);
 
