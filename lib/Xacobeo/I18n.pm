@@ -72,7 +72,7 @@ The string to translate.
 
 =cut
 
-sub __ ($) {
+sub __ {
 	my ($msgid) = @_;
 	return dgettext_utf8($msgid);
 }
@@ -99,7 +99,7 @@ A series of key/value pairs that will be replacing the place holders.
 
 =cut
 
-sub __x ($@) {
+sub __x {
 	my ($msgid, %args) = @_;
 	my $i18n = dgettext_utf8($msgid);
 	return expand($i18n, %args);
@@ -136,7 +136,7 @@ A series of key/value pairs that will be replacing the place holders.
 
 =cut
 
-sub __n ($$$) {
+sub __n {
 	my ($msgid, $msgid_plural, $count) = @_;
 	my $i18n = dngettext_utf8($msgid, $msgid_plural, $count);
 	return $i18n;
@@ -169,7 +169,7 @@ The number of items.
 
 =cut
 
-sub __nx ($$$%) {
+sub __nx {
 	my ($msgid, $msgid_plural, $count, %args) = @_;
 	my $i18n = dngettext_utf8($msgid, $msgid_plural, $count);
 	return expand($i18n);
@@ -202,7 +202,7 @@ The number of items.
 
 =cut
 
-sub __xn ($$$%) {
+sub __xn {
 	my ($msgid, $msgid_plural, $count, %args) = @_;
 	return __nx($msgid, $msgid_plural, $count, %args);
 }
@@ -212,7 +212,7 @@ sub __xn ($$$%) {
 #
 # Replaces the place markers with their corresponding values.
 #
-sub expand ($%) {
+sub expand {
 	my ($i18n, %args) = @_;
 	my $re = join '|', map { quotemeta $_ } keys %args;
 	$i18n =~ s/\{($re)\}/defined $args{$1} ? $args{$1} : "{$1}"/ge;
