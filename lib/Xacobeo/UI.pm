@@ -96,9 +96,9 @@ The i18n (gettext) domain to use for the translations.
 
 sub new {
 	# Arguments
-	my $class = shift;
-	croak 'Usage: new($app_folder, $domain)' unless @_ == 2;
-	my ($app_folder, $domain) = @_;
+	my ($class, $app_folder, $domain) = @_;
+	croak 'Usage: new($app_folder, $domain)'
+      unless defined $app_folder and defined $domain;
 
 	# Create an instance
 	my $self = bless {}, ref($class) || $class;
@@ -117,8 +117,7 @@ sub new {
 #
 sub construct_gui {
 	# Arguments
-	my $self = shift;
-	my ($domain) = @_;
+	my ($self, $domain) = @_;
 
 	my $folder = $self->app_folder();
 
@@ -201,8 +200,7 @@ sub construct_dom_tree_view {
 # content before displaying the new data.
 #
 sub display_xml_node {
-	my $self = shift;
-	my ($widget_name, $node) = @_;
+	my ($self, $widget_name, $node) = @_;
 
 	my $namespaces = $self->document ? $self->document->namespaces : undef;
 	my $textview = $self->glade->get_widget($widget_name);
@@ -291,8 +289,7 @@ sub display_xml_node {
 # view is shown. This mehtod clears the view of it's old content.
 #
 sub display_results {
-	my $self = shift;
-	my ($node) = @_;
+	my ($self, $node) = @_;
 
 	$self->display_xml_node('xpath-results', $node);
 	$self->glade->get_widget('notebook')->set_current_page(0);
@@ -354,8 +351,7 @@ The XML file to load.
 
 sub load_file {
 	# Arguments
-	my $self = shift;
-	my ($file, $type) = @_;
+	my ($self, $file, $type) = @_;
 	$type ||= 'xml';
 
 	my $timer = Xacobeo::Timer->start();
@@ -397,8 +393,7 @@ sub load_file {
 # Populates the different widgets after a document has been loaded
 #
 sub populate_widgets {
-	my $self = shift;
-	my ($file) = @_;
+	my ($self, $file) = @_;
 
 	my $glade = $self->glade;
 	$glade->get_widget('window')->set_title("$APP_NAME - $file");
@@ -437,8 +432,7 @@ sub populate_widgets {
 # Populates the DOM tree view.
 #
 sub populate_treeview {
-	my $self = shift;
-	my ($node) = @_;
+	my ($self, $node) = @_;
 
 	my $treeview = $self->glade->get_widget('dom-tree-view');
 	my $store = $treeview->get_model;
@@ -476,9 +470,8 @@ The XML file to load.
 =cut
 
 sub set_xpath {
-	my $self = shift;
-	croak 'Usage: $xacobeo->set_xpath($xpath)' unless @_;
-	my ($xpath) = @_;
+	my ($self, $xpath) = @_;
+	croak 'Usage: $xacobeo->set_xpath($xpath)' unless defined $xpath;
 
 	if (defined $xpath) {
 		$self->glade->get_widget('xpath-entry')->set_text($xpath);
@@ -676,8 +669,7 @@ sub callback_run_xpath {
 #
 sub callback_xpath_entry_changed {
 	# Arguments
-	my $self = shift;
-	my ($widget) = @_;
+	my ($self, $widget) = @_;
 
 	my $xpath = $widget->get_text;
 	my $pango_attributes = undef;
@@ -715,8 +707,7 @@ sub callback_xpath_entry_changed {
 # cursor which blinks periodically. The markup is sometimes forgotten between
 # redraws. This callback corrects this problem.
 sub callback_xpath_entry_expose {
-	my $self = shift;
-	my ($widget) = @_;
+	my ($self, $widget) = @_;
 	$self->set_xpath_pango_attributes();
 
 	# Continue with the events
@@ -733,8 +724,7 @@ sub callback_xpath_entry_expose {
 # while the button is still pressed.
 #
 sub callback_xpath_entry_button_press {
-	my $self = shift;
-	my ($widget, $event) = @_;
+	my ($self, $widget, $event) = @_;
 
 	if ($widget->get_text or $event->button != 1) {
 		# Propagate the event further since there's text in the widget
@@ -761,8 +751,7 @@ sub callback_file_open {
 # Called when the file choser has chosen a file (File > Open).
 #
 sub callback_file_selected {
-	my $self = shift;
-	my ($dialog, $response) = @_;
+	my ($self, $dialog, $response) = @_;
 
 	# The open button send the response 'accept'
 	if ($response eq 'accept') {
@@ -798,8 +787,7 @@ sub callback_about_show {
 # This callback can be used for all dialogs.
 #
 sub callback_dialog_hide {
-	my $self = shift;
-	my ($dialog) = @_;
+	my ($self, $dialog) = @_;
 	$dialog->hide();
 	return TRUE;
 }
@@ -866,8 +854,7 @@ sub set_xpath_pango_attributes {
 # Displays the given text in the statusbar
 #
 sub display_statusbar_message {
-	my $self = shift;
-	my ($message) = @_;
+	my ($self, $message) = @_;
 
 	my $statusbar = $self->glade->get_widget('statusbar');
 	my $id = $self->statusbar_context_id;

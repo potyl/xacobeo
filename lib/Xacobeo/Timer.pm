@@ -67,8 +67,7 @@ The name of the timer.
 =cut
 
 sub new {
-	my $class = shift;
-	my ($name) = @_;
+	my ($class, $name) = @_;
 
 	my $self = {
 		elapsed   => 0,
@@ -100,9 +99,9 @@ The name is used only when called without a blessed instance.
 =cut
 
 sub start {
-	my $self = shift;
+	my ($self, @params) = @_;
 	if (! ref($self)) {
-		$self = $self->new(@_);
+		$self = $self->new(@params);
 	}
 
 	$self->{start} = time;
