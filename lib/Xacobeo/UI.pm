@@ -25,7 +25,7 @@ The package defines the following methods:
 use strict;
 use warnings;
 
-
+use English qw(-no_match_vars $EVAL_ERROR);
 use Glib qw(TRUE FALSE);
 use Gtk2;
 use Gtk2::GladeXML;
@@ -365,7 +365,7 @@ sub load_file {
 		$document = Xacobeo::Document->new($file, $type);
 		1;
 	} or $self->display_statusbar_message(
-		__x("Can't read {file}: {error}", file => $file, error => $@)
+		__x("Can't read {file}: {error}", file => $file, error => $EVAL_ERROR)
 	);
 	$self->document($document);
 	undef $t_load;
@@ -647,7 +647,7 @@ sub callback_run_xpath {
 		);
 	} else {
 		$timer->stop();
-		$result = Xacobeo::Error->new(xpath => $@);
+		$result = Xacobeo::Error->new(xpath => $EVAL_ERROR);
 		$self->display_statusbar_message(__("XPath query issued an error"));
 	}
 

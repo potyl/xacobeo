@@ -39,6 +39,7 @@ package Xacobeo::Document;
 use strict;
 use warnings;
 
+use English qw(-no_match_vars $EVAL_ERROR);
 use XML::LibXML qw(XML_XML_NS);
 use Data::Dumper;
 use Carp qw(croak);
@@ -102,7 +103,7 @@ sub find {
 	eval {
 		$result = $self->xpath->find($xpath, $self->documentNode);
 		1;
-	} or croak $@;
+	} or croak $EVAL_ERROR;
 
 	return $result;
 }
