@@ -290,7 +290,7 @@ sub _get_all_namespaces {
 		next if ! defined $prefix && $uri eq "";
 
 		# Make sure that the prefixes are unique
-		if (! defined $prefix or exists $cleaned{$prefix}) {
+		if (not defined $prefix or exists $cleaned{$prefix}) {
 			# Assign a new prefix until unique
 			do {
 				$prefix = 'default' . ($index || '');
