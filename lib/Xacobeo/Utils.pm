@@ -1,5 +1,7 @@
 package Xacobeo::Utils;
 
+=encoding utf8
+
 =head1 NAME
 
 Xacobeo::Utils - Utilities shared among the project.

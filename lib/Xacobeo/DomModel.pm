@@ -1,5 +1,7 @@
 package Xacobeo::DomModel;
 
+=encoding utf8
+
 =head1 NAME
 
 Xacobeo::DomModel - The DOM model used for the TreeView.

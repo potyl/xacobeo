@@ -1,5 +1,7 @@
 package Xacobeo::Timer;
 
+=encoding utf8
+
 =head1 NAME
 
 Xacobeo::Timer - A custom made timer.
