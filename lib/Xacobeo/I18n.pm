@@ -217,7 +217,11 @@ sub __xn {
 sub expand {
 	my ($i18n, %args) = @_;
 	my $re = join '|', map { quotemeta $_ } keys %args;
-	$i18n =~ s/\{($re)\}/defined $args{$1} ? $args{$1} : "{$1}"/ge;
+	$i18n =~ s{
+		[{] ($re) [}] # capture expressions in literal curlies
+	}{
+		defined $args{$1} ? $args{$1} : "{$1}"
+	}egmsx; # and replace all
 	return $i18n;
 }
 
