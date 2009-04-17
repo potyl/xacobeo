@@ -181,7 +181,7 @@ sub construct_dom_tree_view {
 	my $treeview = $self->glade->get_widget('dom-tree-view');
 
 	# Create the model and link it with the view
-	Xacobeo::DomModel::create_model_with_view(
+	Xacobeo::DomModel::create_model_with_view( ##no critic (ProhibitCallsToUnexportedSubs)
 		$treeview,
 		sub {
 			my ($node) = @_;
