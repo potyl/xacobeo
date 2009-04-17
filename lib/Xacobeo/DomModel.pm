@@ -142,6 +142,8 @@ sub add_columns {
 
 	# Node attribute value (ID attribute)
 	add_text_column($treeview, $NODE_ID_VALUE, __('ID value'));
+
+	return;
 }
 
 

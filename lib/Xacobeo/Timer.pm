@@ -76,6 +76,8 @@ sub new {
 	};
 
 	bless $self, ref($class) || $class;
+
+	return $self;
 }
 
 
@@ -171,6 +173,7 @@ sub elapsed {
 sub DESTROY {
 	my $self = shift;
 	$self->show() unless $self->{displayed};
+	return;
 }
 
 

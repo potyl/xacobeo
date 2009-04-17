@@ -275,6 +275,8 @@ sub init {
 
 	textdomain($DOMAIN);
 	bindtextdomain($DOMAIN, $folder);
+
+	return;
 }
 
 

@@ -165,6 +165,8 @@ sub construct_gui {
 
 	# Add the version to the about dialog
 	$self->glade->get_widget('about')->set_version($Xacobeo::VERSION);
+
+	return;
 }
 
 
@@ -189,6 +191,8 @@ sub construct_dom_tree_view {
 			$self->display_results($node);
 		},
 	);
+
+	return;
 }
 
 
@@ -276,6 +280,8 @@ sub display_xml_node {
 
 	# Scroll to tbe beginning
 	$textview->scroll_to_iter($buffer->get_start_iter, 0.0, FALSE, 0.0, 0.0);
+
+	return;
 }
 
 
@@ -290,6 +296,8 @@ sub display_results {
 
 	$self->display_xml_node('xpath-results', $node);
 	$self->glade->get_widget('notebook')->set_current_page(0);
+
+	return;
 }
 
 
@@ -322,6 +330,8 @@ sub construct_namespaces_view {
 	);
 
 	$self->namespaces_view($namespaces_view);
+
+	return;
 }
 
 
@@ -379,6 +389,7 @@ sub load_file {
 		$timer->elapsed;
 	}
 
+	return;
 }
 
 
@@ -417,6 +428,8 @@ sub populate_widgets {
 	@{ $self->namespaces_view->{data} } = @namespaces;
 
 	$glade->get_widget('xpath-entry')->set_sensitive(TRUE);
+
+	return;
 }
 
 
@@ -438,6 +451,8 @@ sub populate_treeview {
 		$store->clear();
 	}
 	$treeview->set_model($store);
+
+	return;
 }
 
 
@@ -468,6 +483,8 @@ sub set_xpath {
 	if (defined $xpath) {
 		$self->glade->get_widget('xpath-entry')->set_text($xpath);
 	}
+
+	return;
 }
 
 
@@ -583,6 +600,7 @@ sub add_tag {
 	my $tag = Gtk2::TextTag->new($name);
 	$tag->set(@properties);
 	$tag_table->add($tag);
+	return;
 }
 
 
@@ -594,6 +612,7 @@ sub add_tag {
 sub buffer_add {
 	my ($buffer, $tag, $string) = @_;
 	$buffer->insert_with_tags_by_name($buffer->get_end_iter, $string, $tag);
+	return;
 }
 
 
@@ -602,6 +621,7 @@ sub buffer_add {
 #
 sub callback_window_close {
 	Gtk2->main_quit;
+	return;
 }
 
 
@@ -641,6 +661,8 @@ sub callback_run_xpath {
 
 	# Display the results
 	$self->display_results($result);
+
+	return;
 }
 
 
@@ -684,6 +706,8 @@ sub callback_xpath_entry_changed {
 
 	# Force a redraw
 	request_redraw($widget);
+
+	return;
 }
 
 
@@ -729,6 +753,7 @@ sub callback_xpath_entry_button_press {
 sub callback_file_open {
 	my $self = shift;
 	$self->glade->get_widget('file')->show_all();
+	return;
 }
 
 
@@ -746,6 +771,7 @@ sub callback_file_selected {
 	}
 
 	$dialog->hide();
+	return;
 }
 
 
@@ -756,6 +782,7 @@ sub callback_about_show {
 	my $self = shift;
 	my $about = $self->glade->get_widget('about');
 	$about->show_all();
+	return;
 }
 
 
@@ -796,6 +823,7 @@ sub request_redraw {
 	my $size = $widget->allocation;
 	my $rectangle = Gtk2::Gdk::Rectangle->new(0, 0, $size->width, $size->height);
 	$widget->window->invalidate_rect($rectangle, TRUE);
+	return;
 }
 
 
@@ -830,6 +858,7 @@ sub set_xpath_pango_attributes {
 
 
 	$layout->set_attributes($attributes);
+	return;
 }
 
 
@@ -844,6 +873,7 @@ sub display_statusbar_message {
 	my $id = $self->statusbar_context_id;
 	$statusbar->pop($id);
 	$statusbar->push($id, $message);
+	return;
 }
 
 

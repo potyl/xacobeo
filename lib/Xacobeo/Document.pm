@@ -220,6 +220,8 @@ sub _load_document {
 	$self->xpath(
 		$self->_create_xpath_context()
 	);
+
+	return;
 }
 
 
