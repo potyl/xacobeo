@@ -191,23 +191,23 @@ sub _load_document {
 
 	# Parse the document
 	my $parser = _construct_xml_parser();
-	my $documentNode;
+	my $document_node;
 	if (! defined $type) {
 		croak "Parameter type must be defined";
 	}
 	elsif ($type eq 'xml') {
-		$documentNode = $parser->parse_file($source);
+		$document_node = $parser->parse_file($source);
 	}
 	elsif ($type eq 'html') {
-		$documentNode = $parser->parse_html_file($source);
+		$document_node = $parser->parse_html_file($source);
 	}
 	else {
 		croak __x("Unsupported document type {type}", type => $type);
 	}
-	$self->documentNode($documentNode);
+	$self->documentNode($document_node);
 
 	# Find the namespaces
-	$self->namespaces(_get_all_namespaces($documentNode));
+	$self->namespaces(_get_all_namespaces($document_node));
 
 	# Create the XPath context
 	$self->xpath(

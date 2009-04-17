@@ -401,11 +401,11 @@ sub populate_widgets {
 	$glade->get_widget('window')->set_title("$APP_NAME - $file");
 
 	my $document = $self->document;
-	my ($documentNode, $namespaces) = $document ? ($document->documentNode, $document->namespaces) : (undef, {});
+	my ($document_node, $namespaces) = $document ? ($document->documentNode, $document->namespaces) : (undef, {});
 
 	# Update the text widget
 	my $t_syntax = Xacobeo::Timer->start(__('Syntax Highlight'));
-	$self->display_xml_node('xml-document', $documentNode);
+	$self->display_xml_node('xml-document', $document_node);
 	undef $t_syntax;
 
 	# Clear the previous results
@@ -413,7 +413,7 @@ sub populate_widgets {
 
 	# Populate the DOM view tree
 	my $t_dom = Xacobeo::Timer->start(__('DOM Tree'));
-	$self->populate_treeview($documentNode);
+	$self->populate_treeview($document_node);
 	undef $t_dom;
 
 
