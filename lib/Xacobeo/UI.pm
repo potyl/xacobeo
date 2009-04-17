@@ -227,7 +227,7 @@ sub display_xml_node {
 
 		# Formatting using to indicate which result is being displayed
 		my $i = 0;
-		my $format = sprintf ' %%%dd. ', length($count);
+		my $format = sprintf ' %%%dd. ', length $count;
 
 		foreach my $child (@children) {
 			# Add the result count
