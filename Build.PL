@@ -26,6 +26,7 @@ my %requires = (
 	'Data::Dumper'          => 0,
 	'Gtk2::SourceView'      => 0,
 	'Locale::TextDomain'    => 0,
+	'parent'                => 0,
 );
 
 my %configure_requires = (

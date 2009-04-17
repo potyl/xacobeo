@@ -83,7 +83,7 @@ the URIs and the values the prefixes of the namespaces.
 use strict;
 use warnings;
 
-use base 'DynaLoader';
+use parent qw(DynaLoader);
 use Gtk2;
 use XML::LibXML;
 

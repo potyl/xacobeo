@@ -48,7 +48,7 @@ use Xacobeo::Utils qw(:dom);
 use Xacobeo::I18n qw(__ __x);
 
 
-use base qw(Class::Accessor::Fast);
+use parent qw(Class::Accessor::Fast);
 __PACKAGE__->mk_accessors(
 	qw(
 		source
