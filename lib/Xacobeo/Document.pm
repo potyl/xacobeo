@@ -35,7 +35,7 @@ The package defines the following methods:
 =cut
 
 package Xacobeo::Document;
-
+use 5.006;
 use strict;
 use warnings;
 

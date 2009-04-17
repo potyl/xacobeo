@@ -36,6 +36,7 @@ The package defines the following functions:
 
 =cut
 
+use 5.006;
 use strict;
 use warnings;
 

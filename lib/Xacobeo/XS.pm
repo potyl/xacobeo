@@ -80,6 +80,7 @@ the URIs and the values the prefixes of the namespaces.
 
 =cut
 
+use 5.006;
 use strict;
 use warnings;
 

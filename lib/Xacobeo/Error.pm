@@ -25,6 +25,7 @@ The package defines the following methods:
 
 =cut
 
+use 5.006;
 use strict;
 use warnings;
 
