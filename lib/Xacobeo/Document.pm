@@ -37,12 +37,12 @@ package Xacobeo::Document;
 use strict;
 use warnings;
 
-use XML::LibXML;
+use XML::LibXML qw(XML_XML_NS);
 use Data::Dumper;
-use Carp;
+use Carp qw(croak);
 
 use Xacobeo::Utils qw(:dom);
-use Xacobeo::I18n;
+use Xacobeo::I18n qw(__ __x);
 
 
 use base qw(Class::Accessor::Fast);

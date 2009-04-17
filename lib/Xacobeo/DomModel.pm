@@ -42,7 +42,7 @@ use Gtk2;
 
 use XML::LibXML;
 use Xacobeo::Utils qw(:dom);
-use Xacobeo::I18n;
+use Xacobeo::I18n qw(__);
 
 use Data::Dumper;
 

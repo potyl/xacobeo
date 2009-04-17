@@ -38,8 +38,8 @@ use strict;
 use warnings;
 
 use XML::LibXML;
-use Locale::Messages qw (:locale_h :libintl_h);
-use Encode;
+use Locale::Messages qw(dgettext dngettext textdomain bindtextdomain);
+use Encode qw(decode);
 
 use Exporter 'import';
 our @EXPORT = qw(

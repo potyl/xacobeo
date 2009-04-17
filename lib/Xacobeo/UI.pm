@@ -28,18 +28,26 @@ use Glib qw(TRUE FALSE);
 use Gtk2;
 use Gtk2::GladeXML;
 use Gtk2::SimpleList;
-use Gtk2::Pango;
+use Gtk2::Pango qw(PANGO_WEIGHT_LIGHT PANGO_WEIGHT_BOLD);
 use Gtk2::SourceView;
 
 use Data::Dumper;
-use Carp;
-use File::Spec::Functions;
+use Carp qw(croak);
+use File::Spec::Functions qw(catfile);
 
 use Xacobeo;
 use Xacobeo::DomModel;
 use Xacobeo::Document;
-use Xacobeo::Utils qw(:xml :dom);
-use Xacobeo::I18n;
+use Xacobeo::Utils qw(
+	isa_dom_nodelist
+	isa_dom_namespace
+	escape_xml_attribute
+	isa_dom_boolean
+	isa_dom_number
+	isa_dom_literal
+	escape_xml_text
+);
+use Xacobeo::I18n qw(__ __x __n);
 use Xacobeo::Timer;
 use Xacobeo::Error;
 use Xacobeo::XS qw(
