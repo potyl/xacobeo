@@ -1,0 +1,14 @@
+This is the debian package for the Xacobeo module.
+It was created by Emmanuel Rodriguez <potyl@cpan.org> using dh-make-perl.
+
+It was downloaded from http://search.cpan.org/dist/Xacobeo/
+
+This copyright info was automatically extracted from the perl module.
+It may not be accurate, so you better check the module sources
+if don't want to get into legal troubles.
+
+The upstream author is: Emmanuel Rodriguez <potyl@cpan.org>.
+
+
+The Debian packaging is (C) 2008, Emmanuel Rodriguez <potyl@cpan.org> and
+is licensed under the same terms as the software itself (see above).
