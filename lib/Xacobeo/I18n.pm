@@ -36,6 +36,7 @@ The following functions are available:
 
 =cut
 
+use 5.006;
 use strict;
 use warnings;
 
@@ -216,7 +217,7 @@ sub __xn {
 #
 sub expand {
 	my ($i18n, %args) = @_;
-	my $re = join '|', map { quotemeta $_ } keys %args;
+	my $re = join q{|}, map { quotemeta $_ } keys %args;
 	$i18n =~ s{
 		[{] ($re) [}] # capture expressions in literal curlies
 	}{
@@ -233,7 +234,7 @@ sub expand {
 sub dgettext_utf8 {
 	my ($msgid) = @_;
 	my $i18n = dgettext($DOMAIN, $msgid);
-	return decode("UTF-8", $i18n);
+	return decode('UTF-8', $i18n);
 }
 
 
@@ -244,7 +245,7 @@ sub dgettext_utf8 {
 sub dngettext_utf8 {
 	my ($msgid, $msgid_plural, $count) = @_;
 	my $i18n = dngettext($DOMAIN, $msgid, $msgid_plural, $count);
-	return decode("UTF-8", $i18n);
+	return decode('UTF-8', $i18n);
 }
 
 

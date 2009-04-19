@@ -38,6 +38,7 @@ The following functions are available:
 
 =cut
 
+use 5.006;
 use strict;
 use warnings;
 

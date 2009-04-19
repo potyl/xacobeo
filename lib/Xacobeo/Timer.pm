@@ -44,6 +44,7 @@ The package defines the following methods:
 
 =cut
 
+use 5.006;
 use strict;
 use warnings;
 
@@ -102,7 +103,7 @@ The name is used only when called without a blessed instance.
 
 sub start {
 	my ($self, @params) = @_;
-	if (! ref($self)) {
+	if (!ref $self) {
 		$self = $self->new(@params);
 	}
 

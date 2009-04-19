@@ -80,10 +80,11 @@ the URIs and the values the prefixes of the namespaces.
 
 =cut
 
+use 5.006;
 use strict;
 use warnings;
 
-use base 'DynaLoader';
+use parent qw(DynaLoader);
 use Gtk2;
 use XML::LibXML;
 

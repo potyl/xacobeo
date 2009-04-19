@@ -36,6 +36,7 @@ The package defines the following functions:
 
 =cut
 
+use 5.006;
 use strict;
 use warnings;
 
@@ -109,7 +110,7 @@ sub create_model_with_view {
 	$treeview->set_model($model);
 	$treeview->signal_connect(row_activated =>
 		sub {
-			my ($treeview, $path, $column) = @_;
+			my (undef, $path) = @_;
 			my $iter = $model->get_iter($path);
 			my $node = $model->get($iter, $NODE_DATA);
 

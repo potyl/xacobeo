@@ -22,6 +22,7 @@ The package defines the following methods:
 
 =cut
 
+use 5.006;
 use strict;
 use warnings;
 
@@ -58,7 +59,7 @@ use Xacobeo::XS qw(
 );
 
 
-use base qw(Class::Accessor::Fast);
+use parent qw(Class::Accessor::Fast);
 __PACKAGE__->mk_accessors(
 	qw(
 		glade
@@ -226,7 +227,7 @@ sub display_xml_node {
 
 		# Formatting using to indicate which result is being displayed
 		my $i = 0;
-		my $format = sprintf " %%%dd. ", length($count);
+		my $format = sprintf ' %%%dd. ', length $count;
 
 		foreach my $child (@children) {
 			# Add the result count
@@ -238,12 +239,12 @@ sub display_xml_node {
 				# work with the XS code, we deal with them manually
 				buffer_add($buffer, syntax => ' ');
 				buffer_add($buffer, namespace_name => $child->nodeName);
-				buffer_add($buffer, syntax => '="');
+				buffer_add($buffer, syntax => q{="});
 
 				my $uri = escape_xml_attribute($child->getData);
 				buffer_add($buffer, namespace_uri => $uri);
 
-				buffer_add($buffer, syntax => '"');
+				buffer_add($buffer, syntax => q{"});
 			}
 			else {
 				# Performed through XS
@@ -401,11 +402,11 @@ sub populate_widgets {
 	$glade->get_widget('window')->set_title("$APP_NAME - $file");
 
 	my $document = $self->document;
-	my ($documentNode, $namespaces) = $document ? ($document->documentNode, $document->namespaces) : (undef, {});
+	my ($document_node, $namespaces) = $document ? ($document->documentNode, $document->namespaces) : (undef, {});
 
 	# Update the text widget
 	my $t_syntax = Xacobeo::Timer->start(__('Syntax Highlight'));
-	$self->display_xml_node('xml-document', $documentNode);
+	$self->display_xml_node('xml-document', $document_node);
 	undef $t_syntax;
 
 	# Clear the previous results
@@ -413,7 +414,7 @@ sub populate_widgets {
 
 	# Populate the DOM view tree
 	my $t_dom = Xacobeo::Timer->start(__('DOM Tree'));
-	$self->populate_treeview($documentNode);
+	$self->populate_treeview($document_node);
 	undef $t_dom;
 
 
@@ -493,7 +494,7 @@ sub populate_tag_table {
 		family     => 'Courier 10 Pitch',
 		background => '#EDE9E3',
 		foreground => 'black',
-		style      => 'italic',,
+		style      => 'italic',
 		weight     => PANGO_WEIGHT_LIGHT
 	);
 
@@ -873,7 +874,11 @@ sub glade_custom_handler {
 		$widget = $self->$function();
 	}
 	else {
-		my $message = __x("Can't create widget {name} because method {function} is missing", function => $function, name => $name);
+		my $message = __x(
+			"Can't create widget {name} because method {function} is missing",
+			function => $function,
+			name     => $name
+		);
 		warn "$message\n";
 		$widget = Gtk2::Label->new($message);
 	}
@@ -929,11 +934,11 @@ sub create_xpath_results_view {
 sub pango_span {
 	my ($text, %attributes) = @_;
 
-	my $pango = "<span";
+	my $pango = '<span';
 	while (my ($key, $value) = each %attributes) {
 		$pango .= " $key='$value'";
 	}
-	$pango .= sprintf ">%s</span>", escape_xml_text($text);
+	$pango .= sprintf '>%s</span>', escape_xml_text($text);
 
 	return Gtk2::Pango->parse_markup($pango);
 }
