@@ -880,7 +880,7 @@ sub glade_custom_handler {
 			function => $function,
 			name     => $name
 		);
-		warn "$message\n";
+		warn $message;
 		$widget = Gtk2::Label->new($message);
 	}
 
