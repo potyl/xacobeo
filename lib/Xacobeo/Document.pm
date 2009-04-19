@@ -26,7 +26,7 @@ Xacobeo::Document - An XML document and it's related information.
 =head1 DESCRIPTION
 
 This package wraps an XML document with it's corresponding meta information
-(namespaces, source, etc).
+(namespaces, XPath context, document node, etc).
 
 =head1 METHODS
 
@@ -50,7 +50,6 @@ use Xacobeo::I18n qw(__ __x);
 use parent qw(Class::Accessor::Fast);
 __PACKAGE__->mk_accessors(
 	qw(
-		source
 		documentNode
 		xpath
 		namespaces
@@ -193,9 +192,6 @@ sub get_prefixed_name {
 #
 sub _load_document {
 	my ($self, $source, $type) = @_;
-
-	$self->source($source);
-
 
 	# Parse the document
 	my $parser = _construct_xml_parser();
