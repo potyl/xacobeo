@@ -197,7 +197,7 @@ sub _load_document {
 	my $parser = _construct_xml_parser();
 	my $document_node;
 	if (! defined $type) {
-		croak "Parameter type must be defined";
+		croak __("Parameter 'type' must be defined");
 	}
 	elsif ($type eq 'xml') {
 		$document_node = $parser->parse_file($source);
