@@ -418,7 +418,7 @@ sub populate_widgets {
 
 
 	# Populate the Namespaces view
-	my @namespaces = ();
+	my @namespaces;
 	while (my ($uri, $prefix) = each %{ $namespaces }) {
 		push @namespaces, [$prefix, $uri];
 	}
@@ -674,7 +674,7 @@ sub callback_xpath_entry_changed {
 	my ($self, $widget) = @_;
 
 	my $xpath = $widget->get_text;
-	my $pango_attributes = undef;
+	my $pango_attributes;
 	my $xpath_valid = FALSE;
 	if ($xpath) {
 

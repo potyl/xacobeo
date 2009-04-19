@@ -291,7 +291,7 @@ sub _get_all_namespaces {
 	}
 
 	# Make sure that the prefixes are unique.
-	my %cleaned = ();
+	my %cleaned;
 	my $namespaces = {};
 	my $index = 0;
 	foreach my $namespace_record (@namespaces) {
