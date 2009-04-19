@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Wed Feb  4 22:05:00 2009 -->
+<!--Generated with glade3 3.4.5 on Sun Apr 19 14:42:12 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="width_request">800</property>
@@ -448,8 +448,10 @@ WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 				The End
 </property>
-    <property name="authors">Emmanuel Rodriguez &lt;potyl@cpan.org&gt;</property>
-    <property name="translator_credits">Emmanuel Rodriguez &lt;potyl@cpan.org&gt;</property>
+    <property name="authors">Emmanuel Rodriguez &lt;potyl@cpan.org&gt;
+</property>
+    <property name="translator_credits">Emmanuel Rodriguez &lt;potyl@cpan.org&gt;
+Lars Dieckow &lt;daxim@cpan.org&gt;</property>
     <signal name="delete_event" handler="callback_dialog_hide"/>
     <signal name="response" handler="callback_dialog_hide"/>
     <child internal-child="vbox">
