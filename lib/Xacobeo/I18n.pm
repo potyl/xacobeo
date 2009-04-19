@@ -16,7 +16,7 @@ Xacobeo::I18n - Utilities for internationalization (i18n).
 	
 	# Import the i18n utilities (used everywhere where i18n is needed)
 	use Xacobeo::I18n;
-	print _("Hello world"), "\n";
+	print __("Hello world"), "\n";
 
 =head1 DESCRIPTION
 
