@@ -37,12 +37,12 @@ package Xacobeo::Document;
 use strict;
 use warnings;
 
-use XML::LibXML;
+use XML::LibXML qw(XML_XML_NS);
 use Data::Dumper;
-use Carp;
+use Carp qw(croak);
 
 use Xacobeo::Utils qw(:dom);
-use Xacobeo::I18n;
+use Xacobeo::I18n qw(__ __x);
 
 
 use base qw(Class::Accessor::Fast);
@@ -66,9 +66,9 @@ Parameters:
 =cut
 
 sub new {
-	croak 'Usage: ', __PACKAGE__, '->new($source, $type)' unless @_ == 3;
-	my $class = shift;
-	my ($source, $type) = @_;
+	my ($class, $source, $type) = @_;
+	croak 'Usage: ', __PACKAGE__, '->new($source, $type)'
+      unless defined $source and defined $type;
 	
 	my $self = bless {}, ref($class) || $class;
 	
@@ -93,8 +93,7 @@ Parameters:
 =cut
 
 sub find {
-	my $self = shift;
-	my ($xpath) = @_;
+	my ($self, $xpath) = @_;
 	croak __("Document node is missing") unless defined $self->documentNode;
 	
 	my $result;
@@ -125,8 +124,7 @@ Parameters:
 =cut
 
 sub validate {
-	my $self = shift;
-	my ($xpath) = @_;
+	my ($self, $xpath) = @_;
 
 	# Validate the XPath expression in an empty document, this is a performance
 	# trick. If the XPath expression is something insane '//*' we don't want to
@@ -153,8 +151,7 @@ namespaces are used.
 =cut
 
 sub get_prefixed_name {
-	my $self = shift;
-	my ($node) = @_;
+	my ($self, $node) = @_;
 
 	my $name = $node->localname;
 	my $uri = $node->namespaceURI();
@@ -177,9 +174,9 @@ a hashref where the URIs are used as a key and the prefix as a value.
 =cut
 
 sub namespaces {
-	my $self = shift;
-	if (@_) {
-		$self->{namespaces} = $_[0];
+	my ($self, @params) = @_;
+	if (@params) {
+		$self->{namespaces} = $params[0];
 	}
 	return $self->{namespaces};
 }
@@ -190,8 +187,7 @@ sub namespaces {
 # document.
 #
 sub _load_document {
-	my $self = shift;
-	my ($source, $type) = @_;
+	my ($self, $source, $type) = @_;
 	
 	$self->source($source);
 
@@ -220,6 +216,8 @@ sub _load_document {
 	$self->xpath(
 		$self->_create_xpath_context()
 	);
+
+	return;
 }
 
 
@@ -292,7 +290,7 @@ sub _get_all_namespaces {
 		next if ! defined $prefix && $uri eq "";
 
 		# Make sure that the prefixes are unique
-		if (! defined $prefix or exists $cleaned{$prefix}) {
+		if (not defined $prefix or exists $cleaned{$prefix}) {
 			# Assign a new prefix until unique
 			do {
 				$prefix = 'default' . ($index || '');

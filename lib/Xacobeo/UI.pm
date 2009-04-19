@@ -28,18 +28,26 @@ use Glib qw(TRUE FALSE);
 use Gtk2;
 use Gtk2::GladeXML;
 use Gtk2::SimpleList;
-use Gtk2::Pango;
+use Gtk2::Pango qw(PANGO_WEIGHT_LIGHT PANGO_WEIGHT_BOLD);
 use Gtk2::SourceView;
 
 use Data::Dumper;
-use Carp;
-use File::Spec::Functions;
+use Carp qw(croak);
+use File::Spec::Functions qw(catfile);
 
 use Xacobeo;
 use Xacobeo::DomModel;
 use Xacobeo::Document;
-use Xacobeo::Utils qw(:xml :dom);
-use Xacobeo::I18n;
+use Xacobeo::Utils qw(
+	isa_dom_nodelist
+	isa_dom_namespace
+	escape_xml_attribute
+	isa_dom_boolean
+	isa_dom_number
+	isa_dom_literal
+	escape_xml_text
+);
+use Xacobeo::I18n qw(__ __x __n);
 use Xacobeo::Timer;
 use Xacobeo::Error;
 use Xacobeo::XS qw(
@@ -88,9 +96,9 @@ The i18n (gettext) domain to use for the translations.
 
 sub new {
 	# Arguments
-	my $class = shift;
-	croak 'Usage: new($app_folder, $domain)' unless @_ == 2;
-	my ($app_folder, $domain) = @_;
+	my ($class, $app_folder, $domain) = @_;
+	croak 'Usage: new($app_folder, $domain)'
+      unless defined $app_folder and defined $domain;
 	
 	# Create an instance
 	my $self = bless {}, ref($class) || $class;
@@ -109,8 +117,7 @@ sub new {
 #
 sub construct_gui {
 	# Arguments
-	my $self = shift;
-	my ($domain) = @_;
+	my ($self, $domain) = @_;
 
 	my $folder = $self->app_folder();
 	
@@ -157,6 +164,8 @@ sub construct_gui {
 	
 	# Add the version to the about dialog
 	$self->glade->get_widget('about')->set_version($Xacobeo::VERSION);
+
+	return;
 }
 
 
@@ -172,7 +181,7 @@ sub construct_dom_tree_view {
 	my $treeview = $self->glade->get_widget('dom-tree-view');
 
 	# Create the model and link it with the view
-	Xacobeo::DomModel::create_model_with_view(
+	Xacobeo::DomModel::create_model_with_view( ##no critic (ProhibitCallsToUnexportedSubs)
 		$treeview,	
 		sub {
 			my ($node) = @_;
@@ -181,6 +190,8 @@ sub construct_dom_tree_view {
 			$self->display_results($node);
 		},
 	);
+
+	return;
 }
 
 
@@ -189,8 +200,7 @@ sub construct_dom_tree_view {
 # content before displaying the new data.
 #
 sub display_xml_node {
-	my $self = shift;
-	my ($widget_name, $node) = @_;
+	my ($self, $widget_name, $node) = @_;
 	
 	my $namespaces = $self->document ? $self->document->namespaces : undef;
 	my $textview = $self->glade->get_widget($widget_name);
@@ -268,6 +278,8 @@ sub display_xml_node {
 
 	# Scroll to tbe beginning
 	$textview->scroll_to_iter($buffer->get_start_iter, 0.0, FALSE, 0.0, 0.0);
+
+	return;
 }
 
 
@@ -277,11 +289,12 @@ sub display_xml_node {
 # view is shown. This mehtod clears the view of it's old content.
 #
 sub display_results {
-	my $self = shift;
-	my ($node) = @_;
+	my ($self, $node) = @_;
 	
 	$self->display_xml_node('xpath-results', $node);
 	$self->glade->get_widget('notebook')->set_current_page(0);
+
+	return;
 }
 
 
@@ -314,6 +327,8 @@ sub construct_namespaces_view {
 	);
 	
 	$self->namespaces_view($namespaces_view);
+
+	return;
 }
 
 
@@ -336,8 +351,7 @@ The XML file to load.
 
 sub load_file { 
 	# Arguments
-	my $self = shift;
-	my ($file, $type) = @_;
+	my ($self, $file, $type) = @_;
 	$type ||= 'xml';
 	
 	my $timer = Xacobeo::Timer->start();
@@ -371,6 +385,7 @@ sub load_file {
 		$timer->elapsed;
 	}
 	
+	return;
 }
 
 
@@ -378,8 +393,7 @@ sub load_file {
 # Populates the different widgets after a document has been loaded
 #
 sub populate_widgets {
-	my $self = shift;
-	my ($file) = @_;
+	my ($self, $file) = @_;
 
 	my $glade = $self->glade;
 	$glade->get_widget('window')->set_title("$APP_NAME - $file");
@@ -409,6 +423,8 @@ sub populate_widgets {
 	@{ $self->namespaces_view->{data} } = @namespaces;
 
 	$glade->get_widget('xpath-entry')->set_sensitive(TRUE);
+
+	return;
 }
 
 
@@ -416,8 +432,7 @@ sub populate_widgets {
 # Populates the DOM tree view.
 #
 sub populate_treeview {
-	my $self = shift;
-	my ($node) = @_;
+	my ($self, $node) = @_;
 
 	my $treeview = $self->glade->get_widget('dom-tree-view');
 	my $store = $treeview->get_model;
@@ -430,6 +445,8 @@ sub populate_treeview {
 		$store->clear();
 	}
 	$treeview->set_model($store);
+
+	return;
 }
 
 
@@ -453,13 +470,14 @@ The XML file to load.
 =cut
 
 sub set_xpath {
-	my $self = shift;
-	croak 'Usage: $xacobeo->set_xpath($xpath)' unless @_;
-	my ($xpath) = @_;
+	my ($self, $xpath) = @_;
+	croak 'Usage: $xacobeo->set_xpath($xpath)' unless defined $xpath;
 	
 	if (defined $xpath) {
 		$self->glade->get_widget('xpath-entry')->set_text($xpath);
 	}
+
+	return;
 }
 
 
@@ -575,6 +593,7 @@ sub add_tag {
 	my $tag = Gtk2::TextTag->new($name);
 	$tag->set(@properties);
 	$tag_table->add($tag);
+	return;
 }
 
 
@@ -586,6 +605,7 @@ sub add_tag {
 sub buffer_add {
 	my ($buffer, $tag, $string) = @_;
 	$buffer->insert_with_tags_by_name($buffer->get_end_iter, $string, $tag);
+	return;
 }
 
 
@@ -594,6 +614,7 @@ sub buffer_add {
 #
 sub callback_window_close {
 	Gtk2->main_quit;
+	return;
 }
 
 
@@ -633,6 +654,8 @@ sub callback_run_xpath {
 
 	# Display the results
 	$self->display_results($result);
+
+	return;
 }
 
 
@@ -646,8 +669,7 @@ sub callback_run_xpath {
 #
 sub callback_xpath_entry_changed {
 	# Arguments
-	my $self = shift;
-	my ($widget) = @_;
+	my ($self, $widget) = @_;
 
 	my $xpath = $widget->get_text;
 	my $pango_attributes = undef;
@@ -676,6 +698,8 @@ sub callback_xpath_entry_changed {
 
 	# Force a redraw
 	request_redraw($widget);
+
+	return;
 }
 
 
@@ -683,8 +707,7 @@ sub callback_xpath_entry_changed {
 # cursor which blinks periodically. The markup is sometimes forgotten between
 # redraws. This callback corrects this problem.
 sub callback_xpath_entry_expose {
-	my $self = shift;
-	my ($widget) = @_;
+	my ($self, $widget) = @_;
 	$self->set_xpath_pango_attributes();
 
 	# Continue with the events
@@ -701,8 +724,7 @@ sub callback_xpath_entry_expose {
 # while the button is still pressed.
 #
 sub callback_xpath_entry_button_press {
-	my $self = shift;
-	my ($widget, $event) = @_;
+	my ($self, $widget, $event) = @_;
 
 	if ($widget->get_text or $event->button != 1) {
 		# Propagate the event further since there's text in the widget
@@ -721,6 +743,7 @@ sub callback_xpath_entry_button_press {
 sub callback_file_open {
 	my $self = shift;
 	$self->glade->get_widget('file')->show_all();
+	return;
 }
 
 
@@ -728,8 +751,7 @@ sub callback_file_open {
 # Called when the file choser has chosen a file (File > Open).
 #
 sub callback_file_selected {
-	my $self = shift;
-	my ($dialog, $response) = @_;
+	my ($self, $dialog, $response) = @_;
 	
 	# The open button send the response 'accept'
 	if ($response eq 'accept') {
@@ -738,6 +760,7 @@ sub callback_file_selected {
 	}
 	
 	$dialog->hide();
+	return;
 }
 
 
@@ -748,6 +771,7 @@ sub callback_about_show {
 	my $self = shift;
 	my $about = $self->glade->get_widget('about');
 	$about->show_all();
+	return;
 }
 
 
@@ -763,8 +787,7 @@ sub callback_about_show {
 # This callback can be used for all dialogs.
 #
 sub callback_dialog_hide {
-	my $self = shift;
-	my ($dialog) = @_;
+	my ($self, $dialog) = @_;
 	$dialog->hide();
 	return TRUE;
 }
@@ -788,6 +811,7 @@ sub request_redraw {
 	my $size = $widget->allocation;
 	my $rectangle = Gtk2::Gdk::Rectangle->new(0, 0, $size->width, $size->height);
 	$widget->window->invalidate_rect($rectangle, TRUE);
+	return;
 }
 
 
@@ -822,6 +846,7 @@ sub set_xpath_pango_attributes {
 	
 	
 	$layout->set_attributes($attributes);
+	return;
 }
 
 
@@ -829,13 +854,13 @@ sub set_xpath_pango_attributes {
 # Displays the given text in the statusbar
 #
 sub display_statusbar_message {
-	my $self = shift;
-	my ($message) = @_;
+	my ($self, $message) = @_;
 	
 	my $statusbar = $self->glade->get_widget('statusbar');
 	my $id = $self->statusbar_context_id;
 	$statusbar->pop($id);
 	$statusbar->push($id, $message);
+	return;
 }
 
 

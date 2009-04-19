@@ -42,7 +42,7 @@ use Gtk2;
 
 use XML::LibXML;
 use Xacobeo::Utils qw(:dom);
-use Xacobeo::I18n;
+use Xacobeo::I18n qw(__);
 
 use Data::Dumper;
 
@@ -142,6 +142,8 @@ sub add_columns {
 
 	# Node attribute value (ID attribute)
 	add_text_column($treeview, $NODE_ID_VALUE, __('ID value'));
+
+	return;
 }
 
 
