@@ -1,6 +1,11 @@
 Changelog for Xacobeo.
 
 
+0.09_01 Sun Apr 19 15:03:55 CEST 2009
+	- Merged most of the perl critic branch.
+	- Added the files AUTHORS and HACKING.
+
+
 0.08 Thu Apr 16 21:20:01 CEST 2009
 	- New release with all the changes from the 0.08_XX releases.
 
@@ -10,7 +15,7 @@ Changelog for Xacobeo.
 	- The default namespace (xmlns="") is no longer registered.
 	- Namespaces are found in the right order (affects default, default1, etc).
 	- German translation by Lars Dieckow.
-	- Fixed the build dependencies.
+	- Fixed the build dependencies (patch by Lars Dieckow).
 
 
 0.07 Thu Feb 19 20:20:00 CET 2009
