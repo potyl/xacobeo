@@ -100,8 +100,9 @@ The i18n (gettext) domain to use for the translations.
 sub new {
 	# Arguments
 	my ($class, $app_folder, $domain) = @_;
-	croak 'Usage: new($app_folder, $domain)'
-      unless defined $app_folder and defined $domain;
+	if (! (defined $app_folder && defined $domain)) {
+		croak 'Usage: ', __PACKAGE__, '->new($app_folder, $domain)';
+	}
 
 	# Create an instance
 	my $self = bless {}, ref($class) || $class;
