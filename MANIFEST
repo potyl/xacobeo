@@ -14,6 +14,8 @@ Build.PL
 MANIFEST
 MANIFEST.SKIP
 META.yml
+HACKING
+AUTHORS
 README
 commands
 share/applications/xacobeo.desktop
