@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xacobeo-i 18n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-19 14:11+0200\n"
+"POT-Creation-Date: 2009-04-19 14:19+0200\n"
 "PO-Revision-Date: 2009-01-25 11:50+0100\n"
 "Last-Translator: Emmanuel Rodriguez <emmanuel.rodriguez@gmail.com>\n"
 "Language-Team: English\n"
@@ -70,17 +70,17 @@ msgstr ""
 msgid "Time: %-20s %.4fs\n"
 msgstr "Tiempo: %-20s %.4fs\n"
 
-#: lib/Xacobeo/Document.pm:119
+#: lib/Xacobeo/Document.pm:118
 #, fuzzy
 msgid "Document node is missing"
 msgstr "Documento leido en %.3f segundo"
 
-#: lib/Xacobeo/Document.pm:213
+#: lib/Xacobeo/Document.pm:209
 #, perl-brace-format
 msgid "Unsupported document type {type}"
 msgstr "El typo de documento {type} no esta suportado"
 
-#: lib/Xacobeo/Document.pm:278
+#: lib/Xacobeo/Document.pm:274
 #, perl-brace-format
 msgid "Namespace {name} has no URI"
 msgstr "El espacio de nombre {name} no tiene URI"
