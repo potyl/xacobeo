@@ -1,5 +1,7 @@
 package Xacobeo;
 
+=encoding utf8
+
 =head1 NAME
 
 Xacobeo - XPath (XML Path Language) visualizer.

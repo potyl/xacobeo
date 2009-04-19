@@ -1,5 +1,7 @@
 package Xacobeo::I18n;
 
+=encoding utf8
+
 =head1 NAME
 
 Xacobeo::I18n - Utilities for internationalization (i18n).

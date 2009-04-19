@@ -1,5 +1,7 @@
 package Xacobeo::XS;
 
+=encoding utf8
+
 =head1 NAME
 
 Xacobeo::XS - Functions rewritten in XS.

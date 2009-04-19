@@ -1,3 +1,5 @@
+=encoding utf8
+
 =head1 NAME
 
 Xacobeo::Document - An XML document and it's related information.

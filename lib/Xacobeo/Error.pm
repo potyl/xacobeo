@@ -1,5 +1,7 @@
 package Xacobeo::Error;
 
+=encoding utf8
+
 =head1 NAME
 
 Xacobeo::Error - A simple wrapper over an error.

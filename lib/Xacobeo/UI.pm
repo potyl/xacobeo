@@ -1,5 +1,7 @@
 package Xacobeo::UI;
 
+=encoding utf8
+
 =head1 NAME
 
 Xacobeo::UI - The graphical interface of the application.
