@@ -45,7 +45,7 @@ use Exporter 'import';
 our @EXPORT_OK = qw(
 	escape_xml_text
 	escape_xml_attribute
-	
+
 	isa_dom_document
 	isa_dom_element
 	isa_dom_attr
@@ -115,7 +115,7 @@ Parameters:
 
 The string to escape.
 
-=back	
+=back
 
 =cut
 
@@ -144,7 +144,7 @@ Parameters:
 
 The string to escape.
 
-=back	
+=back
 
 =cut
 
@@ -162,7 +162,7 @@ sub escape_xml_attribute {
 
 =head2 isa_dom_document
 
-Returns true if the node is a DOM C<Document> (instance of 
+Returns true if the node is a DOM C<Document> (instance of
 L<XML::LibXML::Document>).
 
 Parameters:
@@ -173,7 +173,7 @@ Parameters:
 
 The node to check.
 
-=back	
+=back
 
 =cut
 
@@ -186,7 +186,7 @@ sub isa_dom_document {
 
 =head2 isa_dom_element
 
-Returns true if the node is a DOM C<Element> (instance of 
+Returns true if the node is a DOM C<Element> (instance of
 L<XML::LibXML::Element>).
 
 Parameters:
@@ -197,7 +197,7 @@ Parameters:
 
 The node to check.
 
-=back	
+=back
 
 =cut
 
@@ -210,7 +210,7 @@ sub isa_dom_element {
 
 =head2 isa_dom_attr
 
-Returns true if the node is a DOM C<Attribute> (instance of 
+Returns true if the node is a DOM C<Attribute> (instance of
 L<XML::LibXML::Attr>).
 
 Parameters:
@@ -221,7 +221,7 @@ Parameters:
 
 The node to check.
 
-=back	
+=back
 
 =cut
 
@@ -234,7 +234,7 @@ sub isa_dom_attr {
 
 =head2 isa_dom_nodelist
 
-Returns true if the node is a DOM C<NodeList> (instance of 
+Returns true if the node is a DOM C<NodeList> (instance of
 L<XML::LibXML::NodeList>).
 
 Parameters:
@@ -245,7 +245,7 @@ Parameters:
 
 The node to check.
 
-=back	
+=back
 
 =cut
 
@@ -258,7 +258,7 @@ sub isa_dom_nodelist {
 
 =head2 isa_dom_text
 
-Returns true if the node is a DOM C<Text> (instance of 
+Returns true if the node is a DOM C<Text> (instance of
 L<XML::LibXML::Text>).
 
 B<NOTE>: XML::LibXML considers that C<Comment> and C<CDATA> nodes are also
@@ -273,7 +273,7 @@ Parameters:
 
 The node to check.
 
-=back	
+=back
 
 =cut
 
@@ -288,7 +288,7 @@ sub isa_dom_text {
 
 =head2 isa_dom_comment
 
-Returns true if the node is a DOM C<Comment> (instance of 
+Returns true if the node is a DOM C<Comment> (instance of
 L<XML::LibXML::Comment>).
 
 Parameters:
@@ -299,7 +299,7 @@ Parameters:
 
 The node to check.
 
-=back	
+=back
 
 =cut
 
@@ -312,7 +312,7 @@ sub isa_dom_comment {
 
 =head2 isa_dom_node
 
-Returns true if the node is a DOM C<Node> (instance of 
+Returns true if the node is a DOM C<Node> (instance of
 L<XML::LibXML::Node>).
 
 Parameters:
@@ -323,7 +323,7 @@ Parameters:
 
 The node to check.
 
-=back	
+=back
 
 =cut
 
@@ -347,7 +347,7 @@ Parameters:
 
 The node to check.
 
-=back	
+=back
 
 =cut
 
@@ -360,7 +360,7 @@ sub isa_dom_pi {
 
 =head2 isa_dom_dtd
 
-Returns true if the node is a DOM C<DTD> (instance of 
+Returns true if the node is a DOM C<DTD> (instance of
 L<XML::LibXML::Dtd>).
 
 Parameters:
@@ -371,7 +371,7 @@ Parameters:
 
 The node to check.
 
-=back	
+=back
 
 =cut
 
@@ -384,7 +384,7 @@ sub isa_dom_dtd {
 
 =head2 isa_dom_cdata
 
-Returns true if the node is a DOM C<CDATASection> (instance of 
+Returns true if the node is a DOM C<CDATASection> (instance of
 L<XML::LibXML::CDATASection>).
 
 Parameters:
@@ -395,7 +395,7 @@ Parameters:
 
 The node to check.
 
-=back	
+=back
 
 =cut
 
@@ -408,7 +408,7 @@ sub isa_dom_cdata {
 
 =head2 isa_dom_namespace
 
-Returns true if the node is a C<Namespace> (instance of 
+Returns true if the node is a C<Namespace> (instance of
 L<XML::LibXML::Namespace>).
 
 B<NOTE>: The DOM doesn't define an object type named C<Namespaces> but
@@ -423,7 +423,7 @@ Parameters:
 
 The node to check.
 
-=back	
+=back
 
 =cut
 
@@ -436,7 +436,7 @@ sub isa_dom_namespace {
 
 =head2 isa_dom_literal
 
-Returns true if the node is a C<Literal> (instance of 
+Returns true if the node is a C<Literal> (instance of
 L<XML::LibXML::Literal>).
 
 B<NOTE>: The DOM doesn't define an object type named C<Literal> but XML::LibXML
@@ -451,7 +451,7 @@ Parameters:
 
 The node to check.
 
-=back	
+=back
 
 =cut
 
@@ -464,7 +464,7 @@ sub isa_dom_literal {
 
 =head2 isa_dom_boolean
 
-Returns true if the node is a C<Boolean> (instance of 
+Returns true if the node is a C<Boolean> (instance of
 L<XML::LibXML::Boolean>).
 
 B<NOTE>: The DOM doesn't define an object type named C<Boolean> but XML::LibXML
@@ -479,7 +479,7 @@ Parameters:
 
 The node to check.
 
-=back	
+=back
 
 =cut
 
@@ -492,7 +492,7 @@ sub isa_dom_boolean {
 
 =head2 isa_dom_number
 
-Returns true if the node is a C<Number> (instance of 
+Returns true if the node is a C<Number> (instance of
 L<XML::LibXML::Number>).
 
 B<NOTE>: The DOM doesn't define an object type named C<Number> but XML::LibXML
@@ -507,7 +507,7 @@ Parameters:
 
 The node to check.
 
-=back	
+=back
 
 =cut
 

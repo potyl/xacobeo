@@ -7,7 +7,7 @@ Xacobeo::UI - The graphical interface of the application.
 =head1 SYNOPSIS
 
 	use Xacobeo::UI;
-	
+
 =head1 DESCRIPTION
 
 This package provides the graphical user interface (GUI) of the application.
@@ -60,7 +60,7 @@ use base qw(Class::Accessor::Fast);
 __PACKAGE__->mk_accessors(
 	qw(
 		glade
-		document 
+		document
 		statusbar_context_id
 		namespaces_view
 		xpath_pango_attributes
@@ -90,7 +90,7 @@ The application's root folder.
 
 The i18n (gettext) domain to use for the translations.
 
-=back	
+=back
 
 =cut
 
@@ -99,14 +99,14 @@ sub new {
 	my ($class, $app_folder, $domain) = @_;
 	croak 'Usage: new($app_folder, $domain)'
       unless defined $app_folder and defined $domain;
-	
+
 	# Create an instance
 	my $self = bless {}, ref($class) || $class;
-	
+
 	# Create the GUI
 	$self->app_folder($app_folder);
 	$self->construct_gui($domain);
-	
+
 	# Return the new instances
 	return $self;
 }
@@ -120,7 +120,7 @@ sub construct_gui {
 	my ($self, $domain) = @_;
 
 	my $folder = $self->app_folder();
-	
+
 	# Load the GUI definition from the glade files
 	Gtk2::Glade->set_custom_handler(\&glade_custom_handler, $self);
 	my $glade = Gtk2::GladeXML->new(
@@ -129,7 +129,7 @@ sub construct_gui {
 		$domain,
 	);
 	$self->glade($glade);
-	
+
 	my $window = $self->glade->get_widget('window');
 	$window->set_title($APP_NAME);
 
@@ -147,21 +147,21 @@ sub construct_gui {
 
 	# Connect the signals to the callbacks
 	$glade->signal_autoconnect_from_package($self);
-	
+
 	# Status bar context id
 	my $statusbar = $self->glade->get_widget('statusbar');
 	$self->statusbar_context_id(
 		$statusbar->get_context_id('xpath-results')
 	);
-	
+
 	# Create the tree model for the DOM view
-	# See http://www.mail-archive.com/gtk-perl-list@gnome.org/msg03647.html	
+	# See http://www.mail-archive.com/gtk-perl-list@gnome.org/msg03647.html
 	# and http://gtk2-perl.sourceforge.net/doc/pod/Gtk2/TreeViewColumn.html#_tree_column_set_cel
 	$self->construct_dom_tree_view();
-	
+
 	# Create the list model for the Namespace view
 	$self->construct_namespaces_view();
-	
+
 	# Add the version to the about dialog
 	$self->glade->get_widget('about')->set_version($Xacobeo::VERSION);
 
@@ -182,7 +182,7 @@ sub construct_dom_tree_view {
 
 	# Create the model and link it with the view
 	Xacobeo::DomModel::create_model_with_view( ##no critic (ProhibitCallsToUnexportedSubs)
-		$treeview,	
+		$treeview,
 		sub {
 			my ($node) = @_;
 			# Display the node in results text view. Temporary hack, in the future
@@ -201,7 +201,7 @@ sub construct_dom_tree_view {
 #
 sub display_xml_node {
 	my ($self, $widget_name, $node) = @_;
-	
+
 	my $namespaces = $self->document ? $self->document->namespaces : undef;
 	my $textview = $self->glade->get_widget($widget_name);
 
@@ -230,24 +230,24 @@ sub display_xml_node {
 			# Add the result count
 			my $result = sprintf $format, ++$i;
 			buffer_add($buffer, result_count => $result);
-			
+
 			if (isa_dom_namespace($child)) {
 				# The namespaces nodes are an invention of XML::LibXML and they don't
 				# work with the XS code, we deal with them manually
 				buffer_add($buffer, syntax => ' ');
 				buffer_add($buffer, namespace_name => $child->nodeName);
 				buffer_add($buffer, syntax => '="');
-		
+
 				my $uri = escape_xml_attribute($child->getData);
 				buffer_add($buffer, namespace_uri => $uri);
-		
+
 				buffer_add($buffer, syntax => '"');
 			}
 			else {
 				# Performed through XS
 				xacobeo_populate_gtk_text_buffer($buffer, $child, $namespaces);
 			}
-			
+
 			buffer_add($buffer, syntax => "\n") if --$count;
 		}
 	}
@@ -290,7 +290,7 @@ sub display_xml_node {
 #
 sub display_results {
 	my ($self, $node) = @_;
-	
+
 	$self->display_xml_node('xpath-results', $node);
 	$self->glade->get_widget('notebook')->set_current_page(0);
 
@@ -311,12 +311,12 @@ sub construct_namespaces_view {
 		'Prefix' => 'text',
 		'URI'    => 'text',
 	);
-	
-	
+
+
 	# Try to get a handle on the celleditor for the namespaces
 	$namespaces_view->set_column_editable(0, TRUE);
 	my ($editor) = $namespaces_view->get_column(0)->get_cell_renderers();
-	$editor->signal_connect(edited => 
+	$editor->signal_connect(edited =>
 		sub {
 			my ($cell, $text_path, $new_text) = @_;
 			my $path = Gtk2::TreePath->new_from_string($text_path);
@@ -325,7 +325,7 @@ sub construct_namespaces_view {
 			return FALSE;
 		}
 	);
-	
+
 	$self->namespaces_view($namespaces_view);
 
 	return;
@@ -345,17 +345,17 @@ Parameters:
 
 The XML file to load.
 
-=back	
+=back
 
 =cut
 
-sub load_file { 
+sub load_file {
 	# Arguments
 	my ($self, $file, $type) = @_;
 	$type ||= 'xml';
-	
+
 	my $timer = Xacobeo::Timer->start();
-	
+
 	# Parse the content
 	my $t_load = Xacobeo::Timer->start(__('Load document'));
 	my $document;
@@ -368,14 +368,14 @@ sub load_file {
 	}
 	$self->document($document);
 	undef $t_load;
-	
+
 	$self->populate_widgets($file);
-	
+
 	$timer->stop();
 	if ($document) {
 		my $format = __n(
-			"Document loaded in %.3f second", 
-			"Document loaded in %.3f seconds", 
+			"Document loaded in %.3f second",
+			"Document loaded in %.3f seconds",
 			int($timer->elapsed),
 		);
 		$self->display_statusbar_message(sprintf $format, $timer->elapsed);
@@ -384,7 +384,7 @@ sub load_file {
 		# Invoke the time elapsed this way the value is not printed to the console
 		$timer->elapsed;
 	}
-	
+
 	return;
 }
 
@@ -397,7 +397,7 @@ sub populate_widgets {
 
 	my $glade = $self->glade;
 	$glade->get_widget('window')->set_title("$APP_NAME - $file");
-	
+
 	my $document = $self->document;
 	my ($documentNode, $namespaces) = $document ? ($document->documentNode, $document->namespaces) : (undef, {});
 
@@ -405,7 +405,7 @@ sub populate_widgets {
 	my $t_syntax = Xacobeo::Timer->start(__('Syntax Highlight'));
 	$self->display_xml_node('xml-document', $documentNode);
 	undef $t_syntax;
-	
+
 	# Clear the previous results
 	$glade->get_widget('xpath-results')->get_buffer->set_text('');
 
@@ -413,8 +413,8 @@ sub populate_widgets {
 	my $t_dom = Xacobeo::Timer->start(__('DOM Tree'));
 	$self->populate_treeview($documentNode);
 	undef $t_dom;
-	
-	
+
+
 	# Populate the Namespaces view
 	my @namespaces = ();
 	while (my ($uri, $prefix) = each %{ $namespaces }) {
@@ -436,7 +436,7 @@ sub populate_treeview {
 
 	my $treeview = $self->glade->get_widget('dom-tree-view');
 	my $store = $treeview->get_model;
-	
+
 	$treeview->set_model(undef);
 	if (defined $node and defined $store) {
 		xacobeo_populate_gtk_tree_store($store, $node, $self->document->namespaces);
@@ -465,14 +465,14 @@ Parameters:
 
 The XML file to load.
 
-=back	
+=back
 
 =cut
 
 sub set_xpath {
 	my ($self, $xpath) = @_;
 	croak 'Usage: $xacobeo->set_xpath($xpath)' unless defined $xpath;
-	
+
 	if (defined $xpath) {
 		$self->glade->get_widget('xpath-entry')->set_text($xpath);
 	}
@@ -485,8 +485,8 @@ sub set_xpath {
 # Populates a text tag table.
 #
 sub populate_tag_table {
-	my ($tag_table) = @_;	
-	
+	my ($tag_table) = @_;
+
 	add_tag($tag_table, result_count =>
 		family     => 'Courier 10 Pitch',
 		background => '#EDE9E3',
@@ -494,7 +494,7 @@ sub populate_tag_table {
 		style      => 'italic',,
 		weight     => PANGO_WEIGHT_LIGHT
 	);
-	
+
 	# Make the boolean and number look a like
 	foreach my $name qw(boolean number) {
 		add_tag($tag_table, $name =>
@@ -503,7 +503,7 @@ sub populate_tag_table {
 			weight     => PANGO_WEIGHT_BOLD
 		);
 	}
-	
+
 	add_tag($tag_table, attribute_name =>
 		foreground => 'red',
 	);
@@ -511,75 +511,75 @@ sub populate_tag_table {
 	add_tag($tag_table, attribute_value =>
 		foreground => 'blue',
 	);
-	
+
 	add_tag($tag_table, comment =>
 		foreground => '#008000',
 		style      => 'italic',
 		weight     => PANGO_WEIGHT_LIGHT,
 	);
-	
+
 	add_tag($tag_table, dtd =>
 		foreground => '#558CBA',
 		style      => 'italic',
 	);
-	
+
 	add_tag($tag_table, element =>
 		foreground => '#800080',
 		weight     => PANGO_WEIGHT_BOLD,
 	);
-	
+
 	add_tag($tag_table, pi =>
 		foreground => '#558CBA',
 		style      => 'italic',
 	);
-	
+
 	add_tag($tag_table, pi_data =>
 		foreground => 'red',
 		style      => 'italic',
 	);
-	
+
 	add_tag($tag_table, syntax =>
 		foreground => 'black',
 		weight     => PANGO_WEIGHT_BOLD,
 	);
-	
+
 	add_tag($tag_table, literal =>
 		foreground => 'black',
 	);
-	
+
 	add_tag($tag_table, cdata =>
 		foreground => 'red',
 		weight     => PANGO_WEIGHT_BOLD
 	);
-	
+
 	add_tag($tag_table, cdata_content =>
 		foreground => 'purple',
 		weight     => PANGO_WEIGHT_LIGHT,
 		style      => 'italic',
 	);
-	
+
 	add_tag($tag_table, namespace_name =>
 		foreground => 'red',
 		style      => 'italic',
 		weight     => PANGO_WEIGHT_LIGHT,
 	);
-	
+
 	add_tag($tag_table, namespace_uri =>
 		foreground => 'blue',
 		style      => 'italic',
 		weight     => PANGO_WEIGHT_LIGHT,
 	);
-	
+
 	add_tag($tag_table, entity_ref =>
 		foreground => 'red',
 		style      => 'italic',
 		weight     => PANGO_WEIGHT_BOLD,
 	);
-	
+
 	add_tag($tag_table, error =>
 		foreground => 'red',
 	);
-	
+
 	return $tag_table;
 }
 
@@ -624,12 +624,12 @@ sub callback_window_close {
 sub callback_run_xpath {
 	# Arguments
 	my $self = shift;
-	
+
 	my $glade = $self->glade;
 
 	my $button = $glade->get_widget('xpath-evaluate');
 	return unless $button->is_sensitive;
-	
+
 	# Run the XPath expression
 	my $xpath = $glade->get_widget('xpath-entry')->get_text;
 	my $timer = Xacobeo::Timer->start();
@@ -639,7 +639,7 @@ sub callback_run_xpath {
 	};
 	my $error = $@;
 	$timer->stop();
-	
+
 	if ($error) {
 		$result = Xacobeo::Error->new(xpath => $error);
 		$self->display_statusbar_message(__("XPath query issued an error"));
@@ -663,8 +663,8 @@ sub callback_run_xpath {
 # Called when the XPath expression is changed, this will validate the expression.
 #
 # NOTE: There's no XPath compiler available, as a hack the XPath expression will
-#       be runned againsts an empty document, this way the result will be 
-#       instantaneous. Although, a better alternative will be to find a real 
+#       be runned againsts an empty document, this way the result will be
+#       instantaneous. Although, a better alternative will be to find a real
 #       XPath parser that can tell where the problem is.
 #
 sub callback_xpath_entry_changed {
@@ -675,7 +675,7 @@ sub callback_xpath_entry_changed {
 	my $pango_attributes = undef;
 	my $xpath_valid = FALSE;
 	if ($xpath) {
-	
+
 		my $button = $self->glade->get_widget('xpath-evaluate');
 		if ($self->document->validate($xpath)) {
 			# The expression is valid
@@ -691,8 +691,8 @@ sub callback_xpath_entry_changed {
 	}
 	$self->glade->get_widget('xpath-evaluate')->set_sensitive($xpath_valid);
 	$self->xpath_pango_attributes($pango_attributes);
-	
-	
+
+
 	$self->set_xpath_pango_attributes();
 
 
@@ -730,7 +730,7 @@ sub callback_xpath_entry_button_press {
 		# Propagate the event further since there's text in the widget
 		return FALSE;
 	}
-	
+
 	# Give focus to the widget but stop the text selection
 	$widget->grab_focus();
 	return TRUE;
@@ -752,13 +752,13 @@ sub callback_file_open {
 #
 sub callback_file_selected {
 	my ($self, $dialog, $response) = @_;
-	
+
 	# The open button send the response 'accept'
 	if ($response eq 'accept') {
 		my $file = $dialog->get_filename;
 		$self->load_file($file);
 	}
-	
+
 	$dialog->hide();
 	return;
 }
@@ -798,7 +798,7 @@ sub callback_dialog_hide {
 #
 # The text region must be invalidated in order to be repainted. This is true
 # even if the markup text is the same as the one in the widget. Remember that
-# the text in the Pango markup could turn out to be the same text that was 
+# the text in the Pango markup could turn out to be the same text that was
 # previously in the widget but with new styles (this is most common when showing
 # an error with a red underline). In such case the Gtk2::Entry will not refresh
 # its appearance because the text didn't change. Here we are forcing the update.
@@ -843,8 +843,8 @@ sub set_xpath_pango_attributes {
 		# Reset the attributes just in case
 		$attributes = Gtk2::Pango::AttrList->new();
 	}
-	
-	
+
+
 	$layout->set_attributes($attributes);
 	return;
 }
@@ -855,7 +855,7 @@ sub set_xpath_pango_attributes {
 #
 sub display_statusbar_message {
 	my ($self, $message) = @_;
-	
+
 	my $statusbar = $self->glade->get_widget('statusbar');
 	my $id = $self->statusbar_context_id;
 	$statusbar->pop($id);
@@ -866,7 +866,6 @@ sub display_statusbar_message {
 
 sub glade_custom_handler {
 	my ($glade, $function, $name, undef, undef, undef, undef, $self) = @_;
-
 	my $widget;
 	if ($self->can($function)) {
 		$widget = $self->$function();
@@ -876,7 +875,7 @@ sub glade_custom_handler {
 		warn "$message\n";
 		$widget = Gtk2::Label->new($message);
 	}
-	
+
 	$widget->show_all();
 	return $widget;
 }
@@ -893,13 +892,13 @@ sub create_xml_document_view {
 	$buffer->set('highlight', FALSE);
 	# This will disable the undo/redo forever
 	$buffer->begin_not_undoable_action();
-	
+
 	my $widget = Gtk2::SourceView::View->new_with_buffer($buffer);
 	$widget->set_editable(FALSE);
 	$widget->set_show_line_numbers(TRUE);
 	$widget->set_highlight_current_line(TRUE);
-	
-	return $widget;	
+
+	return $widget;
 }
 
 
@@ -913,7 +912,7 @@ sub create_xpath_results_view {
 	my $buffer = Gtk2::TextBuffer->new($tag_table);
 	my $widget = Gtk2::TextView->new_with_buffer($buffer);
 	$widget->set_editable(FALSE);
-	
+
 	return $widget;
 }
 
@@ -927,7 +926,7 @@ sub create_xpath_results_view {
 #
 sub pango_span {
 	my ($text, %attributes) = @_;
-	
+
 	my $pango = "<span";
 	while (my ($key, $value) = each %attributes) {
 		$pango .= " $key='$value'";

@@ -15,7 +15,7 @@ Xacobeo::DomModel - The DOM model used for the TreeView.
 	
 	# Create the model and link it with the view
 	Xacobeo::DomModel::create_model_with_view(
-		$treeview,	
+		$treeview,
 		sub {
 			my ($node) = @_;
 			print "Selected node ", $node->toString(), "\n";
@@ -89,7 +89,7 @@ in the fashion:
 		$node->isa('XML::LibXML::Node');
 	}
 
-=back	
+=back
 
 =cut
 
@@ -114,9 +114,9 @@ sub create_model_with_view {
 			$on_click->($node);
 		}
 	);
-	
+
 	add_columns($treeview);
-	
+
 	return $model;
 }
 
@@ -157,14 +157,14 @@ sub add_text_column {
 	my $cell = Gtk2::CellRendererText->new();
 	my $column = Gtk2::TreeViewColumn->new();
 	$column->pack_end($cell, TRUE);
-	
+
 	$column->set_title($title);
 	$column->set_resizable(TRUE);
 	$column->set_sizing('autosize');
 	$column->set_attributes($cell, text => $field);
 
 	$treeview->append_column($column);
-	
+
 	return $column;
 }
 

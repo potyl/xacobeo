@@ -62,18 +62,18 @@ Parameters:
 
 The name of the timer.
 
-=back	
+=back
 
 =cut
 
 sub new {
 	my ($class, $name) = @_;
-	
+
 	my $self = {
 		elapsed   => 0,
 		name      => $name,
 	};
-	
+
 	bless $self, ref($class) || $class;
 
 	return $self;
@@ -94,7 +94,7 @@ Parameters:
 
 The name is used only when called without a blessed instance.
 
-=back	
+=back
 
 =cut
 
@@ -103,7 +103,7 @@ sub start {
 	if (! ref($self)) {
 		$self = $self->new(@params);
 	}
-	
+
 	$self->{start} = time;
 	return $self;
 }
@@ -119,12 +119,12 @@ started previously this results in a no-op.
 
 sub stop {
 	my $self = shift;
-	
+
 	my $start = delete $self->{start};
 	if (defined $start) {
 		$self->{elapsed} += time - $start;
 	}
-	
+
 	return $self;
 }
 
@@ -139,17 +139,17 @@ previously and wasn't stopped.
 
 sub show {
 	my $self = shift;
-	
+
 	if ($self->{start}) {
 		$self->stop();
 	}
-	
+
 	my $name = $self->{name};
 	printf __("Time: %-20s %.4fs\n"),
 		(defined $name ? $name : 'Unnamed'),
 		$self->elapsed
 	;
-	
+
 	return $self;
 }
 

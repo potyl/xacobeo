@@ -68,7 +68,7 @@ Parameters:
 
 The string to translate.
 
-=back	
+=back
 
 =cut
 
@@ -95,7 +95,7 @@ The string to translate.
 
 A series of key/value pairs that will be replacing the place holders.
 
-=back	
+=back
 
 =cut
 
@@ -132,7 +132,7 @@ The number of items.
 A series of key/value pairs that will be replacing the place holders.
 
 
-=back	
+=back
 
 =cut
 
@@ -164,7 +164,7 @@ The string in it's plural form (more than one item).
 
 The number of items.
 
-=back	
+=back
 
 
 =cut
@@ -197,7 +197,7 @@ The string in it's plural form (more than one item).
 
 The number of items.
 
-=back	
+=back
 
 
 =cut
@@ -267,16 +267,16 @@ The folder where to find the translation files. For instance for the translation
 F</usr/share/locale/fr/LC_MESSAGES/xacobeo.mo> the folder F</usr/share/locale>
 has to be provided.
 
-=back	
+=back
 
 =cut
 
 sub init {
 	my (undef, $domain, $folder) = @_;
-	
+
 	# Remember the appication's domain
 	$DOMAIN = $domain;
-	
+
 	textdomain($DOMAIN);
 	bindtextdomain($DOMAIN, $folder);
 
