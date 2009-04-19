@@ -53,6 +53,7 @@ __PACKAGE__->mk_accessors(
 		source
 		documentNode
 		xpath
+		namespaces
 	)
 );
 
@@ -69,8 +70,9 @@ Parameters:
 
 sub new {
 	my ($class, $source, $type) = @_;
-	croak 'Usage: ', __PACKAGE__, '->new($source, $type)'
-      unless defined $source and defined $type;
+	if (! (defined $source && defined $type)) {
+		croak 'Usage: ', __PACKAGE__, '->new($source, $type)'
+	}
 
 	my $self = bless {}, ref($class) || $class;
 
@@ -78,6 +80,24 @@ sub new {
 
 	return $self;
 }
+
+
+=head2 namespaces
+
+Returns the namespaces declared in the document. The namespaces are returned in
+a hashref where the URIs are used as a key and the prefix as a value.
+
+=head2 documentNode
+
+Returns the document's node (an instance of L<XML::LibXML::Document>).
+
+=head2 xpath
+
+Returns the XPath context (an instance of L<XML::LibXML::XPathContext>) that
+includes the namespaces declared in the document. This is the context used to
+execute all XPath queries.
+
+=cut
 
 
 =head2 find
@@ -164,23 +184,6 @@ sub get_prefixed_name {
 	}
 
 	return $name;
-}
-
-
-
-=head2 namespaces
-
-Returns the namespaces declared in the document. The namespaces are returned in
-a hashref where the URIs are used as a key and the prefix as a value.
-
-=cut
-
-sub namespaces {
-	my ($self, @params) = @_;
-	if (@params) {
-		$self->{namespaces} = $params[0];
-	}
-	return $self->{namespaces};
 }
 
 
