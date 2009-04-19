@@ -156,7 +156,7 @@ clean:
 
 
 .PHONY: i18n
-i18n: po/messages.pot po/fr.po po/es.po
+i18n: po/messages.pot po/*.po
 
 
 po/messages.pot: share/xacobeo/xacobeo.glade\
