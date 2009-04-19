@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xacobeo-i 18n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-19 14:19+0200\n"
+"POT-Creation-Date: 2009-04-19 14:25+0200\n"
 "PO-Revision-Date: 2009-01-25 11:50+0100\n"
 "Last-Translator: Emmanuel Rodriguez <emmanuel.rodriguez@gmail.com>\n"
 "Language-Team: English\n"
@@ -75,6 +75,10 @@ msgstr "Temps: %-20s %.4fs\n"
 #, fuzzy
 msgid "Document node is missing"
 msgstr "Document chargé en %.3f seconde"
+
+#: lib/Xacobeo/Document.pm:200
+msgid "Parameter 'type' must be defined"
+msgstr "Le paramètre 'type' doit être défini"
 
 #: lib/Xacobeo/Document.pm:209
 #, perl-brace-format
