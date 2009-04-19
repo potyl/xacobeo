@@ -254,6 +254,15 @@ sub _get_all_namespaces {
 	my %seen = (
 		XML_XML_NS() => [xml => XML_XML_NS()],
 	);
+	# %seen will look like this:
+	# (
+	#     'http://www.example.org/a' => ['a', 'http://www.example.org/a',],
+	#     'http://www.example.org/b' => ['b', 'http://www.example.org/b',],
+	#     'http://www.example.org/c' => ['c', 'http://www.example.org/c',],
+	#     'http://www.w3.org/XML/1998/namespace' =>
+	#     ['xml', 'http://www.w3.org/XML/1998/namespace',],
+	# )
+
 	# Namespaces found following the document order
 	my @namespaces = (values %seen);
 	if ($node) {
@@ -267,15 +276,15 @@ sub _get_all_namespaces {
 			
 			# If the namespace was seen before make sure that we have a decent prefix.
 			# Maybe the previous time there was no prefix associated.
-			if (my $record = $seen{$uri}) {
-				$record->[0] ||= $name; 
+			if (my $namespace_record = $seen{$uri}) {
+				$namespace_record->[0] ||= $name;
 				next;
 			}
 
 			# First time that this namespace is seen
-			my $record = [$name => $uri];
-			$seen{$uri} = $record;
-			push @namespaces, $record;
+			my $namespace_record = [$name => $uri];
+			$seen{$uri} = $namespace_record;
+			push @namespaces, $namespace_record;
 		}
 	}
 
@@ -283,8 +292,8 @@ sub _get_all_namespaces {
 	my %cleaned = ();
 	my $namespaces = {};
 	my $index = 0;
-	foreach my $record (@namespaces) {
-		my ($prefix, $uri) = @{ $record };
+	foreach my $namespace_record (@namespaces) {
+		my ($prefix, $uri) = @{ $namespace_record };
 
 		# Don't provide a namespace prefix for the default namespace (xmlns="")
 		next if ! defined $prefix && $uri eq "";

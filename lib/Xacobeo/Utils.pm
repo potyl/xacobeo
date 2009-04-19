@@ -121,7 +121,11 @@ The string to escape.
 
 sub escape_xml_text {
 	my ($string) = @_;
-	$string =~ s/([<>&])/$ENTITIES{$1}/eg;
+	$string =~ s{
+		( [<>&] ) # capture any literal < > &
+	}{
+		$ENTITIES{$1}
+	}egmsx; # and replace all
 	return $string;
 }
 
@@ -146,7 +150,11 @@ The string to escape.
 
 sub escape_xml_attribute {
 	my ($string) = @_;
-	$string =~ s/([<>&'"])/$ENTITIES{$1}/eg;
+	$string =~ s{
+		( [<>&'"] )  # capture any literal < > & ' "
+	}{
+		$ENTITIES{$1}
+	}egmsx; # and replace all
 	return $string;
 }
 

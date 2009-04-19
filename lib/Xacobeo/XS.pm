@@ -91,7 +91,7 @@ our @EXPORT_OK = qw(
 	xacobeo_populate_gtk_tree_store
 );
 
-sub dl_load_flags {return 0x01};
+sub dl_load_flags {return 0x01}
 
 __PACKAGE__->bootstrap;
 

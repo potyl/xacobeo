@@ -865,16 +865,15 @@ sub display_statusbar_message {
 
 
 sub glade_custom_handler {
-	my ($glade, $function, $name, $str1, $str2, $int1, $int2, $data) = @_;
-	my $self = $data;
-	
+	my ($glade, $function, $name, undef, undef, undef, undef, $self) = @_;
+
 	my $widget;
 	if ($self->can($function)) {
 		$widget = $self->$function();
 	}
 	else {
 		my $message = __x("Can't create widget {name} because method {function} is missing", function => $function, name => $name);
-		warn $message;
+		warn "$message\n";
 		$widget = Gtk2::Label->new($message);
 	}
 	
