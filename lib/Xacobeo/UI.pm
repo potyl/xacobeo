@@ -219,7 +219,7 @@ sub display_xml_node {
 	if (! defined $node) {
 		buffer_add($buffer, error => __("Node is undef"));
 	}
-	elsif (ref($node) eq 'Xacobeo::Error') {
+	elsif ($node->isa('Xacobeo::Error')) {
 		buffer_add($buffer, error => $node->message);
 	}
 	elsif (isa_dom_nodelist($node)) {
