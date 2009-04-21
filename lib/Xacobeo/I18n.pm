@@ -10,12 +10,12 @@ Xacobeo::I18n - Utilities for internationalization (i18n).
 
 	# Initialize the i18n framework (done once)
 	use FindBin;
-	use Xacobeo::I18n;
+	use Xacobeo::I18n qw();
 	Xacobeo::I18n->init(xacobeo => "$FindBin::Bin/../share/locale/");
 	
 	
 	# Import the i18n utilities (used everywhere where i18n is needed)
-	use Xacobeo::I18n;
+	use Xacobeo::I18n qw(__);
 	print __("Hello world"), "\n";
 
 =head1 DESCRIPTION
@@ -27,7 +27,7 @@ The initialization of the i18n framework should be performed only once,
 preferably as soon as possible. Once the framework is initialized, any module
 requiring to translate a string can include this module.
 
-This module exports automatically the shortcut functions used for translating
+This module exports on request the shortcut functions used for translating
 messages. This is done in order to make the translation transparent.
 
 =head1 FUNCTIONS
@@ -45,7 +45,7 @@ use Locale::Messages qw(dgettext dngettext textdomain bindtextdomain);
 use Encode qw(decode);
 
 use Exporter 'import';
-our @EXPORT = qw(
+our @EXPORT_OK = qw(
 	__
 	__x
 	__n
@@ -147,7 +147,7 @@ sub __n {
 
 
 
-=head2 _nx
+=head2 __nx
 
 Translates a string in either singular or plural with variable substitution.
 
@@ -182,7 +182,7 @@ sub __nx {
 
 =head2 __xn
 
-Same as L</_xn>.
+Same as L</__nx>.
 
 Parameters:
 
