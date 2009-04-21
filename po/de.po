@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-04-19 14:25+0200\n"
-"PO-Revision-Date: 2009-04-08 16:33+0200\n"
+"PO-Revision-Date: 2009-04-21 07:57+0200\n"
 "Last-Translator: Lars Dɪᴇᴄᴋᴏᴡ 迪拉斯 <daxim@cpan.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -62,8 +62,7 @@ msgstr[1] "%d Ergebnisse in %0.3fs gefunden"
 #: lib/Xacobeo/UI.pm:879
 #, perl-brace-format
 msgid "Can't create widget {name} because method {function} is missing"
-msgstr ""
-"Widget {name} konnte nicht erzeugt werden, weil die Funktion {function} fehlt"
+msgstr "Widget {name} konnte nicht erzeugt werden, weil die Funktion {function} fehlt"
 
 #: lib/Xacobeo/Timer.pm:151
 #, perl-format
@@ -76,17 +75,17 @@ msgstr "Dokumentenknoten fehlt"
 
 #: lib/Xacobeo/Document.pm:200
 msgid "Parameter 'type' must be defined"
-msgstr ""
+msgstr "Parameter 'type' muss definiert sein"
 
 #: lib/Xacobeo/Document.pm:209
 #, perl-brace-format
 msgid "Unsupported document type {type}"
-msgstr ""
+msgstr "Dokumententyp {type} wird nicht unterstützt"
 
 #: lib/Xacobeo/Document.pm:274
 #, perl-brace-format
 msgid "Namespace {name} has no URI"
-msgstr ""
+msgstr "Namensraum {name} hat keinen URI"
 
 #: lib/Xacobeo/DomModel.pm:135
 msgid "Element"
@@ -131,3 +130,4 @@ msgstr "Ü_ber Xacobeo"
 #: share/xacobeo/xacobeo.glade:320
 msgid "Copyright (C) 2008-2009 by Emmanuel Rodriguez."
 msgstr "Copyright (C) 2008-2009, Emmanuel Rodriguez"
+
