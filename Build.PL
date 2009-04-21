@@ -28,6 +28,7 @@ my %requires = (
 	'Locale::TextDomain'    => 0,
 	'parent'                => 0,
 	'English'               => 0,
+	'Readonly::XS'          => 0,
 );
 
 my %configure_requires = (

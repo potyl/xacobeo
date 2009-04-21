@@ -43,6 +43,7 @@ use warnings;
 use XML::LibXML;
 use Locale::Messages qw(dgettext dngettext textdomain bindtextdomain);
 use Encode qw(decode);
+use Xacobeo::Utils qw($EMPTY);
 
 use Exporter 'import';
 our @EXPORT_OK = qw(
@@ -55,7 +56,7 @@ our @EXPORT_OK = qw(
 
 
 # The text domain of the application.
-my $DOMAIN = '';
+my $DOMAIN = $EMPTY;
 
 
 

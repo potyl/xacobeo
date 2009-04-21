@@ -49,6 +49,9 @@ use Xacobeo::Utils qw(
 	isa_dom_number
 	isa_dom_literal
 	escape_xml_text
+
+	$EMPTY
+	$SPACE
 );
 use Xacobeo::I18n qw(__ __x __n);
 use Xacobeo::Timer;
@@ -238,7 +241,7 @@ sub display_xml_node {
 			if (isa_dom_namespace($child)) {
 				# The namespaces nodes are an invention of XML::LibXML and they don't
 				# work with the XS code, we deal with them manually
-				buffer_add($buffer, syntax => ' ');
+				buffer_add($buffer, syntax => $SPACE);
 				buffer_add($buffer, namespace_name => $child->nodeName);
 				buffer_add($buffer, syntax => q{="});
 
@@ -410,7 +413,7 @@ sub populate_widgets {
 	undef $t_syntax;
 
 	# Clear the previous results
-	$glade->get_widget('xpath-results')->get_buffer->set_text('');
+	$glade->get_widget('xpath-results')->get_buffer->set_text($EMPTY);
 
 	# Populate the DOM view tree
 	my $t_dom = Xacobeo::Timer->start(__('DOM Tree'));
@@ -834,7 +837,7 @@ sub set_xpath_pango_attributes {
 	my $layout = $widget->get_layout;
 
 	my $attributes;
-	if ($xpath eq '') {
+	if ($xpath eq $EMPTY) {
 		# The widget is empty, show the empty text
 		$layout->set_text($self->xpath_empty_text);
 		$attributes = $self->xpath_empty_attributes;

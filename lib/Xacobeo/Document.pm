@@ -44,7 +44,7 @@ use XML::LibXML qw(XML_XML_NS);
 use Data::Dumper;
 use Carp qw(croak);
 
-use Xacobeo::Utils qw(:dom);
+use Xacobeo::Utils qw(:dom $EMPTY);
 use Xacobeo::I18n qw(__ __x);
 
 
@@ -267,7 +267,7 @@ sub _get_all_namespaces {
 			my $name = $namespace->getLocalName;
 			if (! defined $uri) {
 				warn __x("Namespace {name} has no URI", name => $name);
-				$uri = '';
+				$uri = $EMPTY;
 			}
 
 			# If the namespace was seen before make sure that we have a decent prefix.
@@ -292,13 +292,13 @@ sub _get_all_namespaces {
 		my ($prefix, $uri) = @{ $namespace_record };
 
 		# Don't provide a namespace prefix for the default namespace (xmlns="")
-		next if ! defined $prefix && $uri eq "";
+		next if ! defined $prefix && $uri eq $EMPTY;
 
 		# Make sure that the prefixes are unique
 		if (not defined $prefix or exists $cleaned{$prefix}) {
 			# Assign a new prefix until unique
 			do {
-				$prefix = 'default' . ($index || '');
+				$prefix = 'default' . ($index || $EMPTY);
 				++$index;
 			} while (exists $cleaned{$prefix});
 		}

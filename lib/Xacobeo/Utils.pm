@@ -17,12 +17,13 @@ Xacobeo::Utils - Utilities shared among the project.
 
 =head1 DESCRIPTION
 
-This package provides utility methods that are shared among the different
-modules in this project.
+This package provides utility methods and constants that are shared among
+the different modules in this project.
 
 =head1 IMPORTS
 
-The following import tags are defined:
+The constants C<$EMPTY> and C<$SPACE> are available on demand.
+Additionally, the following import tags are defined:
 
 =head2 :xml
 
@@ -42,9 +43,12 @@ use 5.006;
 use strict;
 use warnings;
 
+use Readonly qw(Scalar);
 use XML::LibXML;
 
 use Exporter 'import';
+Scalar our $EMPTY => q{};
+Scalar our $SPACE => q{ };
 our @EXPORT_OK = qw(
 	escape_xml_text
 	escape_xml_attribute
@@ -63,6 +67,9 @@ our @EXPORT_OK = qw(
 	isa_dom_dtd
 	isa_dom_cdata
 	isa_dom_namespace
+
+	$EMPTY
+	$SPACE
 );
 
 our %EXPORT_TAGS = (
