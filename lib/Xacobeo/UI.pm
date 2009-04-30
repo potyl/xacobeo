@@ -26,7 +26,7 @@ use 5.006;
 use strict;
 use warnings;
 
-
+use English qw(-no_match_vars $EVAL_ERROR);
 use Glib qw(TRUE FALSE);
 use Gtk2;
 use Gtk2::GladeXML;
@@ -365,11 +365,10 @@ sub load_file {
 	my $document;
 	eval {
 		$document = Xacobeo::Document->new($file, $type);
-	};
-	if (my $error = $@) {
-		my $message = __x("Can't read {file}: {error}", file => $file, error => $error);
-		$self->display_statusbar_message($message);
-	}
+		1;
+	} or $self->display_statusbar_message(
+		__x("Can't read {file}: {error}", file => $file, error => $EVAL_ERROR)
+	);
 	$self->document($document);
 	undef $t_load;
 
@@ -638,22 +637,23 @@ sub callback_run_xpath {
 	my $xpath = $glade->get_widget('xpath-entry')->get_text;
 	my $timer = Xacobeo::Timer->start();
 	my $result;
-	eval {
+	my $find_successful = eval {
 		$result = $self->document->find($xpath);
+		1;
 	};
-	my $error = $@;
+	my $error = $EVAL_ERROR;
 	$timer->stop();
 
-	if ($error) {
-		$result = Xacobeo::Error->new(xpath => $error);
-		$self->display_statusbar_message(__("XPath query issued an error"));
-	}
-	else {
+	if ($find_successful) {
 		my $count = isa_dom_nodelist($result) ? $result->size : 1;
 		my $format = __n("Found %d result in %0.3fs", "Found %d results in %0.3fs", $count);
 		$self->display_statusbar_message(
 			sprintf $format, $count, $timer->elapsed
 		);
+	}
+	else {
+		$result = Xacobeo::Error->new(xpath => $error);
+		$self->display_statusbar_message(__("XPath query issued an error"));
 	}
 
 	# Display the results

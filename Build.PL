@@ -27,6 +27,7 @@ my %requires = (
 	'Gtk2::SourceView'      => 0,
 	'Locale::TextDomain'    => 0,
 	'parent'                => 0,
+	'English'               => 0,
 );
 
 my %configure_requires = (

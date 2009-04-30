@@ -39,6 +39,7 @@ use 5.006;
 use strict;
 use warnings;
 
+use English qw(-no_match_vars $EVAL_ERROR);
 use XML::LibXML qw(XML_XML_NS);
 use Data::Dumper;
 use Carp qw(croak);
@@ -120,10 +121,8 @@ sub find {
 	my $result;
 	eval {
 		$result = $self->xpath->find($xpath, $self->documentNode);
-	};
-	if (my $error = $@) {
-		croak $error;
-	}
+		1;
+	} or croak $EVAL_ERROR;
 
 	return $result;
 }
@@ -153,12 +152,8 @@ sub validate {
 	my $empty = XML::LibXML->createDocument();
 	eval {
 		$self->xpath->find($xpath, $empty);
-	};
-	if (my $error = $@) {
-#		print Dumper($error);
-#		warn "Failed to process the XPath expression '$xpath' because: $error.";
-		return;
-	}
+		1;
+	} or return;
 
 	return 1;
 }
