@@ -219,7 +219,7 @@ static void my_populate_tree_store (TreeRenderCtx *xargs, xmlNode *node, GtkTree
 	gchar *node_name = my_get_node_name_prefixed(node, xargs->namespaces);
 
 	
-	// Find out if an attribute is used as an ID
+	// Find out if the node has an attribute that's an ID
 	for (xmlAttr *attr = node->properties; attr; attr = attr->next) {
 		if (xmlIsID(node->doc, node, attr)) {
 
