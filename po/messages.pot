@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-19 14:42+0200\n"
+"POT-Creation-Date: 2009-04-30 21:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,31 +34,31 @@ msgstr ""
 msgid "Can't read {file}: {error}"
 msgstr ""
 
-#: lib/Xacobeo/UI.pm:381
+#: lib/Xacobeo/UI.pm:380
 #, perl-format
 msgid "Document loaded in %.3f second"
 msgid_plural "Document loaded in %.3f seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/Xacobeo/UI.pm:409
+#: lib/Xacobeo/UI.pm:408
 msgid "Syntax Highlight"
 msgstr ""
 
-#: lib/Xacobeo/UI.pm:417
+#: lib/Xacobeo/UI.pm:416
 msgid "DOM Tree"
 msgstr ""
 
 #: lib/Xacobeo/UI.pm:649
-msgid "XPath query issued an error"
-msgstr ""
-
-#: lib/Xacobeo/UI.pm:653
 #, perl-format
 msgid "Found %d result in %0.3fs"
 msgid_plural "Found %d results in %0.3fs"
 msgstr[0] ""
 msgstr[1] ""
+
+#: lib/Xacobeo/UI.pm:656
+msgid "XPath query issued an error"
+msgstr ""
 
 #: lib/Xacobeo/UI.pm:879
 #, perl-brace-format
@@ -70,20 +70,20 @@ msgstr ""
 msgid "Time: %-20s %.4fs\n"
 msgstr ""
 
-#: lib/Xacobeo/Document.pm:118
+#: lib/Xacobeo/Document.pm:119
 msgid "Document node is missing"
 msgstr ""
 
-#: lib/Xacobeo/Document.pm:200
+#: lib/Xacobeo/Document.pm:195
 msgid "Parameter 'type' must be defined"
 msgstr ""
 
-#: lib/Xacobeo/Document.pm:209
+#: lib/Xacobeo/Document.pm:204
 #, perl-brace-format
 msgid "Unsupported document type {type}"
 msgstr ""
 
-#: lib/Xacobeo/Document.pm:274
+#: lib/Xacobeo/Document.pm:269
 #, perl-brace-format
 msgid "Namespace {name} has no URI"
 msgstr ""
