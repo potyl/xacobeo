@@ -125,7 +125,7 @@ static void my_create_widgets (GtkTextView **prt_textview, GtkTreeView **prt_tre
 
 
 //
-// Creates the text view and sets it's model (text buffer)
+// Creates the text view and sets its model (text buffer)
 //
 static GtkWidget* my_create_textview (void) {
 	// Prepare the text view
@@ -143,7 +143,7 @@ static GtkWidget* my_create_textview (void) {
 
 
 //
-// Creates the tree view and sets it's model (tree store)
+// Creates the tree view and sets its model (tree store)
 //
 static GtkWidget* my_create_treeview (void) {
 	// Prepre the tree view
