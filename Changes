@@ -1,6 +1,10 @@
 Changelog for Xacobeo.
 
 
+0.10 Sun Nov 15 22:16:35 CET 2009
+	- Using Gtk2::SourceView2.
+
+
 0.09 Sun Nov 15 20:13:16 CET 2009
 	- Merged most of the perl critic branch.
 	- Added the files AUTHORS and HACKING.
