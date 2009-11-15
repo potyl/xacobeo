@@ -97,13 +97,18 @@ tag:
 	git tag "${VERSION}"
 
 
+.PHONY: push
+push:
+	git push --tags origin master
+
+
 .PHONY: upload
 upload: dist
 	cpan-upload -verbose -mailto "${EMAIL}" -user potyl "${PACKAGE}-${VERSION}.tar.gz"
 
 
 .PHONY: release
-release: clean test dist distcheck tag upload
+release: clean test dist distcheck tag push upload
 	@echo "Release ${PACKAGE} ${VERSION} done."
 	
 
