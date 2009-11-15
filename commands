@@ -8,6 +8,7 @@ FILE=tests/sample.xml
 
 VERSION=$(shell perl -le "print `grep VERSION lib/Xacobeo.pm`")
 PACKAGE=Xacobeo
+EMAIL=$(shell git config --global user.email)
 
 # Compiler stuff
 LIBRARIES=gtk+-2.0 libxml-2.0
