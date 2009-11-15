@@ -6,7 +6,6 @@ DEST=target
 # Default test file
 FILE=tests/sample.xml
 
-SVN_REPO=$(shell svn info | grep -E '^URL: ' | cut -f2 -d' ' | sed -e 's%/trunk%%')
 VERSION=$(shell perl -le "print `grep VERSION lib/Xacobeo.pm`")
 PACKAGE=Xacobeo
 
@@ -45,7 +44,6 @@ CC=gcc $(DEBUG_ARGS) -g -std=c99 -Werror -Wall -Wextra -pedantic-errors -pedanti
 
 .PHONY: info
 info:
-	@echo "SVN     ${SVN_REPO}"
 	@echo "VERSION ${VERSION}"
 	@echo "CFLAGS  $(CFLAGS)"
 	@echo "LIBS    $(LIBS)"
@@ -96,8 +94,7 @@ test: xs
 
 .PHONY: tag
 tag:
-	sh -c 'if svn ls "${SVN_REPO}/tags/${VERSION}" > /dev/null 2>&1 ; then echo "SVN TAG ${VERSION} exists already"; exit 1; else exit 0 ; fi';
-	svn cp -m "Tag for version ${VERSION}" ${SVN_REPO}/trunk ${SVN_REPO}/tags/${VERSION}
+	git tag "${VERSION}"
 
 
 .PHONY: upload
