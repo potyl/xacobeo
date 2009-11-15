@@ -1,7 +1,7 @@
 Changelog for Xacobeo.
 
 
-0.09_01 Sun Apr 19 15:03:55 CEST 2009
+0.09 Sun Nov 15 20:13:16 CET 2009
 	- Merged most of the perl critic branch.
 	- Added the files AUTHORS and HACKING.
 
