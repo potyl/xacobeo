@@ -120,11 +120,11 @@ Parameters:
 
 =item * $singular
 
-The string in it's singular form (one item).
+The string in its singular form (one item).
 
 =item * $plural
 
-The string in it's plural form (more than one item).
+The string in its plural form (more than one item).
 
 =item * $count
 
@@ -157,11 +157,11 @@ Parameters:
 
 =item * $singular
 
-The string in it's singular form (one item).
+The string in its singular form (one item).
 
 =item * $plural
 
-The string in it's plural form (more than one item).
+The string in its plural form (more than one item).
 
 =item * $count
 
@@ -190,11 +190,11 @@ Parameters:
 
 =item * $singular
 
-The string in it's singular form (one item).
+The string in its singular form (one item).
 
 =item * $plural
 
-The string in it's plural form (more than one item).
+The string in its plural form (more than one item).
 
 =item * $count
 

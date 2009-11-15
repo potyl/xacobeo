@@ -8,7 +8,7 @@ The latest version of the code is available at:
 	http://code.google.com/p/xacobeo/source/browse/
 
 Xacobeo is mainly written in Perl and has some bits of XS (C functions) in order
-to improve it's performance. Ideally all hacking should be done in Perl and C
+to improve its performance. Ideally all hacking should be done in Perl and C
 should be used as a last resort.
 
 The application relies heavily on Lib::LibXML and indirectly on libxml2. All XML

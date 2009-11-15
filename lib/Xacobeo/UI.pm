@@ -200,7 +200,7 @@ sub construct_dom_tree_view {
 
 
 #
-# Displays an XML node into a text view. This mehtod clears the view of it's old
+# Displays an XML node into a text view. This mehtod clears the view of its old
 # content before displaying the new data.
 #
 sub display_xml_node {
@@ -290,7 +290,7 @@ sub display_xml_node {
 
 #
 # Displays an XML node in the results text view and makes sure that the results
-# view is shown. This mehtod clears the view of it's old content.
+# view is shown. This mehtod clears the view of its old content.
 #
 sub display_results {
 	my ($self, $node) = @_;
@@ -930,7 +930,7 @@ sub create_xpath_results_view {
 # would have the given attributes.
 #
 # This function creates a span element with the given attributes that wraps the
-# given text. The text has it's content escaped.
+# given text. The text has its content escaped.
 #
 sub pango_span {
 	my ($text, %attributes) = @_;

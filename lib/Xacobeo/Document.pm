@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-Xacobeo::Document - An XML document and it's related information.
+Xacobeo::Document - An XML document and its related information.
 
 =head1 SYNOPSIS
 
@@ -25,7 +25,7 @@ Xacobeo::Document - An XML document and it's related information.
 
 =head1 DESCRIPTION
 
-This package wraps an XML document with it's corresponding meta information
+This package wraps an XML document with its corresponding meta information
 (namespaces, XPath context, document node, etc).
 
 =head1 METHODS
