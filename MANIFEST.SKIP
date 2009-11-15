@@ -1,5 +1,6 @@
 ^target/
-[.]svn
+[.]git/
+[.]gitignore
 ^blib/
 ^_build/
 ^Build$
