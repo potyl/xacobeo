@@ -32,7 +32,7 @@ use Gtk2;
 use Gtk2::GladeXML;
 use Gtk2::SimpleList;
 use Gtk2::Pango qw(PANGO_WEIGHT_LIGHT PANGO_WEIGHT_BOLD);
-use Gtk2::SourceView;
+use Gtk2::SourceView2;
 
 use Data::Dumper;
 use Carp qw(croak);
@@ -211,7 +211,7 @@ sub display_xml_node {
 
 	# It's faster to disconnect the buffer from the view and to reconnect it back
 	my $buffer = $textview->get_buffer;
-	$textview->set_buffer(Gtk2::SourceView::Buffer->new(undef));
+	$textview->set_buffer(Gtk2::SourceView2::Buffer->new(undef));
 	$buffer->delete($buffer->get_start_iter, $buffer->get_end_iter);
 
 
@@ -895,13 +895,13 @@ sub glade_custom_handler {
 sub create_xml_document_view {
 	my $self = shift;
 
-	my $tag_table = populate_tag_table(Gtk2::SourceView::TagTable->new());
-	my $buffer = Gtk2::SourceView::Buffer->new($tag_table);
-	$buffer->set('highlight', FALSE);
+	my $tag_table = populate_tag_table(Gtk2::TextTagTable->new());
+	my $buffer = Gtk2::SourceView2::Buffer->new($tag_table);
+	$buffer->set_highlight_syntax(undef);
 	# This will disable the undo/redo forever
 	$buffer->begin_not_undoable_action();
 
-	my $widget = Gtk2::SourceView::View->new_with_buffer($buffer);
+	my $widget = Gtk2::SourceView2::View->new_with_buffer($buffer);
 	$widget->set_editable(FALSE);
 	$widget->set_show_line_numbers(TRUE);
 	$widget->set_highlight_current_line(TRUE);
