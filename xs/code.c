@@ -20,11 +20,12 @@
 #define buffer_add(xargs, tag, text) my_buffer_add(xargs, tag, NULL, text)
 #define buffer_add_node(xargs, tag, node, text) my_buffer_add(xargs, tag, node, text)
 
-#define buffer_cat(xargs, tag, ...) { \
+#define buffer_cat(xargs, tag, ...) \
+do { \
 	gchar *content = g_strconcat(__VA_ARGS__, NULL); \
 	my_buffer_add(xargs, tag, NULL, content); \
 	g_free(content); \
-}
+} while (FALSE)
 
 // The icon type to use for an element
 #define ICON_ELEMENT "gtk-directory"
