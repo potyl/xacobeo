@@ -5,6 +5,7 @@ lib/Xacobeo/XS.c
 lib/Xacobeo/XS.o
 lib/Xacobeo/XS.xs
 lib/Xacobeo/libxml2-perl.typemap
+po/*.po~
 target/
 xs/*.o
 Xacobeo-*.tar.gz
