@@ -188,10 +188,25 @@ sub construct_dom_tree_view {
 	Xacobeo::DomModel::create_model_with_view( ##no critic (ProhibitCallsToUnexportedSubs)
 		$treeview,
 		sub {
-			my ($node) = @_;
+			my ($xpath) = @_;
 			# Display the node in results text view. Temporary hack, in the future
 			# clicking on the node will display the node finition in the sourve view.
-			$self->display_results($node);
+			my $results = $self->document->find($xpath);
+
+			# Scroll to the right place in the main text document
+			my $textview = $self->glade->get_widget('xml-document');
+			my $buffer = $textview->get_buffer;
+			my $mark = $buffer->get_mark($xpath);
+			if ($mark) {
+				my $iter = $buffer->get_iter_at_mark($mark);
+				$buffer->place_cursor($iter);
+				$textview->scroll_to_mark($mark, 0.0, FALSE, 0.0, 0.0);
+			}
+			else {
+				print "Got no mark at $xpath!\n";
+			}
+
+			$self->display_results($results->[0]);
 		},
 	);
 

@@ -12,7 +12,7 @@
 
 // The columns in the DOM Tree View
 enum DomModelColumns {
-	DOM_COL_XML_POINTER,
+	DOM_COL_XML_PATH,
 	DOM_COL_ICON,
 	DOM_COL_ELEMENT_NAME,
 	DOM_COL_ID_NAME,

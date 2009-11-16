@@ -50,7 +50,7 @@ use Xacobeo::I18n qw(__);
 use Data::Dumper;
 
 my $NODE_POS = 0;
-my $NODE_DATA     = $NODE_POS++;
+my $NODE_PATH     = $NODE_POS++;
 my $NODE_ICON     = $NODE_POS++;
 my $NODE_NAME     = $NODE_POS++;
 my $NODE_ID_NAME  = $NODE_POS++;
@@ -100,7 +100,7 @@ sub create_model_with_view {
 	my ($treeview, $on_click) = @_;
 
 	my $model = Gtk2::TreeStore->new(
-		'Glib::Scalar', # A reference to the XML::LibXML::Element
+		'Glib::String', # Unique path to the node
 		'Glib::String', # The icon to use (ex: 'gtk-directory')
 		'Glib::String', # The name of the Element
 		'Glib::String', # The name of the ID field
@@ -112,7 +112,7 @@ sub create_model_with_view {
 		sub {
 			my (undef, $path) = @_;
 			my $iter = $model->get_iter($path);
-			my $node = $model->get($iter, $NODE_DATA);
+			my $node = $model->get($iter, $NODE_PATH);
 
 			$on_click->($node);
 		}
