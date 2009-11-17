@@ -187,31 +187,54 @@ sub construct_dom_tree_view {
 	# Create the model and link it with the view
 	Xacobeo::DomModel::create_model_with_view( ##no critic (ProhibitCallsToUnexportedSubs)
 		$treeview,
-		sub {
-			my ($xpath) = @_;
-			# Display the node in results text view. Temporary hack, in the future
-			# clicking on the node will display the node finition in the sourve view.
-			my $results = $self->document->find($xpath);
-
-			# Scroll to the right place in the main text document
-			my $textview = $self->glade->get_widget('xml-document');
-			my $buffer = $textview->get_buffer;
-			my $mark = $buffer->get_mark($xpath);
-			if ($mark) {
-				my $iter = $buffer->get_iter_at_mark($mark);
-				$buffer->place_cursor($iter);
-				$textview->scroll_to_mark($mark, 0.0, FALSE, 0.0, 0.0);
-			}
-			else {
-				print "Got no mark at $xpath!\n";
-			}
-
-			$self->display_results($results->[0]);
-		},
+		sub { $self->callback_on_selected_node(@_) }
 	);
 
 	return;
 }
+
+
+#
+# Display the selected node in the text view and in the source view. The
+# selection is made from the tree view and we receive an unique XPath expression
+# that will get us to the selected node.
+#
+sub callback_on_selected_node {
+	my ($self, $xpath) = @_;
+
+	my $node = $self->document->find($xpath)->[0];
+
+	my $textview = $self->glade->get_widget('xml-document');
+	my $buffer = $textview->get_buffer;
+
+	# Clear any previous selection
+	if (my $marks = delete $self->{selected}) {
+		my @iters = map { $buffer->get_iter_at_mark($_) } @{ $marks };
+		$buffer->remove_tag_by_name('selected', @iters);
+	}
+
+	# Scroll to the right place in the source view
+	my $mark_start = $buffer->get_mark("$xpath|start");
+	if ($mark_start) {
+		my $iter_start = $buffer->get_iter_at_mark($mark_start);
+		$buffer->place_cursor($iter_start);
+
+		my $mark_end = $buffer->get_mark("$xpath|end");
+		my $iter_end = $buffer->get_iter_at_mark($mark_end);
+
+		$buffer->apply_tag_by_name('selected', $iter_start, $iter_end);
+		$textview->scroll_to_mark($mark_start, 0.25, FALSE, 0.0, 0.5);
+
+		$self->{selected} = [$mark_start, $mark_end];
+	}
+	else {
+		print "Got no mark at $xpath!\n";
+	}
+
+	# Show the results of the selection
+	$self->display_results($node);
+}
+
 
 
 #
@@ -596,6 +619,10 @@ sub populate_tag_table {
 
 	add_tag($tag_table, error =>
 		foreground => 'red',
+	);
+
+	add_tag($tag_table, selected =>
+		background => 'yellow',
 	);
 
 	return $tag_table;
