@@ -88,8 +88,7 @@ A callback that will invoked each time that a node is selected. The callback is
 in the fashion:
 
 	sub callback {
-		my ($node) = @_;
-		$node->isa('XML::LibXML::Node');
+		my ($xpath) = @_;
 	}
 
 =back
@@ -112,9 +111,9 @@ sub create_model_with_view {
 		sub {
 			my (undef, $path) = @_;
 			my $iter = $model->get_iter($path);
-			my $node = $model->get($iter, $NODE_PATH);
+			my $xpath = $model->get($iter, $NODE_PATH);
 
-			$on_click->($node);
+			$on_click->($xpath);
 		}
 	);
 
