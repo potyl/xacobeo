@@ -1,6 +1,6 @@
 ---
 name: Xacobeo
-version: 0.09
+version: 0.10
 author:
   - 'Emmanuel Rodriguez <potyl@cpan.org>'
 abstract: XPath (XML Path Language) visualizer.
@@ -30,7 +30,7 @@ requires:
   Glib: 0
   Gtk2: 0
   Gtk2::GladeXML: 0
-  Gtk2::SourceView: 0
+  Gtk2::SourceView2: 0
   Locale::TextDomain: 0
   Pod::Usage: 0
   Time::HiRes: 0
@@ -50,7 +50,7 @@ build_requires:
 provides:
   Xacobeo:
     file: lib/Xacobeo.pm
-    version: 0.09
+    version: 0.10
   Xacobeo::Document:
     file: lib/Xacobeo/Document.pm
   Xacobeo::DomModel:
