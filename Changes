@@ -1,7 +1,9 @@
 Changelog for Xacobeo.
 
 
-0.10 Sun Nov 15 22:16:35 CET 2009
+0.10 Tue Nov 17 22:08:35 CET 2009
+	- Issue 10: Link the DOM tree with the XML source.
+	- Issue 39: link DOM tree with text view (duplicate of 10).
 	- Using Gtk2::SourceView2.
 
 
