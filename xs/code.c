@@ -393,7 +393,16 @@ static void my_render_buffer (TextRenderCtx *xargs) {
 		gtk_text_buffer_get_iter_at_offset(xargs->buffer, &iter_end, to_apply->end);
 		
 		if (to_apply->path) {
-			gtk_text_buffer_create_mark(xargs->buffer, to_apply->path, &iter_start, TRUE);
+			gchar *name;
+
+			name = g_strjoin("|", to_apply->path, "start", NULL);
+			gtk_text_buffer_create_mark(xargs->buffer, name, &iter_start, TRUE);
+			g_free(name);
+
+			name = g_strjoin("|", to_apply->path, "end", NULL);
+			gtk_text_buffer_create_mark(xargs->buffer, name, &iter_end, FALSE);
+			g_free(name);
+
 			g_free(to_apply->path);
 		}
 
@@ -518,8 +527,8 @@ static void my_XML_ELEMENT_NODE (TextRenderCtx *xargs, xmlNode *node) {
 	gchar *name = my_get_node_name_prefixed(node, xargs->namespaces);
 
 	// Start of the element
-	buffer_add_node(xargs, xargs->markup->syntax, node, "<");
-	buffer_add(xargs, xargs->markup->element, name);
+	buffer_add(xargs, xargs->markup->syntax, "<");
+	buffer_add_node(xargs, xargs->markup->element, node, name);
 
 
 	// The element's namespace definitions
