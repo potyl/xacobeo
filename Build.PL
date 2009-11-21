@@ -64,7 +64,7 @@ my $build = inc::MyBuilder->new(
 		resources => {
 			homepage   => 'http://code.google.com/p/xacobeo/',
 			bugtracker => 'http://code.google.com/p/xacobeo/issues/list',
-			repository => 'http://code.google.com/p/xacobeo/source/browse/',
+			repository => 'http://github.com/potyl/xacobeo',
 		},
 	},
 
