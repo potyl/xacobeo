@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-16 22:44+0100\n"
+"POT-Creation-Date: 2009-11-21 19:27+0100\n"
 "PO-Revision-Date: 2009-04-21 07:57+0200\n"
 "Last-Translator: Lars Dɪᴇᴄᴋᴏᴡ 迪拉斯 <daxim@cpan.org>\n"
 "MIME-Version: 1.0\n"
@@ -20,46 +20,46 @@ msgstr ""
 msgid "XPath Expression..."
 msgstr "XPath-Ausdruck..."
 
-#: lib/Xacobeo/UI.pm:235
+#: lib/Xacobeo/UI.pm:258
 msgid "Node is undef"
 msgstr "Knoten ist undef"
 
-#: lib/Xacobeo/UI.pm:379
+#: lib/Xacobeo/UI.pm:402
 msgid "Load document"
 msgstr "Dokument laden"
 
-#: lib/Xacobeo/UI.pm:385
+#: lib/Xacobeo/UI.pm:408
 #, perl-brace-format
 msgid "Can't read {file}: {error}"
 msgstr "{file} kann nicht gelesen werden: {error}"
 
-#: lib/Xacobeo/UI.pm:395
+#: lib/Xacobeo/UI.pm:418
 #, perl-format
 msgid "Document loaded in %.3f second"
 msgid_plural "Document loaded in %.3f seconds"
 msgstr[0] "Dokument wurde in %.3f Sekunde geladen"
 msgstr[1] "Dokument wurde in %.3f Sekunden geladen"
 
-#: lib/Xacobeo/UI.pm:423
+#: lib/Xacobeo/UI.pm:446
 msgid "Syntax Highlight"
 msgstr "Syntaxhervorhebung"
 
-#: lib/Xacobeo/UI.pm:431
+#: lib/Xacobeo/UI.pm:454
 msgid "DOM Tree"
 msgstr "DOM-Baum"
 
-#: lib/Xacobeo/UI.pm:664
+#: lib/Xacobeo/UI.pm:697
 #, perl-format
 msgid "Found %d result in %0.3fs"
 msgid_plural "Found %d results in %0.3fs"
 msgstr[0] "%d Ergebnis in %0.3fs gefunden"
 msgstr[1] "%d Ergebnisse in %0.3fs gefunden"
 
-#: lib/Xacobeo/UI.pm:671
+#: lib/Xacobeo/UI.pm:704
 msgid "XPath query issued an error"
 msgstr "Fehler bei der XPath-Abfrage"
 
-#: lib/Xacobeo/UI.pm:894
+#: lib/Xacobeo/UI.pm:927
 #, perl-brace-format
 msgid "Can't create widget {name} because method {function} is missing"
 msgstr ""
@@ -88,15 +88,15 @@ msgstr "Dokumententyp {type} wird nicht unterstützt"
 msgid "Namespace {name} has no URI"
 msgstr "Namensraum {name} hat keinen URI"
 
-#: lib/Xacobeo/DomModel.pm:135
+#: lib/Xacobeo/DomModel.pm:134
 msgid "Element"
 msgstr "Element"
 
-#: lib/Xacobeo/DomModel.pm:144
+#: lib/Xacobeo/DomModel.pm:143
 msgid "ID name"
 msgstr "ID-Name"
 
-#: lib/Xacobeo/DomModel.pm:147
+#: lib/Xacobeo/DomModel.pm:146
 msgid "ID value"
 msgstr "ID-Wert"
 
