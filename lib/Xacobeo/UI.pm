@@ -487,6 +487,12 @@ sub populate_treeview {
 	}
 	$treeview->set_model($store);
 
+	# Expand the first level
+	if (my $iter = $store->get_iter_first) {
+		my $path = $store->get_path($iter);
+		$treeview->expand_row($path, FALSE);
+	}
+
 	return;
 }
 
