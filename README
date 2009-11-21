@@ -49,7 +49,7 @@ This module depends on the following CPAN modules:
 PROJECT
 
 The project is now hosted on github (http://github.com/potyl/xacobeo/) which
-provides the latest source codw and a simple bug tracking.
+provides the latest source code and a simple bug tracking.
 
 Even tough github provides a download facility, the project's source code
 bundles will always be published through CPAN. It's easier this way for the
