@@ -1,9 +1,9 @@
 Changelog for Xacobeo.
 
 
-0.11 Sat Nov 21 19:28:34 CET 2009
+0.11 Mon Nov 23 20:57:30 CET 2009
 	- Expand the first level by default
-	- Unit test fixes (error messages changed in libxml 2.7.3)
+	- Unit test fixes: error messages changed in libxml 2.7.3 (patch by Jozef Kutej)
 
 
 0.10 Tue Nov 17 22:08:35 CET 2009
