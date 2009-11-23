@@ -1,6 +1,6 @@
 ---
 name: Xacobeo
-version: 0.10
+version: 0.11
 author:
   - 'Emmanuel Rodriguez <potyl@cpan.org>'
 abstract: XPath (XML Path Language) visualizer.
@@ -9,7 +9,7 @@ resources:
   bugtracker: http://code.google.com/p/xacobeo/issues/list
   homepage: http://code.google.com/p/xacobeo/
   license: http://dev.perl.org/licenses/
-  repository: http://code.google.com/p/xacobeo/source/browse/
+  repository: http://github.com/potyl/xacobeo
 configure_requires:
   ExtUtils::Depends: 0
   ExtUtils::ParseXS: 0
@@ -50,7 +50,7 @@ build_requires:
 provides:
   Xacobeo:
     file: lib/Xacobeo.pm
-    version: 0.10
+    version: 0.11
   Xacobeo::Document:
     file: lib/Xacobeo/Document.pm
   Xacobeo::DomModel:
