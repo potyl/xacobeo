@@ -16,6 +16,8 @@ use XML::LibXML qw(XML_XML_NS);
 
 my $FOLDER = "tests";
 my @XML_NS = (XML_XML_NS() => 'xml');
+my $LibXML_VERSION = XML::LibXML::LIBXML_RUNTIME_VERSION;
+
 
 exit main();
 
@@ -67,14 +69,13 @@ sub test_without_namespaces {
 	my $regex_syntax;
 	my $regex_func;
 
-	my $version = XML::LibXML::LIBXML_RUNTIME_VERSION;
-	if ($version >= 20703) {
+	if ($LibXML_VERSION >= 20703) {
 		$regex_invalid = qr/^XPath error : Invalid expression/;
 		$regex_ns      = qr/^XPath error : Undefined namespace prefix/;
 		$regex_syntax  = qr/^XPath error : Invalid predicate/;
 		$regex_func    = qr/^ error : xmlXPathCompOpEval: function aaa not found\nXPath error : Unregistered function/;
 	}
-	elsif ($version >= 20632) {
+	elsif ($LibXML_VERSION >= 20632) {
 		$regex_invalid = qr/^XPath error : Invalid expression/;
 		$regex_ns      = qr/^ error : xmlXPathCompiledEval: evaluation failed/;
 		$regex_syntax  = qr/^XPath error : Invalid predicate/;
@@ -324,7 +325,7 @@ sub test_empty_document {
 	
 	# libxml 2.7.3 returns XML::LibXML::Document for empty documents
 	if ($document->documentNode) {
-		cmp_ok(XML::LibXML::LIBXML_RUNTIME_VERSION, '>=', 20703, 'libxml 2.7.3 or greater');
+		cmp_ok($LibXML_VERSION, '>=', 20703, 'libxml 2.7.3 or greater');
 		isa_ok($document->documentNode, 'XML::LibXML::Document', 'there is a document');
 		is($document->documentNode->hasChildNodes, 0, 'no child nodes');
 	}
