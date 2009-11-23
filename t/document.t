@@ -72,7 +72,7 @@ sub test_without_namespaces {
 		$regex_invalid = qr/^XPath error : Invalid expression/;
 		$regex_ns      = qr/^XPath error : Undefined namespace prefix/;
 		$regex_syntax  = qr/^XPath error : Invalid predicate/;
-		$regex_func    = qr/^error : xmlXPathCompOpEval: function aaa not found\nXPath error : Unregistered function/;
+		$regex_func    = qr/^ error : xmlXPathCompOpEval: function aaa not found\nXPath error : Unregistered function/;
 	}
 	elsif ($version >= 20632) {
 		$regex_invalid = qr/^XPath error : Invalid expression/;
@@ -322,16 +322,23 @@ sub test_empty_document {
 	);
 	
 	
-	is($document->documentNode, undef, 'there is no node');
-	throws_ok
-		{$document->find('/')}
-		qr/^Document node is missing/,
-		q(throws 'Document node is missing');
-
-	throws_ok
-		{$document->find('42')}
-		qr/^Document node is missing/,
-		q(again throws 'Document node is missing');
+	# libxml 2.7.3 returns XML::LibXML::Document for empty documents
+	if ($document->documentNode) {
+		cmp_ok(XML::LibXML::LIBXML_RUNTIME_VERSION, '>=', 20703, 'libxml 2.7.3 or greater');
+		isa_ok($document->documentNode, 'XML::LibXML::Document', 'there is a document');
+		is($document->documentNode->hasChildNodes, 0, 'no child nodes');
+	}
+	else {
+		is($document->documentNode, undef, 'there is no node');
+		throws_ok
+			{$document->find('/')}
+			qr/^Document node is missing/,
+			q(throws 'Document node is missing');
+		throws_ok
+			{$document->find('42')}
+			qr/^Document node is missing/,
+			q(again throws 'Document node is missing');
+	}
 }
 
 
