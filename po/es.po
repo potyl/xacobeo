@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xacobeo-i 18n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-21 19:27+0100\n"
+"POT-Creation-Date: 2009-12-05 15:03+0100\n"
 "PO-Revision-Date: 2009-01-25 11:50+0100\n"
 "Last-Translator: Emmanuel Rodriguez <emmanuel.rodriguez@gmail.com>\n"
 "Language-Team: English\n"
@@ -16,50 +16,50 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/Xacobeo/UI.pm:147
+#: lib/Xacobeo/UI.pm:146
 msgid "XPath Expression..."
 msgstr "Expresión XPath..."
 
-#: lib/Xacobeo/UI.pm:258
+#: lib/Xacobeo/UI.pm:257
 msgid "Node is undef"
 msgstr "Nudo es undef"
 
-#: lib/Xacobeo/UI.pm:402
+#: lib/Xacobeo/UI.pm:401
 msgid "Load document"
 msgstr "Lectura del documento"
 
-#: lib/Xacobeo/UI.pm:408
+#: lib/Xacobeo/UI.pm:407
 #, perl-brace-format
 msgid "Can't read {file}: {error}"
 msgstr "Imposible de leer {file}: {error}"
 
-#: lib/Xacobeo/UI.pm:418
+#: lib/Xacobeo/UI.pm:417
 #, perl-format
 msgid "Document loaded in %.3f second"
 msgid_plural "Document loaded in %.3f seconds"
 msgstr[0] "Documento leido en %.3f segundo"
 msgstr[1] "Documento leido en %.3f segundos"
 
-#: lib/Xacobeo/UI.pm:446
+#: lib/Xacobeo/UI.pm:445
 msgid "Syntax Highlight"
 msgstr "Coloreado de sintaxis"
 
-#: lib/Xacobeo/UI.pm:454
+#: lib/Xacobeo/UI.pm:453
 msgid "DOM Tree"
 msgstr "Arbol DOM"
 
-#: lib/Xacobeo/UI.pm:697
+#: lib/Xacobeo/UI.pm:576
 #, perl-format
 msgid "Found %d result in %0.3fs"
 msgid_plural "Found %d results in %0.3fs"
 msgstr[0] "%d resultado encotrado en %0.3fs"
 msgstr[1] "%d resultados encotrados en %0.3fs"
 
-#: lib/Xacobeo/UI.pm:704
+#: lib/Xacobeo/UI.pm:583
 msgid "XPath query issued an error"
 msgstr "La expression XPath dió con un error"
 
-#: lib/Xacobeo/UI.pm:927
+#: lib/Xacobeo/UI.pm:806
 #, perl-brace-format
 msgid "Can't create widget {name} because method {function} is missing"
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-21 19:27+0100\n"
+"POT-Creation-Date: 2009-12-05 15:35+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,50 +17,50 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: lib/Xacobeo/UI.pm:147
+#: lib/Xacobeo/UI.pm:146
 msgid "XPath Expression..."
 msgstr ""
 
-#: lib/Xacobeo/UI.pm:258
+#: lib/Xacobeo/UI.pm:257
 msgid "Node is undef"
 msgstr ""
 
-#: lib/Xacobeo/UI.pm:402
+#: lib/Xacobeo/UI.pm:401
 msgid "Load document"
 msgstr ""
 
-#: lib/Xacobeo/UI.pm:408
+#: lib/Xacobeo/UI.pm:407
 #, perl-brace-format
 msgid "Can't read {file}: {error}"
 msgstr ""
 
-#: lib/Xacobeo/UI.pm:418
+#: lib/Xacobeo/UI.pm:417
 #, perl-format
 msgid "Document loaded in %.3f second"
 msgid_plural "Document loaded in %.3f seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/Xacobeo/UI.pm:446
+#: lib/Xacobeo/UI.pm:445
 msgid "Syntax Highlight"
 msgstr ""
 
-#: lib/Xacobeo/UI.pm:454
+#: lib/Xacobeo/UI.pm:453
 msgid "DOM Tree"
 msgstr ""
 
-#: lib/Xacobeo/UI.pm:697
+#: lib/Xacobeo/UI.pm:576
 #, perl-format
 msgid "Found %d result in %0.3fs"
 msgid_plural "Found %d results in %0.3fs"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/Xacobeo/UI.pm:704
+#: lib/Xacobeo/UI.pm:583
 msgid "XPath query issued an error"
 msgstr ""
 
-#: lib/Xacobeo/UI.pm:927
+#: lib/Xacobeo/UI.pm:806
 #, perl-brace-format
 msgid "Can't create widget {name} because method {function} is missing"
 msgstr ""
