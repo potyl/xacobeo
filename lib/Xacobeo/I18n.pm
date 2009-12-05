@@ -10,12 +10,12 @@ Xacobeo::I18n - Utilities for internationalization (i18n).
 
 	# Initialize the i18n framework (done once)
 	use FindBin;
-	use Xacobeo::I18n qw();
+	use Xacobeo::I18n;
 	Xacobeo::I18n->init(xacobeo => "$FindBin::Bin/../share/locale/");
 	
 	
 	# Import the i18n utilities (used everywhere where i18n is needed)
-	use Xacobeo::I18n qw(__);
+	use Xacobeo::I18n;
 	print __("Hello world"), "\n";
 
 =head1 DESCRIPTION
@@ -24,10 +24,10 @@ This package provides utilities that perform i18n. This module relies on
 gettext.
 
 The initialization of the i18n framework should be performed only once,
-preferably as soon as possible. Once the framework is initialized, any module
+preferably as soon as possible. Once the framework is initialized any module
 requiring to translate a string can include this module.
 
-This module exports on request the shortcut functions used for translating
+This module exports automatically the shortcut functions used for translating
 messages. This is done in order to make the translation transparent.
 
 =head1 FUNCTIONS
@@ -36,7 +36,6 @@ The following functions are available:
 
 =cut
 
-use 5.006;
 use strict;
 use warnings;
 
@@ -45,7 +44,7 @@ use Locale::Messages qw(dgettext dngettext textdomain bindtextdomain);
 use Encode qw(decode);
 
 use Exporter 'import';
-our @EXPORT_OK = qw(
+our @EXPORT = qw(
 	__
 	__x
 	__n
