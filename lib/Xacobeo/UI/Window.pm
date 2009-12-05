@@ -40,6 +40,7 @@ sub INIT_INSTANCE {
 	$self->statusbar($statusbar);
 	$main_vbox->pack_start($statusbar, FALSE, TRUE, 0);
 
+	$self->set_size_request(800, 600);
 }
 
 
