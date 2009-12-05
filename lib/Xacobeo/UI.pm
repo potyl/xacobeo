@@ -31,8 +31,7 @@ use Glib qw(TRUE FALSE);
 use Gtk2;
 use Gtk2::GladeXML;
 use Gtk2::SimpleList;
-use Gtk2::Pango qw(PANGO_WEIGHT_LIGHT PANGO_WEIGHT_BOLD);
-use Gtk2::SourceView2;
+use Xacobeo::UI::SourceView;
 
 use Data::Dumper;
 use Carp qw(croak);
@@ -528,126 +527,6 @@ sub set_xpath {
 }
 
 
-#
-# Populates a text tag table.
-#
-sub populate_tag_table {
-	my ($tag_table) = @_;
-
-	add_tag($tag_table, result_count =>
-		family     => 'Courier 10 Pitch',
-		background => '#EDE9E3',
-		foreground => 'black',
-		style      => 'italic',
-		weight     => PANGO_WEIGHT_LIGHT
-	);
-
-	# Make the boolean and number look a like
-	foreach my $name qw(boolean number) {
-		add_tag($tag_table, $name =>
-			family     => 'Courier 10 Pitch',
-			foreground => 'black',
-			weight     => PANGO_WEIGHT_BOLD
-		);
-	}
-
-	add_tag($tag_table, attribute_name =>
-		foreground => 'red',
-	);
-
-	add_tag($tag_table, attribute_value =>
-		foreground => 'blue',
-	);
-
-	add_tag($tag_table, comment =>
-		foreground => '#008000',
-		style      => 'italic',
-		weight     => PANGO_WEIGHT_LIGHT,
-	);
-
-	add_tag($tag_table, dtd =>
-		foreground => '#558CBA',
-		style      => 'italic',
-	);
-
-	add_tag($tag_table, element =>
-		foreground => '#800080',
-		weight     => PANGO_WEIGHT_BOLD,
-	);
-
-	add_tag($tag_table, pi =>
-		foreground => '#558CBA',
-		style      => 'italic',
-	);
-
-	add_tag($tag_table, pi_data =>
-		foreground => 'red',
-		style      => 'italic',
-	);
-
-	add_tag($tag_table, syntax =>
-		foreground => 'black',
-		weight     => PANGO_WEIGHT_BOLD,
-	);
-
-	add_tag($tag_table, literal =>
-		foreground => 'black',
-	);
-
-	add_tag($tag_table, cdata =>
-		foreground => 'red',
-		weight     => PANGO_WEIGHT_BOLD
-	);
-
-	add_tag($tag_table, cdata_content =>
-		foreground => 'purple',
-		weight     => PANGO_WEIGHT_LIGHT,
-		style      => 'italic',
-	);
-
-	add_tag($tag_table, namespace_name =>
-		foreground => 'red',
-		style      => 'italic',
-		weight     => PANGO_WEIGHT_LIGHT,
-	);
-
-	add_tag($tag_table, namespace_uri =>
-		foreground => 'blue',
-		style      => 'italic',
-		weight     => PANGO_WEIGHT_LIGHT,
-	);
-
-	add_tag($tag_table, entity_ref =>
-		foreground => 'red',
-		style      => 'italic',
-		weight     => PANGO_WEIGHT_BOLD,
-	);
-
-	add_tag($tag_table, error =>
-		foreground => 'red',
-	);
-
-	add_tag($tag_table, selected =>
-		background => 'yellow',
-	);
-
-	return $tag_table;
-}
-
-
-#
-# Creates a text tag (Gtk2::TextTag) with the given name and properties and adds
-# it to a tag table.
-#
-sub add_tag {
-	my ($tag_table, $name, @properties) = @_;
-	my $tag = Gtk2::TextTag->new($name);
-	$tag->set(@properties);
-	$tag_table->add($tag);
-	return;
-}
-
-
 
 #
 # Adds the given text at the end of the buffer. The text is added with a tag
@@ -943,13 +822,7 @@ sub glade_custom_handler {
 sub create_xml_document_view {
 	my $self = shift;
 
-	my $tag_table = populate_tag_table(Gtk2::TextTagTable->new());
-	my $buffer = Gtk2::SourceView2::Buffer->new($tag_table);
-	$buffer->set_highlight_syntax(undef);
-	# This will disable the undo/redo forever
-	$buffer->begin_not_undoable_action();
-
-	my $widget = Gtk2::SourceView2::View->new_with_buffer($buffer);
+	my $widget = Xacobeo::UI::SourceView->new();
 	$widget->set_editable(FALSE);
 	$widget->set_show_line_numbers(TRUE);
 	$widget->set_highlight_current_line(TRUE);
@@ -964,9 +837,7 @@ sub create_xml_document_view {
 sub create_xpath_results_view {
 	my $self = shift;
 
-	my $tag_table = populate_tag_table(Gtk2::TextTagTable->new());
-	my $buffer = Gtk2::TextBuffer->new($tag_table);
-	my $widget = Gtk2::TextView->new_with_buffer($buffer);
+	my $widget = Xacobeo::UI::SourceView->new();
 	$widget->set_editable(FALSE);
 
 	return $widget;
