@@ -19,6 +19,7 @@ __PACKAGE__->mk_accessors(
 		dom_view
 		results_view
 		namespaces_view
+		statusbar
 	)
 );
 
@@ -34,7 +35,11 @@ sub INIT_INSTANCE {
 	# Add menu bar
 	$main_vbox->pack_start($self->_create_search_bar, FALSE, TRUE, 0);
 	$main_vbox->pack_start($self->_create_main_content, TRUE, TRUE, 0);
-	# Add status bar
+
+	my $statusbar = Gtk2::Statusbar->new();
+	$self->statusbar($statusbar);
+	$main_vbox->pack_start($statusbar, FALSE, TRUE, 0);
+
 }
 
 
