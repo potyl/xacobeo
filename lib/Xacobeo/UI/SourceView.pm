@@ -20,6 +20,7 @@ sub INIT_INSTANCE {
 	my $self = shift;
 	my $buffer = _create_buffer();
 	$self->set_buffer($buffer);
+	$self->set_editable(FALSE);
 }
 
 
