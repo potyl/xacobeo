@@ -31,8 +31,8 @@ sub INIT_INSTANCE {
 
 	my $main_vbox = Gtk2::VBox->new(FALSE, 0);
 	$self->add($main_vbox);
-	
-	# Add menu bar
+
+	$main_vbox->pack_start($self->_create_menu, FALSE, FALSE, 0);
 	$main_vbox->pack_start($self->_create_search_bar, FALSE, TRUE, 0);
 	$main_vbox->pack_start($self->_create_main_content, TRUE, TRUE, 0);
 
@@ -41,6 +41,150 @@ sub INIT_INSTANCE {
 	$main_vbox->pack_start($statusbar, FALSE, TRUE, 0);
 
 	$self->set_size_request(800, 600);
+}
+
+
+#
+# Called when a new file has to be loaded
+#
+sub do_file_open {
+	my $self = shift;
+
+	my $dialog = Gtk2::FileChooserDialog->new(
+		__("Open file..."),
+		$self, # parent window
+		'open',
+		'gtk-cancel' => 'cancel',
+		'gtk-ok'     => 'ok',
+	);
+	$dialog->signal_connect(response => sub {
+		my ($dialog, $response) = @_;
+
+		if ($response eq 'ok') {
+			my $file = $dialog->get_filename;
+			print "File is $file\n";
+			return if -d $file;
+			$self->load_file($file);
+		}
+
+		$dialog->destroy();
+	});
+	$dialog->show();
+}
+
+
+#
+# Called when the window has to be closed
+#
+sub do_quit {
+	my $self = shift;
+	$self->destroy();
+	return;
+}
+
+
+#
+# Called when the about dialog has to be shown
+#
+sub do_show_about_dialog {
+	my $self = shift;
+
+	my $dialog = Gtk2::AboutDialog->new();
+	$dialog->set_title(__("About Xacobeo"));
+	$dialog->set_program_name("Xacobeo");
+
+	$dialog->set_authors('Emmanuel Rodriguez <potyl@cpan.org>');
+	$dialog->set_copyright("Copyright (C) 2008-2009 by Emmanuel Rodriguez.");
+	$dialog->set_translator_credits(join "\n",
+		'Emmanuel Rodriguez <potyl@cpan.org>',
+		'Lars Dieckow <daxim@cpan.org>',
+	);
+
+	$dialog->set_website("http://code.google.com/p/xacobeo/");
+	$dialog->set_website_label("Xacobeo");
+
+	$dialog->set_comments("Gtk2::SourceView2 Demo");
+	$dialog->signal_connect(response => sub {
+		my ($dialog, $response) = @_;
+		$dialog->destroy();
+	});
+	$dialog->show();
+}
+
+
+sub _create_menu {
+	my $self = shift;
+
+	# This entries are always active
+	my $active_entries = [
+		# Top level
+		[ 'FileMenu',  undef, "_File" ],
+		[ 'HelpMenu',  undef, "_Help" ],
+
+
+		# Entries (name, stock id, label, accelerator, tooltip, callback)
+		[
+			'FileOpen',
+			'gtk-open',
+			__("_Open"),
+			'<control>O',
+			__("Open a file"),
+			sub { $self->do_file_open(@_) }
+		],
+		[
+			'FileQuit',
+			'gtk-quit',
+			__("_Quit"),
+			"<control>Q",
+			__("Quit"),
+			sub { $self->do_quit() }
+		],
+
+
+		[
+			'HelpAbout',
+			'gtk-about',
+			__("_About"),
+			undef,
+			__("About"),
+			sub { $self->do_show_about_dialog(@_) }
+		],
+	];
+
+	my $actions = Gtk2::ActionGroup->new("Actions");
+	$actions->add_actions($active_entries, undef);
+
+	my $ui = Gtk2::UIManager->new();
+	$ui->insert_action_group($actions, 0);
+	$ui->add_ui_from_string(<<'__UI__');
+<ui>
+	<menubar name='MenuBar'>
+
+		<menu action='FileMenu'>
+			<menuitem action='FileOpen'/>
+			<placeholder name="FilePlaceholder_1"/>
+
+			<separator/>
+
+			<placeholder name="FilePlaceholder_2"/>
+			<menuitem action='FileQuit'/>
+		</menu>
+
+
+		<placeholder name="ExtraMenu"/>
+
+
+		<menu action='HelpMenu'>
+			<menuitem action='HelpAbout'/>
+		</menu>
+
+	</menubar>
+</ui>
+__UI__
+
+	$self->add_accel_group($ui->get_accel_group);
+
+	return $ui->get_widget('/MenuBar');
 }
 
 
