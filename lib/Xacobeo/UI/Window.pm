@@ -53,8 +53,8 @@ sub _create_search_bar {
 	my $entry = Gtk2::Entry->new();
 	$hbox->pack_start($entry, TRUE, TRUE, 0);
 	
-	my $entry = Gtk2::Button->new(__("Evaluate"));
-	$hbox->pack_start($entry, FALSE, TRUE, 0);
+	my $button = Gtk2::Button->new(__("Evaluate"));
+	$hbox->pack_start($button, FALSE, TRUE, 0);
 	
 	return $hbox;
 }
