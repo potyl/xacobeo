@@ -31,7 +31,7 @@ use Glib::Object::Subclass 'Gtk2::Window';
 
 sub INIT_INSTANCE {
 	my $self = shift;
-print Dumper (\@_);
+
 	my $conf = Xacobeo::Conf->get_conf;
 	$self->conf($conf);
 
