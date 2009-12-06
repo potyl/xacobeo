@@ -54,7 +54,7 @@ sub set_document {
 }
 
 
-sub show_node {
+sub load_node {
 	my $self = shift;
 	my ($node) = @_;
 

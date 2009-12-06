@@ -116,7 +116,7 @@ sub load_file {
 	# Update the text widget
 	my $t_syntax = Xacobeo::Timer->start(__('Syntax Highlight'));
 	$self->source_view->set_document($document);
-	$self->source_view->show_node($node);
+	$self->source_view->load_node($node);
 	undef $t_syntax;
 
 	# Clear the previous results
@@ -125,7 +125,7 @@ sub load_file {
 	# Populate the DOM view tree
 	my $t_dom = Xacobeo::Timer->start(__('DOM Tree'));
 	$self->dom_view->set_document($document);
-	$self->dom_view->show_node($node);
+	$self->dom_view->load_node($node);
 	undef $t_dom;
 
 
