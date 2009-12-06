@@ -18,9 +18,7 @@ use Xacobeo::Utils qw(
 	isa_dom_namespace
 	escape_xml_attribute
 );
-use Xacobeo::XS qw(
-	xacobeo_populate_gtk_text_buffer
-);
+use Xacobeo::XS;
 
 use parent qw(Class::Accessor::Fast);
 __PACKAGE__->mk_accessors(
@@ -31,6 +29,7 @@ __PACKAGE__->mk_accessors(
 );
 
 use Glib::Object::Subclass 'Gtk2::SourceView2::View';
+
 
 # The tag table shared by all editors
 my $TAG_TABLE = _create_tag_table(Gtk2::TextTagTable->new());
@@ -98,8 +97,7 @@ sub show_node {
 				_buffer_add($buffer, syntax => '"');
 			}
 			else {
-				# Performed through XS
-				xacobeo_populate_gtk_text_buffer($buffer, $child, $self->namespaces);
+				Xacobeo::XS->load_text_buffer($buffer, $child, $self->namespaces);
 			}
 
 			_buffer_add($buffer, syntax => "\n") if --$count;
@@ -122,8 +120,8 @@ sub show_node {
 	}
 
 	else {
-		# Any kind of XML node (XS call)
-		xacobeo_populate_gtk_text_buffer($buffer, $node, $self->namespaces);
+		# Any kind of XML node
+		Xacobeo::XS->load_text_buffer($buffer, $node, $self->namespaces);
 	}
 
 
