@@ -24,6 +24,7 @@ __PACKAGE__->mk_accessors(
 		dom_view
 		results_view
 		namespaces_view
+		notebook
 		statusbar
 		conf
 	)
@@ -84,6 +85,7 @@ sub callback_node_selected {
 	# Since the results view shows only the current node we use load_node instead
 	# of show_node().
 	$self->results_view->load_node($node);
+	$self->notebook->set_current_page(0);
 }
 
 
@@ -371,6 +373,7 @@ sub _create_main_content {
 	
 	# Notebook with the results view and the namespaces view
 	my $notebook = Gtk2::Notebook->new();
+	$self->notebook($notebook);
 	$vpaned->pack2($notebook, TRUE, TRUE);
 
 	my $results_view = Xacobeo::UI::SourceView->new();
