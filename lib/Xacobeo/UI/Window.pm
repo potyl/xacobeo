@@ -339,13 +339,14 @@ sub _create_main_content {
 
 	my $source_view = Xacobeo::UI::SourceView->new();
 	$self->source_view($source_view);
+	$source_view->set_show_line_numbers(TRUE);
+	$source_view->set_highlight_current_line(TRUE);
 	$vpaned->pack1(_scroll($source_view, -1, 400), FALSE, TRUE);
 	
 	
 	# Notebook with the results view and the namespaces view
 	my $notebook = Gtk2::Notebook->new();
 	$vpaned->pack2($notebook, TRUE, TRUE);
-	
 
 	my $results_view = Xacobeo::UI::SourceView->new();
 	$self->results_view($results_view);
