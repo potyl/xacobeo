@@ -55,6 +55,39 @@ sub set_document {
 }
 
 
+sub show_node {
+	my $self = shift;
+	my ($node) = @_;
+
+	my $xpath = $node->nodePath;
+	my $buffer = $self->get_buffer;
+
+	# Clear any previous selection
+	if (my $marks = delete $self->{selected}) {
+		my @iters = map { $buffer->get_iter_at_mark($_) } @{ $marks };
+		$buffer->remove_tag_by_name('selected', @iters);
+	}
+
+	# Scroll to the right place in the source view
+	my $mark_start = $buffer->get_mark("$xpath|start");
+	if ($mark_start) {
+		my $iter_start = $buffer->get_iter_at_mark($mark_start);
+		$buffer->place_cursor($iter_start);
+
+		my $mark_end = $buffer->get_mark("$xpath|end");
+		my $iter_end = $buffer->get_iter_at_mark($mark_end);
+
+		$buffer->apply_tag_by_name('selected', $iter_start, $iter_end);
+		$self->scroll_to_mark($mark_start, 0.25, FALSE, 0.0, 0.5);
+
+		$self->{selected} = [$mark_start, $mark_end];
+	}
+	else {
+		print "Got no mark at $xpath!\n";
+	}
+}
+
+
 sub load_node {
 	my $self = shift;
 	my ($node) = @_;
