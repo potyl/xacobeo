@@ -8,9 +8,18 @@ use Data::Dumper;
 use Glib qw(TRUE FALSE);
 use Gtk2;
 use Xacobeo::I18n;
+use Xacobeo::XS;
 
+use parent qw(Class::Accessor::Fast);
+__PACKAGE__->mk_accessors(
+	qw(
+		document
+		namespaces
+	)
+);
 
 use Glib::Object::Subclass 'Gtk2::TreeView';
+
 
 my $NODE_POS = 0;
 my $NODE_PATH     = $NODE_POS++;
@@ -44,6 +53,40 @@ sub INIT_INSTANCE {
 
 	# Node attribute value (ID attribute)
 	$self->_add_text_column($NODE_ID_VALUE, __('ID value'));
+}
+
+
+sub set_document {
+	my $self = shift;
+	my ($document) = @_;
+
+	$self->document($document);
+	$self->namespaces(
+		$self->document ? $self->document->namespaces : undef
+	);
+}
+
+
+sub show_node {
+	my $self = shift;
+	my ($node) = @_;
+
+	my $store = $self->get_model;
+
+	$self->set_model(undef);
+	if (defined $node and defined $store) {
+		Xacobeo::XS->load_tree_store($store, $node, $self->namespaces);
+	}
+	elsif (defined $store) {
+		$store->clear();
+	}
+	$self->set_model($store);
+
+	# Expand the first level
+	if (my $iter = $store->get_iter_first) {
+		my $path = $store->get_path($iter);
+		$self->expand_row($path, FALSE);
+	}
 }
 
 
