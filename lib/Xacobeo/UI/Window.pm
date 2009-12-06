@@ -120,7 +120,7 @@ sub load_file {
 	undef $t_syntax;
 
 	# Clear the previous results
-	$self->results_view->clear();
+	$self->results_view->set_document($document);
 
 	# Populate the DOM view tree
 	my $t_dom = Xacobeo::Timer->start(__('DOM Tree'));
