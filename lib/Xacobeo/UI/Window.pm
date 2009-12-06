@@ -14,6 +14,8 @@ use Xacobeo::UI::SourceView;
 use Xacobeo::UI::DomView;
 use Xacobeo::UI::Statusbar;
 use Xacobeo::I18n;
+use Xacobeo::Timer;
+use Xacobeo::Document;
 
 use parent qw(Class::Accessor::Fast);
 __PACKAGE__->mk_accessors(
@@ -246,7 +248,7 @@ sub _create_menu {
 			__("_Open"),
 			'<control>O',
 			__("Open a file"),
-			sub { $self->do_file_open(@_) }
+			sub { $self->do_show_file_open_dialog(@_) }
 		],
 		[
 			'FileQuit',
