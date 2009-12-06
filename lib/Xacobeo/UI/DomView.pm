@@ -22,8 +22,8 @@ use Glib::Object::Subclass 'Gtk2::TreeView' =>
 	signals => {
 		'node-selected' => {
 			flags       => ['run-last'],
-			# Parameters:   Node            XPath
-			param_types => ['Glib::Scalar', 'Glib::String'],
+			# Parameters:   Node 
+			param_types => ['Glib::Scalar'],
 		},
 	},
 ;
@@ -78,7 +78,7 @@ sub callback_row_activated {
 	my $xpath = $model->get($iter, $NODE_PATH);
 
 	my $node = $self->document->find($xpath)->[0];
-	$self->signal_emit('node-selected' => $node, $xpath);
+	$self->signal_emit('node-selected' => $node);
 }
 
 
