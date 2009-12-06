@@ -51,6 +51,8 @@ use Xacobeo::I18n qw(__ __x);
 use parent qw(Class::Accessor::Fast);
 __PACKAGE__->mk_accessors(
 	qw(
+		source
+		type
 		documentNode
 		xpath
 		namespaces
@@ -75,12 +77,22 @@ sub new {
 	}
 
 	my $self = bless {}, ref($class) || $class;
+	$self->source($source);
+	$self->type($type);
 
 	$self->_load_document($source, $type);
 
 	return $self;
 }
 
+
+=head2 source
+
+The source of the document: most likely a file path or an URI.
+
+=head2 type
+
+The type of document: I<xml> or I<html>.
 
 =head2 namespaces
 
