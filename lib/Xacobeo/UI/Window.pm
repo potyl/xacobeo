@@ -8,9 +8,10 @@ use Data::Dumper;
 use Glib qw(TRUE FALSE);
 use Gtk2;
 use Gtk2::SimpleList;
+
 use Xacobeo::UI::SourceView;
 use Xacobeo::UI::DomView;
-use Xacobeo::I18n qw(__);
+use Xacobeo::I18n;
 
 use parent qw(Class::Accessor::Fast);
 __PACKAGE__->mk_accessors(
@@ -20,6 +21,7 @@ __PACKAGE__->mk_accessors(
 		results_view
 		namespaces_view
 		statusbar
+		conf
 	)
 );
 
@@ -28,7 +30,23 @@ use Glib::Object::Subclass 'Gtk2::Window';
 
 sub INIT_INSTANCE {
 	my $self = shift;
+print Dumper (\@_);
+	my $conf = Xacobeo::Conf->get_conf;
+	$self->conf($conf);
 
+	# Pimp a bit the window (title, icon
+	$self->set_title($conf->app_name);
+
+	$self->set_icon(
+		Gtk2::Gdk::Pixbuf->new_from_file(
+			$conf->share_file('pixmaps', 'xacobeo.png')
+		)
+	);
+
+	$self->set_size_request(800, 600);
+
+
+	# Build the window's widgets
 	my $main_vbox = Gtk2::VBox->new(FALSE, 0);
 	$self->add($main_vbox);
 
@@ -40,7 +58,6 @@ sub INIT_INSTANCE {
 	$self->statusbar($statusbar);
 	$main_vbox->pack_start($statusbar, FALSE, TRUE, 0);
 
-	$self->set_size_request(800, 600);
 }
 
 
@@ -89,9 +106,12 @@ sub do_quit {
 sub do_show_about_dialog {
 	my $self = shift;
 
+	my $name = $self->conf->app_name;
+
 	my $dialog = Gtk2::AboutDialog->new();
-	$dialog->set_title(__("About Xacobeo"));
-	$dialog->set_program_name("Xacobeo");
+	$dialog->set_title(__x("About {name}", name => $name));
+	$dialog->set_program_name($self->conf->app_name);
+	$dialog->set_logo($self->get_icon);
 
 	$dialog->set_authors('Emmanuel Rodriguez <potyl@cpan.org>');
 	$dialog->set_copyright("Copyright (C) 2008-2009 by Emmanuel Rodriguez.");
@@ -101,7 +121,7 @@ sub do_show_about_dialog {
 	);
 
 	$dialog->set_website("http://code.google.com/p/xacobeo/");
-	$dialog->set_website_label("Xacobeo");
+	$dialog->set_website_label($name);
 
 	$dialog->set_comments("Gtk2::SourceView2 Demo");
 	$dialog->signal_connect(response => sub {
