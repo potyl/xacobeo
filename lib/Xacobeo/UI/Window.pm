@@ -12,6 +12,7 @@ use Gtk2::SimpleList;
 use Xacobeo;
 use Xacobeo::UI::SourceView;
 use Xacobeo::UI::DomView;
+use Xacobeo::UI::Statusbar;
 use Xacobeo::I18n;
 
 use parent qw(Class::Accessor::Fast);
@@ -55,17 +56,109 @@ sub INIT_INSTANCE {
 	$main_vbox->pack_start($self->_create_search_bar, FALSE, TRUE, 0);
 	$main_vbox->pack_start($self->_create_main_content, TRUE, TRUE, 0);
 
-	my $statusbar = Gtk2::Statusbar->new();
+	my $statusbar = Xacobeo::UI::Statusbar->new();
 	$self->statusbar($statusbar);
 	$main_vbox->pack_start($statusbar, FALSE, TRUE, 0);
 
 }
 
 
+=head2 load_file
+
+This method loads a new file into the GUI. The new document will be parsed and
+displayed in the window.
+
+Parameters:
+
+=over
+
+=item * $file
+
+The file to load.
+
+=item * $type
+
+The type of document to load (xml, html).
+
+=back
+
+=cut
+
+sub load_file {
+	# Arguments
+	my ($self, $file, $type) = @_;
+	$type ||= 'xml';
+
+	my $timer = Xacobeo::Timer->start();
+
+	# Parse the content
+	my $t_load = Xacobeo::Timer->start(__('Load document'));
+	my $document;
+	eval {
+		$document = Xacobeo::Document->new($file, $type);
+		1;
+	} or do {
+		my $error = $@;
+		$self->statusbar->display(
+			__x("Can't read {file}: {error}", file => $file, error => $error)
+		);
+	};
+	undef $t_load;
+
+
+	# Fill the widgets
+	$self->set_title($self->conf->app_name . ' - ' . $file);
+	
+	my ($node, $namespaces) = $document ? ($document->documentNode, $document->namespaces) : (undef, {});
+	
+	# Update the text widget
+	my $t_syntax = Xacobeo::Timer->start(__('Syntax Highlight'));
+	$self->source_view->set_document($document);
+	$self->source_view->show_node($node);
+	undef $t_syntax;
+
+	# Clear the previous results
+	$self->results_view->clear();
+
+	# Populate the DOM view tree
+	my $t_dom = Xacobeo::Timer->start(__('DOM Tree'));
+#	$self->populate_treeview($document_node);
+	undef $t_dom;
+
+
+	# Populate the Namespaces view
+	my @namespaces;
+	while (my ($uri, $prefix) = each %{ $namespaces }) {
+		push @namespaces, [$prefix, $uri];
+	}
+	@{ $self->namespaces_view->{data} } = @namespaces;
+
+#	$glade->get_widget('xpath-entry')->set_sensitive(TRUE);
+
+
+	# Show the timers
+	$timer->stop();
+	if ($document) {
+		my $format = __n(
+			"Document loaded in %.3f second",
+			"Document loaded in %.3f seconds",
+			int($timer->elapsed),
+		);
+		$self->statusbar->displayf($format, $timer->elapsed);
+	}
+	else {
+		# Invoke the time elapsed this way the value is not printed to the console
+		$timer->elapsed;
+	}
+
+	return;
+}
+
+
 #
 # Called when a new file has to be loaded
 #
-sub do_file_open {
+sub do_show_file_open_dialog {
 	my $self = shift;
 
 	my $dialog = Gtk2::FileChooserDialog->new(
@@ -75,6 +168,7 @@ sub do_file_open {
 		'gtk-cancel' => 'cancel',
 		'gtk-ok'     => 'ok',
 	);
+
 	$dialog->signal_connect(response => sub {
 		my ($dialog, $response) = @_;
 
@@ -82,12 +176,13 @@ sub do_file_open {
 			my $file = $dialog->get_filename;
 			print "File is $file\n";
 			return if -d $file;
-			$self->load_file($file);
+			$self->load_file($file, 'xml');
 		}
 
 		$dialog->destroy();
 	});
-	$dialog->show();
+
+	$dialog->run();
 }
 
 
