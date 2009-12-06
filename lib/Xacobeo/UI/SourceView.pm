@@ -51,6 +51,7 @@ sub set_document {
 	$self->namespaces(
 		$self->document ? $self->document->namespaces : undef
 	);
+	$self->clear();
 }
 
 
