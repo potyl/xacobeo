@@ -9,6 +9,7 @@ use Glib qw(TRUE FALSE);
 use Gtk2;
 use Gtk2::SimpleList;
 
+use Xacobeo;
 use Xacobeo::UI::SourceView;
 use Xacobeo::UI::DomView;
 use Xacobeo::I18n;
@@ -112,6 +113,7 @@ sub do_show_about_dialog {
 	$dialog->set_title(__x("About {name}", name => $name));
 	$dialog->set_program_name($self->conf->app_name);
 	$dialog->set_logo($self->get_icon);
+	$dialog->set_version($Xacobeo::VERSION);
 
 	$dialog->set_authors('Emmanuel Rodriguez <potyl@cpan.org>');
 	$dialog->set_copyright("Copyright (C) 2008-2009 by Emmanuel Rodriguez.");
@@ -120,10 +122,10 @@ sub do_show_about_dialog {
 		'Lars Dieckow <daxim@cpan.org>',
 	);
 
-	$dialog->set_website("http://code.google.com/p/xacobeo/");
+	$dialog->set_website('http://code.google.com/p/xacobeo/');
 	$dialog->set_website_label($name);
 
-	$dialog->set_comments("Gtk2::SourceView2 Demo");
+	$dialog->set_comments(__("Simple XPath viewer"));
 	$dialog->signal_connect(response => sub {
 		my ($dialog, $response) = @_;
 		$dialog->destroy();
