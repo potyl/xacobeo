@@ -62,6 +62,28 @@ sub INIT_INSTANCE {
 	$self->statusbar($statusbar);
 	$main_vbox->pack_start($statusbar, FALSE, TRUE, 0);
 
+
+	# Connect the signals
+	$self->dom_view->signal_connect(node_selected => sub {
+		$self->callback_node_selected(@_);
+	});
+}
+
+
+#
+# Display the selected node in the source view and in the results view. The
+# selection is made from the tree view and we receive selected node that has to
+# be displayed.
+#
+sub callback_node_selected {
+	my $self = shift;
+	my ($view, $node) = @_;
+
+	$self->source_view->show_node($node);
+	
+	# Since the results view shows only the current node we use load_node instead
+	# of show_node().
+	$self->results_view->load_node($node);
 }
 
 
