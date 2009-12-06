@@ -124,7 +124,8 @@ sub load_file {
 
 	# Populate the DOM view tree
 	my $t_dom = Xacobeo::Timer->start(__('DOM Tree'));
-#	$self->populate_treeview($document_node);
+	$self->dom_view->set_document($document);
+	$self->dom_view->show_node($node);
 	undef $t_dom;
 
 
