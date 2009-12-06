@@ -8,24 +8,21 @@ Xacobeo::XS - Functions rewritten in XS.
 
 =head1 SYNOPSIS
 
-	use Xacobeo::XS qw(
-		xacobeo_populate_gtk_text_buffer
-		xacobeo_populate_gtk_tree_store
-	);
+	use Xacobeo::XS;
 	
-	xacobeo_populate_gtk_text_buffer($textview->get_buffer, $node, $namespaces);
-	xacobeo_populate_gtk_tree_store($treeview->get_store, $node, $namespaces);
+	Xacobeo::XS->load_text_buffer($textview->get_buffer, $node, $namespaces);
+	Xacobeo::XS->load_tree_store($treeview->get_store, $node, $namespaces);
 
 =head1 DESCRIPTION
 
 This package provides some functions that are implemented through XS. These
 functions are much faster than their Perl counterpart.
 
-=head1 FUNCTIONS
+=head1 CLASS METHODS
 
-The following functions are available:
+The following class methods are available:
 
-=head2 xacobeo_populate_gtk_text_buffer
+=head2 load_text_buffer
 
 Populates a L<Gtk2::TextBuffer> with the contents of an L<XML::LibXML::Node>.
 The elements and attributes are displayed with the prefix corresponding to their
@@ -38,7 +35,7 @@ Parameters:
 
 =item * $buffer
 
-The text  buffer to fill. Must be an instance of L<Gtk2::TextBuffer>.
+The text buffer to fill. Must be an instance of L<Gtk2::TextBuffer>.
 
 =item * $node
 
@@ -52,7 +49,7 @@ the URIs and the values the prefixes of the namespaces.
 
 =back
 
-=head2 xacobeo_populate_gtk_tree_store
+=head2 load_tree_store
 
 Populates a L<Gtk2::TreeStore> with the contents of an L<XML::LibXML::Node>. The
 tree will display only the nodes of type element. Furthermore, the elements are
@@ -94,7 +91,23 @@ our @EXPORT_OK = qw(
 	xacobeo_populate_gtk_tree_store
 );
 
+
 sub dl_load_flags {return 0x01}
+
+
+sub load_text_buffer {
+	my $class = shift;
+	my ($buffer, $node, $namespaces) = @_;
+	xacobeo_populate_gtk_text_buffer($buffer, $node, $namespaces);
+}
+
+
+sub load_tree_store {
+	my $class = shift;
+	my ($store, $node, $namespaces) = @_;
+	xacobeo_populate_gtk_tree_store($store, $node, $namespaces);
+}
+
 
 __PACKAGE__->bootstrap;
 
