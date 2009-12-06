@@ -10,24 +10,25 @@ use File::Spec::Functions;
 my %requires = (
 	perl => '5.6.1',
 
-	'Pod::Usage'            => 0,
-	'Getopt::Long'          => 0,
-	'Glib'                  => 0,
-	'Gtk2'                  => 0,
-	'Gtk2::GladeXML'        => 0,
-	'Time::HiRes'           => 0,
-	'XML::LibXML'           => 0,
-	'Class::Accessor::Fast' => 0,
-	'File::Spec::Functions' => 0,
-	'FindBin'               => 0,
-	'Carp'                  => 0,
-	'Exporter'              => 0,
-	'DynaLoader'            => 0,
-	'Data::Dumper'          => 0,
-	'Gtk2::SourceView2'     => 0,
-	'Locale::TextDomain'    => 0,
-	'parent'                => 0,
-	'English'               => 0,
+	'Pod::Usage'             => 0,
+	'Getopt::Long'           => 0,
+	'Glib'                   => 0,
+	'Gtk2'                   => '1.100',
+	'Gtk2::GladeXML'         => 0, # To be removed
+	'Time::HiRes'            => 0,
+	'XML::LibXML'            => 0,
+	'Class::Accessor::Fast'  => 0,
+	'File::Spec::Functions'  => 0,
+	'FindBin'                => 0,
+	'Carp'                   => 0,
+	'Exporter'               => 0,
+	'DynaLoader'             => 0,
+	'Data::Dumper'           => 0,
+	'Gtk2::SourceView2'      => 0,
+	'Locale::TextDomain'     => 0,
+	'parent'                 => 0,
+	'English'                => 0, # To be removed
+	'Gtk2::Ex::Entry::Pango' => '0.07'
 );
 
 my %configure_requires = (
