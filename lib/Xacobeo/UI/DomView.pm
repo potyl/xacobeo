@@ -18,7 +18,15 @@ __PACKAGE__->mk_accessors(
 	)
 );
 
-use Glib::Object::Subclass 'Gtk2::TreeView';
+use Glib::Object::Subclass 'Gtk2::TreeView' =>
+	signals => {
+		'node-selected' => {
+			flags       => ['run-last'],
+			# Parameters:   Node            XPath
+			param_types => ['Glib::Scalar', 'Glib::String'],
+		},
+	},
+;
 
 
 my $NODE_POS = 0;
@@ -53,6 +61,24 @@ sub INIT_INSTANCE {
 
 	# Node attribute value (ID attribute)
 	$self->_add_text_column($NODE_ID_VALUE, __('ID value'));
+	
+
+	$self->signal_connect(row_activated => \&callback_row_activated);
+}
+
+
+#
+# Transform the signal 'row-activated' into 'node-selected'
+#
+sub callback_row_activated {
+	my ($self, $path) = @_;
+
+	my $model = $self->get_model;
+	my $iter = $model->get_iter($path);
+	my $xpath = $model->get($iter, $NODE_PATH);
+
+	my $node = $self->document->find($xpath)->[0];
+	$self->signal_emit('node-selected' => $node, $xpath);
 }
 
 
