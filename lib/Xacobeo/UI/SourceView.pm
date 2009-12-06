@@ -10,6 +10,26 @@ use Gtk2;
 use Gtk2::Pango qw(PANGO_WEIGHT_LIGHT PANGO_WEIGHT_BOLD);
 use Gtk2::SourceView2;
 
+use Xacobeo::Utils qw(
+	isa_dom_nodelist
+	isa_dom_boolean
+	isa_dom_number
+	isa_dom_literal
+	isa_dom_namespace
+	escape_xml_attribute
+);
+use Xacobeo::XS qw(
+	xacobeo_populate_gtk_text_buffer
+);
+
+use parent qw(Class::Accessor::Fast);
+__PACKAGE__->mk_accessors(
+	qw(
+		document
+		namespaces
+	)
+);
+
 use Glib::Object::Subclass 'Gtk2::SourceView2::View';
 
 # The tag table shared by all editors
@@ -21,6 +41,114 @@ sub INIT_INSTANCE {
 	my $buffer = _create_buffer();
 	$self->set_buffer($buffer);
 	$self->set_editable(FALSE);
+}
+
+
+sub set_document {
+	my $self = shift;
+	my ($document) = @_;
+
+	$self->document($document);
+	$self->namespaces(
+		$self->document ? $self->document->namespaces : undef
+	);
+}
+
+
+sub show_node {
+	my $self = shift;
+	my ($node) = @_;
+
+	# It's faster to disconnect the buffer from the view and to reconnect it back
+	my $buffer = $self->get_buffer;
+	$self->set_buffer(Gtk2::SourceView2::Buffer->new(undef));
+	$buffer->delete($buffer->get_start_iter, $buffer->get_end_iter);
+
+
+	# A NodeList
+	if (! defined $node) {
+		_buffer_add($buffer, error => __("Node is undef"));
+	}
+	elsif ($node->isa('Xacobeo::Error')) {
+		_buffer_add($buffer, error => $node->message);
+	}
+	elsif (isa_dom_nodelist($node)) {
+		my @children = $node->get_nodelist;
+		my $count = scalar @children;
+
+		# Formatting using to indicate which result is being displayed
+		my $i = 0;
+		my $format = sprintf ' %%%dd. ', length $count;
+
+		foreach my $child (@children) {
+			# Add the result count
+			my $result = sprintf $format, ++$i;
+			_buffer_add($buffer, result_count => $result);
+
+			if (isa_dom_namespace($child)) {
+				# The namespaces nodes are an invention of XML::LibXML and they don't
+				# work with the XS code, we deal with them manually.
+				_buffer_add($buffer, syntax => ' ');
+				_buffer_add($buffer, namespace_name => $child->nodeName);
+				_buffer_add($buffer, syntax => '="');
+
+				my $uri = escape_xml_attribute($child->getData);
+				_buffer_add($buffer, namespace_uri => $uri);
+
+				_buffer_add($buffer, syntax => '"');
+			}
+			else {
+				# Performed through XS
+				xacobeo_populate_gtk_text_buffer($buffer, $child, $self->namespaces);
+			}
+
+			_buffer_add($buffer, syntax => "\n") if --$count;
+		}
+	}
+
+	# A Boolean value ex: true() or false()
+	elsif (isa_dom_boolean($node)) {
+		_buffer_add($buffer, boolean => $node->to_literal);
+	}
+
+	# A Number ex: 2 + 5
+	elsif (isa_dom_number($node)) {
+		_buffer_add($buffer, number => $node->to_literal);
+	}
+
+	# A Literal (a single text string) ex: "hello"
+	elsif (isa_dom_literal($node)) {
+		_buffer_add($buffer, literal => $node->to_literal);
+	}
+
+	else {
+		# Any kind of XML node (XS call)
+		xacobeo_populate_gtk_text_buffer($buffer, $node, $self->namespaces);
+	}
+
+
+	# Add the buffer back into into the text view
+	$self->set_buffer($buffer);
+
+	# Scroll to the beginning
+	$self->scroll_to_iter($buffer->get_start_iter, 0.0, FALSE, 0.0, 0.0);
+}
+
+
+sub clear {
+	my $self = shift;
+	$self->get_buffer->set_text('');
+}
+
+
+#
+# Adds the given text at the end of the buffer. The text is added with a tag
+# which can be used for performing syntax highlighting.
+#
+sub _buffer_add {
+	my ($buffer, $tag, $string) = @_;
+	$buffer->insert_with_tags_by_name($buffer->get_end_iter, $string, $tag);
+	return;
 }
 
 
