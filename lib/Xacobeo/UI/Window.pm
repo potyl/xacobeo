@@ -13,9 +13,11 @@ use Xacobeo;
 use Xacobeo::UI::SourceView;
 use Xacobeo::UI::DomView;
 use Xacobeo::UI::Statusbar;
+use Xacobeo::UI::XPathEntry;
 use Xacobeo::I18n;
 use Xacobeo::Timer;
 use Xacobeo::Document;
+use Xacobeo::Utils qw(escape_xml_text);
 
 use parent qw(Class::Accessor::Fast);
 __PACKAGE__->mk_accessors(
@@ -26,6 +28,7 @@ __PACKAGE__->mk_accessors(
 		namespaces_view
 		notebook
 		statusbar
+		xpath_entry
 		conf
 	)
 );
@@ -152,6 +155,9 @@ sub load_file {
 	$self->dom_view->load_node($node);
 	undef $t_dom;
 
+	# The XPath entry needs the document since it has the namespaces that are
+	# available to the current XPath expression
+	$self->xpath_entry->set_document($document);
 
 	# Populate the Namespaces view
 	my @namespaces;
@@ -339,7 +345,12 @@ sub _create_search_bar {
 	my $label = Gtk2::Label->new(__("XPath:"));
 	$hbox->pack_start($label, FALSE, TRUE, 0);
 	
-	my $entry = Gtk2::Entry->new();
+	my $entry = Xacobeo::UI::XPathEntry->new();
+	$self->xpath_entry($entry);
+	my $markup = sprintf '<span color="grey" size="smaller">%s</span>',
+		escape_xml_text(__("XPath Expression..."))
+	;
+	$entry->set_empty_markup($markup);
 	$hbox->pack_start($entry, TRUE, TRUE, 0);
 	
 	my $button = Gtk2::Button->new(__("Evaluate"));
