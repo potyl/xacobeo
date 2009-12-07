@@ -8,8 +8,6 @@ use Data::Dumper;
 use Glib qw(TRUE FALSE);
 use Gtk2;
 use Gtk2::Ex::Entry::Pango;
-use Xacobeo::I18n;
-use Xacobeo::Utils qw(escape_xml_text);
 use Xacobeo::Accessors qw(document);
 
 use Glib::Object::Subclass 'Gtk2::Ex::Entry::Pango';
