@@ -8,7 +8,7 @@ use Data::Dumper;
 use Glib qw(TRUE FALSE);
 use Gtk2;
 use Gtk2::Ex::Entry::Pango;
-use Xacobeo::Accessors qw(document);
+use Xacobeo::Accessors qw(document valid);
 
 use Glib::Object::Subclass 'Gtk2::Ex::Entry::Pango' =>
 	signals => {
@@ -24,6 +24,7 @@ sub INIT_INSTANCE {
 	my $self = shift;
 
 	$self->signal_connect('changed' => \&callback_changed);
+	$self->valid(FALSE);
 }
 
 
@@ -50,7 +51,14 @@ sub callback_changed {
 		}
 	}
 
+	$self->valid($is_valid);
 	$self->signal_emit('xpath-changed' => $xpath, $is_valid);
+}
+
+
+sub is_valid {
+	my $self = shift;
+	return $self->valid;
 }
 
 
