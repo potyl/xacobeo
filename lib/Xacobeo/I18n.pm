@@ -1,7 +1,5 @@
 package Xacobeo::I18n;
 
-=encoding utf8
-
 =head1 NAME
 
 Xacobeo::I18n - Utilities for internationalization (i18n).
@@ -296,7 +294,7 @@ Emmanuel Rodriguez E<lt>potyl@cpan.orgE<gt>.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2009 by Emmanuel Rodriguez.
+Copyright (C) 2008,2009 by Emmanuel Rodriguez.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.8 or,

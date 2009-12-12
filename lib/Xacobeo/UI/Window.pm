@@ -1,5 +1,33 @@
 package Xacobeo::UI::Window;
 
+=head1 NAME
+
+Xacobeo::UI::Window - Main window of Xacobeo.
+
+=head1 SYNOPSIS
+
+	use Gtk2 qw(-init);
+	use Xacobeo::UI::Window;
+	
+	my $xacobeo = Xacobeo::UI::Window->new();
+	$xacobeo->signal_connect(destroy => sub { Gtk2->main_quit(); });
+	$xacobeo->show_all();
+	Gtk2->main();
+
+=head1 DESCRIPTION
+
+The application's main window. This widget is a L<Gtk2::Window>.
+
+=head1 METHODS
+
+The following methods are available:
+
+=head2 new
+
+Creates a new instance. This is simply the parent's constructor.
+
+=cut
+
 use strict;
 use warnings;
 
@@ -183,7 +211,7 @@ sub display_results {
 
 =head2 load_file
 
-This method loads a new file into the GUI. The new document will be parsed and
+Load a new file into the application. The new document will be parsed and
 displayed in the window.
 
 Parameters:
@@ -196,7 +224,8 @@ The file to load.
 
 =item * $type
 
-The type of document to load: I<xml> or I<html>.
+The type of document to load: I<xml> or I<html>. Defaults to I<xml> if no value
+is provided.
 
 =back
 
@@ -248,14 +277,12 @@ sub load_file {
 	# available to the current XPath expression
 	$self->xpath_entry->set_document($document);
 
-	# Populate the Namespaces view
+	# Populate the namespaces view
 	my @namespaces;
 	while (my ($uri, $prefix) = each %{ $namespaces }) {
 		push @namespaces, [$prefix, $uri];
 	}
 	@{ $self->namespaces_view->{data} } = @namespaces;
-
-#	$glade->get_widget('xpath-entry')->set_sensitive(TRUE);
 
 
 	# Show the timers
@@ -539,4 +566,21 @@ sub _scroll {
 }
 
 
+# A true value
 1;
+
+
+=head1 AUTHORS
+
+Emmanuel Rodriguez E<lt>potyl@cpan.orgE<gt>.
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2008,2009 by Emmanuel Rodriguez.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.8 or,
+at your option, any later version of Perl 5 you may have available.
+
+=cut
+

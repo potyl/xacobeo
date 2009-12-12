@@ -1,10 +1,8 @@
 package Xacobeo::Utils;
 
-=encoding utf8
-
 =head1 NAME
 
-Xacobeo::Utils - Utilities shared among the project.
+Xacobeo::Utils - Utilities.
 
 =head1 SYNOPSIS
 
@@ -17,7 +15,7 @@ Xacobeo::Utils - Utilities shared among the project.
 
 =head1 DESCRIPTION
 
-This package provides utility methods that are shared among the different
+This package provides utility functions that are shared among the different
 modules in this project.
 
 =head1 IMPORTS
@@ -38,7 +36,6 @@ The following functions are available:
 
 =cut
 
-use 5.006;
 use strict;
 use warnings;
 
@@ -94,7 +91,7 @@ our %EXPORT_TAGS = (
 );
 
 
-# The entities defined in XML
+# The default entities defined in the XML spec
 my %ENTITIES = qw(
 	<  &lt;
 	>  &gt;
@@ -520,7 +517,6 @@ sub isa_dom_number {
 }
 
 
-
 # A true value
 1;
 
@@ -531,10 +527,11 @@ Emmanuel Rodriguez E<lt>potyl@cpan.orgE<gt>.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2008 by Emmanuel Rodriguez.
+Copyright (C) 2008,2009 by Emmanuel Rodriguez.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.8 or,
 at your option, any later version of Perl 5 you may have available.
 
 =cut
+

@@ -1,5 +1,36 @@
 package Xacobeo::UI::DomView;
 
+=head1 NAME
+
+Xacobeo::UI::DomView - DOM tree view
+
+=head1 SYNOPSIS
+
+	use Xacobeo::DomView;
+	use Xacobeo::UI::SourceView;
+	
+	my $view = Xacobeo::UI::SourceView->new();
+	$window->add($view);
+	
+	# Load a document
+	my $document = Xacobeo::Document->new($file, $type);
+	$view->set_document($document);
+	$view->load_node($document->documentNode);
+
+=head1 DESCRIPTION
+
+The application's main window. This widget is a L<Gtk2::TreeView>.
+
+=head1 METHODS
+
+The following methods are available:
+
+=head2 new
+
+Creates a new instance. This is simply the parent's constructor.
+
+=cut
+
 use strict;
 use warnings;
 
@@ -92,6 +123,23 @@ sub set_document {
 	);
 }
 
+=head2 load_node
+
+Sets the tree view nodes hierarchy based on the given node. This is the method
+that will actually add items to the widget.
+
+Parameters:
+
+=over
+
+=item * $node
+
+The node to be loaded into the tree widget; an instance of L<XML::LibXML::Node>.
+
+=back
+
+=cut
+
 
 sub load_node {
 	my $self = shift;
@@ -138,4 +186,21 @@ sub _add_text_column {
 }
 
 
+# A true value
 1;
+
+
+=head1 AUTHORS
+
+Emmanuel Rodriguez E<lt>potyl@cpan.orgE<gt>.
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2008,2009 by Emmanuel Rodriguez.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.8 or,
+at your option, any later version of Perl 5 you may have available.
+
+=cut
+

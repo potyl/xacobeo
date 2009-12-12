@@ -1,5 +1,38 @@
 package Xacobeo::UI::SourceView;
 
+=head1 NAME
+
+Xacobeo::UI::SourceView - Text editor that displays XML.
+
+=head1 SYNOPSIS
+
+	use Xacobeo::Document;
+	use Xacobeo::UI::SourceView;
+	
+	my $view = Xacobeo::UI::SourceView->new();
+	$view->set_show_line_numbers(TRUE);
+	$window->add($view);
+	
+	# Load a document
+	my $document = Xacobeo::Document->new($file, $type);
+	$view->set_document($document);
+	$view->load_node($document->documentNode);
+
+=head1 DESCRIPTION
+
+The text editor widget that's used for displaying XML. This widget is a
+L<Gtk2::SourceView2::View>.
+
+=head1 METHODS
+
+The following methods are available:
+
+=head2 new
+
+Creates a new instance. This is simply the parent's constructor.
+
+=cut
+
 use strict;
 use warnings;
 
@@ -43,6 +76,23 @@ sub INIT_INSTANCE {
 }
 
 
+=head2 set_document
+
+Sets a new document. This method only registers the document with the view, to
+display the document use the method load_node and pass the root node.
+
+Parameters:
+
+=over
+
+=item * $document
+
+The main document; an instance of L<Xacobeo::Document>.
+
+=back
+
+=cut
+
 sub set_document {
 	my $self = shift;
 	my ($document) = @_;
@@ -54,6 +104,22 @@ sub set_document {
 	$self->clear();
 }
 
+
+=head2 show_node
+
+Scrolls the text so that the given node is displayed.
+
+Parameters:
+
+=over
+
+=item * $node
+
+The node to show; an instance of L<XML::LibXML::Node>.
+
+=back
+
+=cut
 
 sub show_node {
 	my $self = shift;
@@ -87,6 +153,23 @@ sub show_node {
 	}
 }
 
+
+=head2 load_node
+
+Sets the editor's text according to the text representation of the given node.
+This is the method that will actually add text to the widget.
+
+Parameters:
+
+=over
+
+=item * $node
+
+The node to be loaded into the editor; an instance of L<XML::LibXML::Node>.
+
+=back
+
+=cut
 
 sub load_node {
 	my $self = shift;
@@ -313,5 +396,21 @@ sub _add_tag {
 	$tag_table->add($tag);
 }
 
-
+# A true value
 1;
+
+
+=head1 AUTHORS
+
+Emmanuel Rodriguez E<lt>potyl@cpan.orgE<gt>.
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2008,2009 by Emmanuel Rodriguez.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.8 or,
+at your option, any later version of Perl 5 you may have available.
+
+=cut
+

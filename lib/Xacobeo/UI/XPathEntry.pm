@@ -1,5 +1,46 @@
 package Xacobeo::UI::XPathEntry;
 
+=head1 NAME
+
+Xacobeo::UI::XPathEntry - XPath text entry
+
+=head1 SYNOPSIS
+
+	use Xacobeo::UI::XPathEntry;
+	
+	my $entry = Xacobeo::UI::XPathEntry->new();
+	my $markup = sprintf '<span color="grey" size="smaller">%s</span>',
+		escape_xml_text(__("XPath Expression..."))
+	;
+	$entry->set_empty_markup($markup);
+	
+	# Must set a document in order to find the namespaces that are allowed
+	$entry->set_document($document);
+	
+	if ($entry->is_valid) {
+		my $xpath = $entry->get_text
+		my $node = $document->find($xpath);
+		$result_view->load_node($node);
+	}
+
+=head1 DESCRIPTION
+
+A text entry that validates XPath expressions. This widget is a
+L<Gtk2::Ex::Entry::Pango>.
+
+The widget validates the text in realtime. In order to support validation for
+namespaces a document has to be set first.
+
+=head1 METHODS
+
+The following methods are available:
+
+=head2 new
+
+Creates a new instance. This is simply the parent's constructor.
+
+=cut
+
 use strict;
 use warnings;
 
@@ -14,8 +55,8 @@ use Glib::Object::Subclass 'Gtk2::Ex::Entry::Pango' =>
 	signals => {
 		'xpath-changed' => {
 			flags       => ['run-last'],
-			# Parameters:   XPath expression isValid
-			param_types => ['Glib::String',  'Glib::Boolean'],
+			# Parameters:   XPath expression,  isValid
+			param_types => ['Glib::String',    'Glib::Boolean'],
 		},
 	},
 ;
@@ -27,6 +68,23 @@ sub INIT_INSTANCE {
 	$self->valid(FALSE);
 }
 
+
+=head2 set_document
+
+Sets a the widget's document. A document is needed in order to provide the
+namespaces that allowed in the XPath expression.
+
+Parameters:
+
+=over
+
+=item * $document
+
+The main document; an instance of L<Xacobeo::Document>.
+
+=back
+
+=cut
 
 sub set_document {
 	my $self = shift;
@@ -56,10 +114,33 @@ sub callback_changed {
 }
 
 
+=head2 is_valid
+
+Returns C<TRUE> if the current XPath expression is valid.
+
+=cut
+
 sub is_valid {
 	my $self = shift;
 	return $self->valid;
 }
 
 
+# A true value
 1;
+
+
+=head1 AUTHORS
+
+Emmanuel Rodriguez E<lt>potyl@cpan.orgE<gt>.
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2008,2009 by Emmanuel Rodriguez.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.8 or,
+at your option, any later version of Perl 5 you may have available.
+
+=cut
+
