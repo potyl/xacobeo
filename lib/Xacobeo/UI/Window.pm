@@ -196,7 +196,7 @@ The file to load.
 
 =item * $type
 
-The type of document to load (xml, html).
+The type of document to load: I<xml> or I<html>.
 
 =back
 
@@ -274,6 +274,31 @@ sub load_file {
 	}
 
 	return;
+}
+
+
+=head2 set_xpath
+
+Set the XPath expression to display in the XPath text area. The expression is
+not evaluated.
+
+Parameters:
+
+=over
+
+=item * $xpath
+
+The XPath expression to set
+
+=back
+
+=cut
+
+sub set_xpath {
+	my ($self, $xpath) = @_;
+	croak 'Usage: $window->set_xpath($xpath)' unless defined $xpath;
+
+	$self->xpath_entry->set_text($xpath);
 }
 
 
