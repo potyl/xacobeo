@@ -9,7 +9,9 @@ use FindBin;
 use lib "$FindBin::Bin";
 
 BEGIN { use_ok('Xacobeo::XS') };
-use Xacobeo::Simple;
+use Xacobeo::UI::SourceView;
+use Xacobeo::Document;
+use Xacobeo::Utils 'scrollify';
 
 use Glib qw(TRUE FALSE);
 use Gtk2 qw(-init);
@@ -17,17 +19,28 @@ use FindBin;
 use File::Slurp qw(slurp);
 use Encode 'decode';
 
+
 exit tests();
 
 
 sub tests {
-	
-	
+
+	my $window = Gtk2::Window->new();
+	my $textview = Xacobeo::UI::SourceView->new();
+	$textview->set_show_line_numbers(TRUE);
+	$textview->set_highlight_current_line(TRUE);
+	$window->set_size_request(800, 600);
+	$window->add(scrollify($textview));
+	$window->signal_connect(destroy => sub { Gtk2->main_quit(); });
+
 	foreach my $file ('sample.xml') {
 
 		my $filename = File::Spec->catfile($FindBin::Bin, File::Spec->updir, 'tests', $file);
+		my $document = Xacobeo::Document->new($filename, 'xml');
 
-		my ($textview) = Xacobeo::Simple::render_document($filename);
+		$textview->set_document($document);
+		$textview->load_node($document->documentNode);
+
 		my $buffer = $textview->get_buffer;
 		my $text = $buffer->get_text($buffer->get_start_iter, $buffer->get_end_iter, TRUE);
 	
@@ -38,6 +51,7 @@ sub tests {
 			is_deeply(\@got, \@expected, "Generated the proper XML for $file");
 
 			# Start the GUI's main loop
+			$window->show_all();
 			Gtk2->main();
 		}
 		else {
