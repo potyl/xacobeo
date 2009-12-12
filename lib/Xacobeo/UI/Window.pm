@@ -8,6 +8,7 @@ use Data::Dumper;
 use Glib qw(TRUE FALSE);
 use Gtk2;
 use Gtk2::SimpleList;
+use Carp;
 
 use Xacobeo;
 use Xacobeo::UI::SourceView;
@@ -69,12 +70,24 @@ sub INIT_INSTANCE {
 
 
 	# Connect the signals
-	$self->dom_view->signal_connect('node-selected' => sub {
-		$self->callback_node_selected(@_);
-	});
-	$self->xpath_entry->signal_connect('xpath-changed' => sub {
-		$self->callback_xpath_changed(@_);
-	});
+	$self->_signal_connect(dom_view => 'node-selected');
+	$self->_signal_connect(xpath_entry => 'xpath-changed');
+}
+
+
+sub _signal_connect {
+	my $self = shift;
+	my ($object, $signal, $callback) = @_;
+
+	if (! $callback) {
+		# Build the callback's name based on the signal name
+		my $name = "callback_$signal";
+		$name =~ tr/-/_/;
+		$callback = $self->can($name) or croak "Can't find callback: $name";
+	}
+
+
+	$self->{$object}->signal_connect($signal => sub { $self->$callback(@_); });
 }
 
 
