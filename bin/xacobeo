@@ -81,22 +81,21 @@ at your option, any later version of Perl 5 you may have available.
 
 use strict;
 use warnings;
-use open qw(:std :utf8); # STD* in UTF-8
+use open qw(:std :utf8);
 
 use Gtk2 qw(-init);
 
 use Pod::Usage;
 use Getopt::Long qw(:config auto_help);
-use File::Spec::Functions;
-use FindBin;
 use XML::LibXML;
 
 use Xacobeo;
-use Xacobeo::UI;
+use Xacobeo::Conf;
 use Xacobeo::I18n;
+use Xacobeo::UI::Window;
 
 
-exit main();
+exit main() unless caller;
 
 
 #
@@ -121,45 +120,22 @@ sub main {
 	}
 	
 	# Create a new instance of this application
-	my $folder = find_app_folder();
-	my $domain = 'xacobeo';
-	Xacobeo::I18n->init($domain => catdir($folder, 'share', 'locale'));
+	my $conf = Xacobeo::Conf->get_conf;
+	Xacobeo::I18n->init(xacobeo => $conf->share_dir('locale'));
 
-	my $xacobeo = Xacobeo::UI->new($folder, $domain);
+	my $xacobeo = Xacobeo::UI::Window->new();
 	
 	if (@ARGV) {
 		my ($source, $xpath) = @ARGV;
 		$xacobeo->load_file($source, $type);
 		$xacobeo->set_xpath($xpath) if defined $xpath;
 	}
+
+	$xacobeo->signal_connect(destroy => sub { Gtk2->main_quit(); });
+	$xacobeo->show_all();
 	
 	# Start the main loop
 	Gtk2->main();
 	
 	return 0;
-}
-
-
-# Return the root folder of the application once installed. The 'root' folder is
-# the one where the installation is done, the root folder hierarchy is as
-# follows:
-#
-# (root)
-# |-- bin
-# |-- lib
-# |   `-- perl5
-# |       |-- Xacobeo
-# |       `-- i486-linux-gnu-thread-multi
-# |               `-- Xacobeo
-# |           `-- auto
-# |               `-- Xacobeo
-# |-- man
-# |   |-- man1
-# |   `-- man3
-# `-- share
-#     |-- applications
-#     |-- pixmaps
-#     `-- xacobeo
-sub find_app_folder {
-	return catdir($FindBin::Bin, '..');
 }
