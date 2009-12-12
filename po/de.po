@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-05 15:03+0100\n"
+"POT-Creation-Date: 2009-12-12 18:56+0100\n"
 "PO-Revision-Date: 2009-04-21 07:57+0200\n"
 "Last-Translator: Lars Dɪᴇᴄᴋᴏᴡ 迪拉斯 <daxim@cpan.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,118 +16,155 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: lib/Xacobeo/UI.pm:146
-msgid "XPath Expression..."
-msgstr "XPath-Ausdruck..."
-
-#: lib/Xacobeo/UI.pm:257
+#: lib/Xacobeo/UI/SourceView.pm:103
 msgid "Node is undef"
 msgstr "Knoten ist undef"
 
-#: lib/Xacobeo/UI.pm:401
-msgid "Load document"
-msgstr "Dokument laden"
-
-#: lib/Xacobeo/UI.pm:407
-#, perl-brace-format
-msgid "Can't read {file}: {error}"
-msgstr "{file} kann nicht gelesen werden: {error}"
-
-#: lib/Xacobeo/UI.pm:417
-#, perl-format
-msgid "Document loaded in %.3f second"
-msgid_plural "Document loaded in %.3f seconds"
-msgstr[0] "Dokument wurde in %.3f Sekunde geladen"
-msgstr[1] "Dokument wurde in %.3f Sekunden geladen"
-
-#: lib/Xacobeo/UI.pm:445
-msgid "Syntax Highlight"
-msgstr "Syntaxhervorhebung"
-
-#: lib/Xacobeo/UI.pm:453
-msgid "DOM Tree"
-msgstr "DOM-Baum"
-
-#: lib/Xacobeo/UI.pm:576
+#: lib/Xacobeo/UI/Window.pm:159
 #, perl-format
 msgid "Found %d result in %0.3fs"
 msgid_plural "Found %d results in %0.3fs"
 msgstr[0] "%d Ergebnis in %0.3fs gefunden"
 msgstr[1] "%d Ergebnisse in %0.3fs gefunden"
 
-#: lib/Xacobeo/UI.pm:583
+#: lib/Xacobeo/UI/Window.pm:164
 msgid "XPath query issued an error"
 msgstr "Fehler bei der XPath-Abfrage"
 
-#: lib/Xacobeo/UI.pm:806
+#: lib/Xacobeo/UI/Window.pm:213
+msgid "Load document"
+msgstr "Dokument laden"
+
+#: lib/Xacobeo/UI/Window.pm:221
 #, perl-brace-format
-msgid "Can't create widget {name} because method {function} is missing"
+msgid "Can't read {file}: {error}"
+msgstr "{file} kann nicht gelesen werden: {error}"
+
+#: lib/Xacobeo/UI/Window.pm:233
+msgid "Syntax Highlight"
+msgstr "Syntaxhervorhebung"
+
+#: lib/Xacobeo/UI/Window.pm:242
+msgid "DOM Tree"
+msgstr "DOM-Baum"
+
+#: lib/Xacobeo/UI/Window.pm:265
+#, perl-format
+msgid "Document loaded in %.3f second"
+msgid_plural "Document loaded in %.3f seconds"
+msgstr[0] "Dokument wurde in %.3f Sekunde geladen"
+msgstr[1] "Dokument wurde in %.3f Sekunden geladen"
+
+#: lib/Xacobeo/UI/Window.pm:312
+msgid "Open file..."
 msgstr ""
-"Widget {name} konnte nicht erzeugt werden, weil die Funktion {function} fehlt"
+
+#: lib/Xacobeo/UI/Window.pm:355
+#, fuzzy, perl-brace-format
+msgid "About {name}"
+msgstr "Ü_ber Xacobeo"
+
+#: lib/Xacobeo/UI/Window.pm:370
+msgid "Simple XPath viewer"
+msgstr ""
+
+#: lib/Xacobeo/UI/Window.pm:393
+msgid "_Open"
+msgstr ""
+
+#: lib/Xacobeo/UI/Window.pm:395
+msgid "Open a file"
+msgstr ""
+
+#: lib/Xacobeo/UI/Window.pm:401
+msgid "_Quit"
+msgstr ""
+
+#: lib/Xacobeo/UI/Window.pm:403
+msgid "Quit"
+msgstr ""
+
+#: lib/Xacobeo/UI/Window.pm:411
+msgid "_About"
+msgstr ""
+
+#: lib/Xacobeo/UI/Window.pm:413
+msgid "About"
+msgstr ""
+
+#: lib/Xacobeo/UI/Window.pm:459
+msgid "XPath:"
+msgstr "XPath:"
+
+#: lib/Xacobeo/UI/Window.pm:465
+msgid "XPath Expression..."
+msgstr "XPath-Ausdruck..."
+
+#: lib/Xacobeo/UI/Window.pm:470
+msgid "Evaluate"
+msgstr "Auswerten"
+
+#: lib/Xacobeo/UI/Window.pm:510
+msgid "Results"
+msgstr "Ergebnisse"
+
+#: lib/Xacobeo/UI/Window.pm:514
+msgid "Prefix"
+msgstr ""
+
+#: lib/Xacobeo/UI/Window.pm:515
+msgid "URI"
+msgstr ""
+
+#: lib/Xacobeo/UI/Window.pm:520
+msgid "Namespaces"
+msgstr "Namensräume"
+
+#: lib/Xacobeo/UI/DomView.pm:52 lib/Xacobeo/DomModel.pm:134
+msgid "Element"
+msgstr "Element"
+
+#: lib/Xacobeo/UI/DomView.pm:60 lib/Xacobeo/DomModel.pm:143
+msgid "ID name"
+msgstr "ID-Name"
+
+#: lib/Xacobeo/UI/DomView.pm:63 lib/Xacobeo/DomModel.pm:146
+msgid "ID value"
+msgstr "ID-Wert"
 
 #: lib/Xacobeo/Timer.pm:151
 #, perl-format
 msgid "Time: %-20s %.4fs\n"
 msgstr "Zeit: %-20s %.4fs\n"
 
-#: lib/Xacobeo/Document.pm:119
+#: lib/Xacobeo/Document.pm:131
 msgid "Document node is missing"
 msgstr "Dokumentenknoten fehlt"
 
-#: lib/Xacobeo/Document.pm:195
+#: lib/Xacobeo/Document.pm:207
 msgid "Parameter 'type' must be defined"
 msgstr "Parameter 'type' muss definiert sein"
 
-#: lib/Xacobeo/Document.pm:204
+#: lib/Xacobeo/Document.pm:216
 #, perl-brace-format
 msgid "Unsupported document type {type}"
 msgstr "Dokumententyp {type} wird nicht unterstützt"
 
-#: lib/Xacobeo/Document.pm:269
+#: lib/Xacobeo/Document.pm:281
 #, perl-brace-format
 msgid "Namespace {name} has no URI"
 msgstr "Namensraum {name} hat keinen URI"
 
-#: lib/Xacobeo/DomModel.pm:134
-msgid "Element"
-msgstr "Element"
+#~ msgid "Can't create widget {name} because method {function} is missing"
+#~ msgstr ""
+#~ "Widget {name} konnte nicht erzeugt werden, weil die Funktion {function} "
+#~ "fehlt"
 
-#: lib/Xacobeo/DomModel.pm:143
-msgid "ID name"
-msgstr "ID-Name"
+#~ msgid "_File"
+#~ msgstr "_Datei"
 
-#: lib/Xacobeo/DomModel.pm:146
-msgid "ID value"
-msgstr "ID-Wert"
+#~ msgid "_Help"
+#~ msgstr "_Hilfe"
 
-#: share/xacobeo/xacobeo.glade:19
-msgid "_File"
-msgstr "_Datei"
-
-#: share/xacobeo/xacobeo.glade:97
-msgid "_Help"
-msgstr "_Hilfe"
-
-#: share/xacobeo/xacobeo.glade:126
-msgid "XPath:"
-msgstr "XPath:"
-
-#: share/xacobeo/xacobeo.glade:150
-msgid "Evaluate"
-msgstr "Auswerten"
-
-#: share/xacobeo/xacobeo.glade:244
-msgid "Results"
-msgstr "Ergebnisse"
-
-#: share/xacobeo/xacobeo.glade:275
-msgid "Namespaces"
-msgstr "Namensräume"
-
-#: share/xacobeo/xacobeo.glade:314
-msgid "About Xacobeo"
-msgstr "Ü_ber Xacobeo"
-
-#: share/xacobeo/xacobeo.glade:320
-msgid "Copyright (C) 2008-2009 by Emmanuel Rodriguez."
-msgstr "Copyright (C) 2008-2009, Emmanuel Rodriguez"
+#~ msgid "Copyright (C) 2008-2009 by Emmanuel Rodriguez."
+#~ msgstr "Copyright (C) 2008-2009, Emmanuel Rodriguez"
