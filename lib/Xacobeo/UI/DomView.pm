@@ -41,13 +41,10 @@ use Gtk2;
 use Xacobeo::I18n;
 use Xacobeo::XS;
 
-use parent qw(Class::Accessor::Fast);
-__PACKAGE__->mk_accessors(
-	qw(
-		document
-		namespaces
-	)
-);
+use Xacobeo::Accessors qw{
+	document
+	namespaces
+};
 
 use Glib::Object::Subclass 'Gtk2::TreeView' =>
 	signals => {

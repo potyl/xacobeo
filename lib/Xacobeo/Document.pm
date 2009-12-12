@@ -45,16 +45,13 @@ use Xacobeo::Utils qw(:dom);
 use Xacobeo::I18n qw(__ __x);
 
 
-use parent qw(Class::Accessor::Fast);
-__PACKAGE__->mk_accessors(
-	qw(
-		source
-		type
-		documentNode
-		xpath
-		namespaces
-	)
-);
+use Xacobeo::Accessors qw{
+	source
+	type
+	documentNode
+	xpath
+	namespaces
+};
 
 
 =head2 new

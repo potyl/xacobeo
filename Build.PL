@@ -16,7 +16,6 @@ my %requires = (
 	'Gtk2'                   => '1.100',
 	'Time::HiRes'            => 0,
 	'XML::LibXML'            => 0,
-	'Class::Accessor::Fast'  => 0,
 	'File::Spec::Functions'  => 0,
 	'FindBin'                => 0,
 	'Carp'                   => 0,

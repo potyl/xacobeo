@@ -30,12 +30,9 @@ use warnings;
 use FindBin;
 use File::Spec::Functions;
 
-use parent qw(Class::Accessor::Fast);
-__PACKAGE__->mk_accessors(
-	qw(
-		dir
-	)
-);
+use Xacobeo::Accessors qw{
+	dir
+};
 
 
 my $INSTANCE = __PACKAGE__->init();

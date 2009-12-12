@@ -36,12 +36,9 @@ use Glib qw(TRUE FALSE);
 use Gtk2;
 
 
-use parent qw(Class::Accessor::Fast);
-__PACKAGE__->mk_accessors(
-	qw(
-		context_id
-	)
-);
+use Xacobeo::Accessors qw{
+	context_id
+};
 
 use Glib::Object::Subclass 'Gtk2::Statusbar';
 

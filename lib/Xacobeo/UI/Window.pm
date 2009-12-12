@@ -52,20 +52,17 @@ use Xacobeo::Utils qw(
 	escape_xml_text
 );
 
-use parent qw(Class::Accessor::Fast);
-__PACKAGE__->mk_accessors(
-	qw(
-		source_view
-		dom_view
-		results_view
-		namespaces_view
-		notebook
-		statusbar
-		xpath_entry
-		evaluate_button
-		conf
-	)
-);
+use Xacobeo::Accessors qw{
+	source_view
+	dom_view
+	results_view
+	namespaces_view
+	notebook
+	statusbar
+	xpath_entry
+	evaluate_button
+	conf
+};
 
 use Glib::Object::Subclass 'Gtk2::Window';
 

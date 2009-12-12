@@ -7,7 +7,10 @@ Xacobeo::Accessors - Generate accessors/setters easily.
 =head1 SYNOPSIS
 
 	# Create $self->document and $self->xpath
-	use Xacobeo::Accessors qw(document xpath);
+	use Xacobeo::Accessors qw{
+		document
+		xpath
+	};
 	
 	$self->document($document);
 	validate($self->xpath);
@@ -48,7 +51,6 @@ sub import {
 		}
 	}
 }
-
 
 
 # A true value
