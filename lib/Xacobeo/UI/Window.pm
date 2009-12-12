@@ -18,7 +18,11 @@ use Xacobeo::UI::XPathEntry;
 use Xacobeo::I18n;
 use Xacobeo::Timer;
 use Xacobeo::Document;
-use Xacobeo::Utils qw(escape_xml_text);
+use Xacobeo::Error;
+use Xacobeo::Utils qw(
+	isa_dom_nodelist
+	escape_xml_text
+);
 
 use parent qw(Class::Accessor::Fast);
 __PACKAGE__->mk_accessors(
@@ -72,9 +76,22 @@ sub INIT_INSTANCE {
 	# Connect the signals
 	$self->_signal_connect(dom_view => 'node-selected');
 	$self->_signal_connect(xpath_entry => 'xpath-changed');
+
+	$self->_signal_connect(xpath_entry => 'activate', \&callback_execute_xpath);
+	$self->_signal_connect(evaluate_button => 'activate', \&callback_execute_xpath);
+	$self->_signal_connect(evaluate_button => 'clicked', \&callback_execute_xpath);
 }
 
 
+#
+# Helper for connecting signals easily.
+#
+# Args:
+#   $object:   the name of object that will fire the signal
+#   $signal:   the name of the signal
+#   $callback: the callback to connect, if no callback is provided then
+#              "callback_$signal" will be used instead (Optional).
+#
 sub _signal_connect {
 	my $self = shift;
 	my ($object, $signal, $callback) = @_;
@@ -101,11 +118,7 @@ sub callback_node_selected {
 	my ($view, $node) = @_;
 
 	$self->source_view->show_node($node);
-	
-	# Since the results view shows only the current node we use load_node instead
-	# of show_node().
-	$self->results_view->load_node($node);
-	$self->notebook->set_current_page(0);
+	$self->display_results($node);
 }
 
 
@@ -118,6 +131,53 @@ sub callback_xpath_changed {
 	my ($entry, $xpath, $is_valid) = @_;
 
 	$self->evaluate_button->set_sensitive($is_valid);
+}
+
+
+#
+# Execute the XPath expression on the current document.
+#
+sub callback_execute_xpath {
+	my $self = shift;
+
+	return unless $self->xpath_entry->is_valid;
+
+	my $xpath = $self->xpath_entry->get_text();
+	my $document = $self->source_view->document;
+
+	my $timer = Xacobeo::Timer->start();
+	my $result;
+	my $find_successful = eval {
+		$result = $document->find($xpath);
+		1;
+	};
+	my $error = $@;
+	$timer->stop();
+
+	if ($find_successful) {
+		my $count = isa_dom_nodelist($result) ? $result->size : 1;
+		my $format = __n("Found %d result in %0.3fs", "Found %d results in %0.3fs", $count);
+		$self->statusbar->displayf($format, $count, $timer->elapsed);
+	}
+	else {
+		$result = Xacobeo::Error->new(xpath => $error);
+		$self->statusbar->display(__("XPath query issued an error"));
+	}
+
+	# Display the results
+	$self->display_results($result);
+
+}
+
+
+sub display_results {
+	my $self = shift;
+	my ($node) = @_;
+
+	# Since the results view shows only the current node we use load_node instead
+	# of show_node().
+	$self->results_view->load_node($node);
+	$self->notebook->set_current_page(0);
 }
 
 
