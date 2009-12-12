@@ -47,10 +47,11 @@ use Xacobeo::I18n;
 use Xacobeo::Timer;
 use Xacobeo::Document;
 use Xacobeo::Error;
-use Xacobeo::Utils qw(
+use Xacobeo::Utils qw{
 	isa_dom_nodelist
 	escape_xml_text
-);
+	scrollify
+};
 
 use Xacobeo::Accessors qw{
 	source_view
@@ -508,7 +509,7 @@ sub _create_main_content {
 	# Left part - Tree view
 	my $dom_view = Xacobeo::UI::DomView->new();
 	$self->dom_view($dom_view);
-	$hpaned->pack1(_scroll($dom_view, 200), FALSE, TRUE);
+	$hpaned->pack1(scrollify($dom_view, 200), FALSE, TRUE);
 
 
 	# Rigth part - VPaned [Source view | Notebook(Results, Namespaces)]
@@ -519,7 +520,7 @@ sub _create_main_content {
 	$self->source_view($source_view);
 	$source_view->set_show_line_numbers(TRUE);
 	$source_view->set_highlight_current_line(TRUE);
-	$vpaned->pack1(_scroll($source_view, -1, 400), FALSE, TRUE);
+	$vpaned->pack1(scrollify($source_view, -1, 400), FALSE, TRUE);
 	
 	
 	# Notebook with the results view and the namespaces view
@@ -530,7 +531,7 @@ sub _create_main_content {
 	my $results_view = Xacobeo::UI::SourceView->new();
 	$self->results_view($results_view);
 	$notebook->append_page(
-		_scroll($results_view),
+		scrollify($results_view),
 		Gtk2::Label->new(__("Results"))
 	);
 	
@@ -540,26 +541,11 @@ sub _create_main_content {
 	);
 	$self->namespaces_view($namespaces_view);
 	$notebook->append_page(
-		_scroll($namespaces_view),
+		scrollify($namespaces_view),
 		Gtk2::Label->new(__("Namespaces"))
 	);
 	
 	return $hpaned;
-}
-
-
-sub _scroll {
-	my ($widget, $width, $height) = @_;
-	$width = -1 unless defined $width;
-	$height = -1 unless defined $height;
-	
-	my $scroll = Gtk2::ScrolledWindow->new();
-	$scroll->set_policy('automatic', 'automatic');
-	$scroll->set_shadow_type('in');
-	$scroll->set_size_request($width, $height);
-	
-	$scroll->add($widget);
-	return $scroll;
 }
 
 

@@ -60,6 +60,8 @@ our @EXPORT_OK = qw(
 	isa_dom_dtd
 	isa_dom_cdata
 	isa_dom_namespace
+
+	scrollify
 );
 
 our %EXPORT_TAGS = (
@@ -88,6 +90,13 @@ our %EXPORT_TAGS = (
 			isa_dom_namespace
 		)
 	],
+
+	'ui' => [
+		qw(
+			scrollify
+		)
+	],
+
 );
 
 
@@ -514,6 +523,45 @@ The node to check.
 sub isa_dom_number {
 	my ($node) = @_;
 	return defined $node ? $node->isa('XML::LibXML::Number') : 0;
+}
+
+
+=head2 scrollify
+
+Wraps a widget in a scrolled window.
+
+Parameters:
+
+=over
+
+=item * $widget
+
+The widget to wrap.
+
+=item * $width
+
+The width of the scroll window. If C<undef> then -1 will be used.
+
+=item * $height
+
+The height of the scroll window. If C<undef> then -1 will be used.
+
+=back
+
+=cut
+
+sub scrollify {
+	my ($widget, $width, $height) = @_;
+	$width = -1 unless defined $width;
+	$height = -1 unless defined $height;
+	
+	my $scroll = Gtk2::ScrolledWindow->new();
+	$scroll->set_policy('automatic', 'automatic');
+	$scroll->set_shadow_type('in');
+	$scroll->set_size_request($width, $height);
+	
+	$scroll->add($widget);
+	return $scroll;
 }
 
 
