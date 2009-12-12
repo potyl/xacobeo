@@ -29,6 +29,7 @@ __PACKAGE__->mk_accessors(
 		notebook
 		statusbar
 		xpath_entry
+		evaluate_button
 		conf
 	)
 );
@@ -68,8 +69,11 @@ sub INIT_INSTANCE {
 
 
 	# Connect the signals
-	$self->dom_view->signal_connect(node_selected => sub {
+	$self->dom_view->signal_connect('node-selected' => sub {
 		$self->callback_node_selected(@_);
+	});
+	$self->xpath_entry->signal_connect('xpath-changed' => sub {
+		$self->callback_xpath_changed(@_);
 	});
 }
 
@@ -89,6 +93,18 @@ sub callback_node_selected {
 	# of show_node().
 	$self->results_view->load_node($node);
 	$self->notebook->set_current_page(0);
+}
+
+
+#
+# Enable/Disable the evaluate button based on the validity of the XPath
+# expression.
+#
+sub callback_xpath_changed {
+	my $self = shift;
+	my ($entry, $xpath, $is_valid) = @_;
+
+	$self->evaluate_button->set_sensitive($is_valid);
 }
 
 
@@ -354,6 +370,8 @@ sub _create_search_bar {
 	$hbox->pack_start($entry, TRUE, TRUE, 0);
 	
 	my $button = Gtk2::Button->new(__("Evaluate"));
+	$self->evaluate_button($button);
+	$button->set_sensitive(FALSE);
 	$hbox->pack_start($button, FALSE, TRUE, 0);
 	
 	return $hbox;
