@@ -10,8 +10,15 @@ use Gtk2;
 use Gtk2::Ex::Entry::Pango;
 use Xacobeo::Accessors qw(document);
 
-use Glib::Object::Subclass 'Gtk2::Ex::Entry::Pango';
-
+use Glib::Object::Subclass 'Gtk2::Ex::Entry::Pango' =>
+	signals => {
+		'xpath-changed' => {
+			flags       => ['run-last'],
+			# Parameters:   XPath expression isValid
+			param_types => ['Glib::String',  'Glib::Boolean'],
+		},
+	},
+;
 
 sub INIT_INSTANCE {
 	my $self = shift;
@@ -31,13 +38,10 @@ sub callback_changed {
 	my ($self) = @_;
 
 	my $xpath = $self->get_text;
-	my $xpath_valid = FALSE;
+	my $is_valid = FALSE;
 	if ($xpath) {
-		if ($self->document->validate($xpath)) {
-			# The expression is valid
-			$xpath_valid = TRUE;
-		}
-		else {
+		$is_valid = $self->document->validate($xpath);
+		if (! $is_valid) {
 			# Mark the XPath expression as wrong
 			my $escaped = Glib::Markup::escape_text($xpath);
 			my $markup = "<span underline='error' underline_color='red'>$escaped</span>";
@@ -46,7 +50,7 @@ sub callback_changed {
 		}
 	}
 
-	print "FIXME: fire the event xpath-change and include the flag is_valid, this will be used to update the 'Evaluate' button\n";
+	$self->signal_emit('xpath-changed' => $xpath, $is_valid);
 }
 
 
