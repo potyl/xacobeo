@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xacobeo-i 18n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-12 18:56+0100\n"
+"POT-Creation-Date: 2009-12-12 20:12+0100\n"
 "PO-Revision-Date: 2009-01-25 11:50+0100\n"
 "Last-Translator: Emmanuel Rodriguez <emmanuel.rodriguez@gmail.com>\n"
 "Language-Team: English\n"
@@ -16,119 +16,119 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/Xacobeo/UI/SourceView.pm:103
+#: lib/Xacobeo/UI/SourceView.pm:186
 msgid "Node is undef"
 msgstr "Nudo es undef"
 
-#: lib/Xacobeo/UI/Window.pm:159
+#: lib/Xacobeo/UI/Window.pm:187
 #, perl-format
 msgid "Found %d result in %0.3fs"
 msgid_plural "Found %d results in %0.3fs"
 msgstr[0] "%d resultado encotrado en %0.3fs"
 msgstr[1] "%d resultados encotrados en %0.3fs"
 
-#: lib/Xacobeo/UI/Window.pm:164
+#: lib/Xacobeo/UI/Window.pm:192
 msgid "XPath query issued an error"
 msgstr "La expression XPath dió con un error"
 
-#: lib/Xacobeo/UI/Window.pm:213
+#: lib/Xacobeo/UI/Window.pm:242
 msgid "Load document"
 msgstr "Lectura del documento"
 
-#: lib/Xacobeo/UI/Window.pm:221
+#: lib/Xacobeo/UI/Window.pm:250
 #, perl-brace-format
 msgid "Can't read {file}: {error}"
 msgstr "Imposible de leer {file}: {error}"
 
-#: lib/Xacobeo/UI/Window.pm:233
+#: lib/Xacobeo/UI/Window.pm:262
 msgid "Syntax Highlight"
 msgstr "Coloreado de sintaxis"
 
-#: lib/Xacobeo/UI/Window.pm:242
+#: lib/Xacobeo/UI/Window.pm:271
 msgid "DOM Tree"
 msgstr "Arbol DOM"
 
-#: lib/Xacobeo/UI/Window.pm:265
+#: lib/Xacobeo/UI/Window.pm:292
 #, perl-format
 msgid "Document loaded in %.3f second"
 msgid_plural "Document loaded in %.3f seconds"
 msgstr[0] "Documento leido en %.3f segundo"
 msgstr[1] "Documento leido en %.3f segundos"
 
-#: lib/Xacobeo/UI/Window.pm:312
+#: lib/Xacobeo/UI/Window.pm:339
 msgid "Open file..."
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:355
+#: lib/Xacobeo/UI/Window.pm:382
 #, fuzzy, perl-brace-format
 msgid "About {name}"
 msgstr "A_cerca de Xacobeo"
 
-#: lib/Xacobeo/UI/Window.pm:370
+#: lib/Xacobeo/UI/Window.pm:397
 msgid "Simple XPath viewer"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:393
+#: lib/Xacobeo/UI/Window.pm:420
 msgid "_Open"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:395
+#: lib/Xacobeo/UI/Window.pm:422
 msgid "Open a file"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:401
+#: lib/Xacobeo/UI/Window.pm:428
 msgid "_Quit"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:403
+#: lib/Xacobeo/UI/Window.pm:430
 msgid "Quit"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:411
+#: lib/Xacobeo/UI/Window.pm:438
 msgid "_About"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:413
+#: lib/Xacobeo/UI/Window.pm:440
 msgid "About"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:459
+#: lib/Xacobeo/UI/Window.pm:486
 msgid "XPath:"
 msgstr "XPath:"
 
-#: lib/Xacobeo/UI/Window.pm:465
+#: lib/Xacobeo/UI/Window.pm:492
 msgid "XPath Expression..."
 msgstr "Expresión XPath..."
 
-#: lib/Xacobeo/UI/Window.pm:470
+#: lib/Xacobeo/UI/Window.pm:497
 msgid "Evaluate"
 msgstr "Evaluar"
 
-#: lib/Xacobeo/UI/Window.pm:510
+#: lib/Xacobeo/UI/Window.pm:537
 msgid "Results"
 msgstr "Resultados"
 
-#: lib/Xacobeo/UI/Window.pm:514
+#: lib/Xacobeo/UI/Window.pm:541
 msgid "Prefix"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:515
+#: lib/Xacobeo/UI/Window.pm:542
 msgid "URI"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:520
+#: lib/Xacobeo/UI/Window.pm:547
 msgid "Namespaces"
 msgstr "Espacios de nombres"
 
-#: lib/Xacobeo/UI/DomView.pm:52 lib/Xacobeo/DomModel.pm:134
+#: lib/Xacobeo/UI/DomView.pm:83
 msgid "Element"
 msgstr "Elemento"
 
-#: lib/Xacobeo/UI/DomView.pm:60 lib/Xacobeo/DomModel.pm:143
+#: lib/Xacobeo/UI/DomView.pm:91
 msgid "ID name"
 msgstr "ID nombre"
 
-#: lib/Xacobeo/UI/DomView.pm:63 lib/Xacobeo/DomModel.pm:146
+#: lib/Xacobeo/UI/DomView.pm:94
 msgid "ID value"
 msgstr "ID valor"
 
@@ -137,21 +137,21 @@ msgstr "ID valor"
 msgid "Time: %-20s %.4fs\n"
 msgstr "Tiempo: %-20s %.4fs\n"
 
-#: lib/Xacobeo/Document.pm:131
+#: lib/Xacobeo/Document.pm:129
 #, fuzzy
 msgid "Document node is missing"
 msgstr "Documento leido en %.3f segundo"
 
-#: lib/Xacobeo/Document.pm:207
+#: lib/Xacobeo/Document.pm:205
 msgid "Parameter 'type' must be defined"
 msgstr "El parametro 'type' tiene que estar definido"
 
-#: lib/Xacobeo/Document.pm:216
+#: lib/Xacobeo/Document.pm:214
 #, perl-brace-format
 msgid "Unsupported document type {type}"
 msgstr "El typo de documento {type} no esta suportado"
 
-#: lib/Xacobeo/Document.pm:281
+#: lib/Xacobeo/Document.pm:279
 #, perl-brace-format
 msgid "Namespace {name} has no URI"
 msgstr "El espacio de nombre {name} no tiene URI"
