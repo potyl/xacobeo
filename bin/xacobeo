@@ -13,9 +13,9 @@ Options:
    -h, --help            brief help message
    -v, --version         display the version of Xacobeo, XML::LibXML and libxml2
                          that are used and exit
-   --html                use the HTML parser with the provided file
+   --html                parse the input file as an HTML document
 
-Where I<file> is a valid XML document and I<xpath> a valid XPath query.
+Where I<file> is a XML document and I<xpath> a XPath query.
 
 =head1 OPTIONS
 
