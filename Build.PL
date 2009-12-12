@@ -27,7 +27,6 @@ my %requires = (
 	'Gtk2::SourceView2'      => 0,
 	'Locale::TextDomain'     => 0,
 	'parent'                 => 0,
-	'English'                => 0, # To be removed
 	'Gtk2::Ex::Entry::Pango' => '0.07'
 );
 
