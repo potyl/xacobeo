@@ -14,7 +14,6 @@ my %requires = (
 	'Getopt::Long'           => 0,
 	'Glib'                   => 0,
 	'Gtk2'                   => '1.100',
-	'Gtk2::GladeXML'         => 0, # To be removed
 	'Time::HiRes'            => 0,
 	'XML::LibXML'            => 0,
 	'Class::Accessor::Fast'  => 0,
