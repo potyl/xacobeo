@@ -10,6 +10,8 @@ VERSION=$(shell perl -le "print `grep VERSION lib/Xacobeo.pm`")
 PACKAGE=Xacobeo
 EMAIL=$(shell git config --global user.email)
 
+PERL_MODULES=$(shell find lib/Xacobeo/ -type f -name '*.pm')
+
 # Compiler stuff
 LIBRARIES=gtk+-2.0 libxml-2.0
 
@@ -162,16 +164,7 @@ clean:
 i18n: po/messages.pot po/*.po
 
 
-po/messages.pot: share/xacobeo/xacobeo.glade\
-  bin/xacobeo \
-  lib/Xacobeo/UI.pm \
-  lib/Xacobeo/Timer.pm \
-  lib/Xacobeo/Document.pm \
-  lib/Xacobeo/DomModel.pm \
-  lib/Xacobeo/XS.pm \
-  lib/Xacobeo/I18n.pm \
-  lib/Xacobeo/Utils.pm \
-  lib/Xacobeo.pm 
+po/messages.pot:  bin/xacobeo $(PERL_MODULES)
 	xgettext --language=Perl \
 	  --keyword \
 	  --keyword=__ \
@@ -180,8 +173,7 @@ po/messages.pot: share/xacobeo/xacobeo.glade\
 	  --keyword=__nx:1,2 \
 	  --keyword=__xn \
 	  --keyword=N__ \
-	  -o $@ bin/xacobeo `find lib/ -type f -name '*.pm'`
-	xgettext --language=Glade --join-existing -o $@ share/xacobeo/xacobeo.glade
+	  -o $@ bin/xacobeo $(PERL_MODULES)
 
 
 po/%.po: po/messages.pot
