@@ -7,14 +7,22 @@ use blib;
 use lib '.';
 
 use Xacobeo::Conf;
-Xacobeo::Conf->init('.');
 
-my $return = do 'bin/xacobeo';
-if ($@) {
-    die "Failed to load xacobeo; $@";
-}
-if (! defined $return) {
-    die "Error loading xacobeo; $!";
-}
 
-main();
+exit main2() unless caller;
+
+
+sub main2 {
+	Xacobeo::Conf->init('.');
+
+	my $return = do 'bin/xacobeo';
+	if ($@) {
+		die "Failed to load xacobeo; $@";
+	}
+	elsif (! defined $return) {
+		die "Error loading xacobeo; $!";
+	}
+
+	goto &main;
+	return 0;
+}
