@@ -61,16 +61,16 @@ sub INIT_INSTANCE {
 
 
 	# Build the window's widgets
-	my $main_vbox = Gtk2::VBox->new(FALSE, 0);
-	$self->add($main_vbox);
+	my $vbox = Gtk2::VBox->new(FALSE, 0);
+	$self->add($vbox);
 
-	$main_vbox->pack_start($self->_create_menu, FALSE, FALSE, 0);
-	$main_vbox->pack_start($self->_create_search_bar, FALSE, TRUE, 0);
-	$main_vbox->pack_start($self->_create_main_content, TRUE, TRUE, 0);
+	$vbox->pack_start($self->_create_menu, FALSE, FALSE, 0);
+	$vbox->pack_start($self->_create_search_bar, FALSE, TRUE, 0);
+	$vbox->pack_start($self->_create_main_content, TRUE, TRUE, 0);
 
 	my $statusbar = Xacobeo::UI::Statusbar->new();
 	$self->statusbar($statusbar);
-	$main_vbox->pack_start($statusbar, FALSE, TRUE, 0);
+	$vbox->pack_start($statusbar, FALSE, TRUE, 0);
 
 
 	# Connect the signals
