@@ -127,8 +127,6 @@ Returns the folders that are scanned for plugins.
 
 sub plugin_folders {
 	my $self = shift;
-use Data::Dumper;
-print Dumper([$XDG->config_home, $XDG->config_dirs]);
 	my %seen;
 	return map { $seen{$_}++ ? () : catdir($_, 'xacobeo', 'plugins') }
 		$XDG->config_home,
