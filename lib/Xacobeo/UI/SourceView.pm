@@ -52,6 +52,7 @@ use Xacobeo::Utils qw(
 	escape_xml_attribute
 );
 use Xacobeo::XS;
+use Xacobeo::I18n;
 
 use Xacobeo::Accessors qw{
 	document
