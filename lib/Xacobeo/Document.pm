@@ -60,7 +60,8 @@ Creates a new instance.
 
 Parameters:
 
-	$source: the source of the XML document, this can be a file name.
+	$source: the source of the document, this can be a filename or an URI.
+	$type:   the type of document: C<xml> or C<html>.
 
 =cut
 
