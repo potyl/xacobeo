@@ -76,7 +76,7 @@ sub INIT_INSTANCE {
 	$self->conf($conf);
 
 	# Pimp a bit the window (title, icon
-	$self->set_title($conf->app_name);
+	$self->set_title(__("No document"));
 
 	$self->set_icon(
 		Gtk2::Gdk::Pixbuf->new_from_file(
@@ -248,13 +248,54 @@ sub load_file {
 		$self->statusbar->display(
 			__x("Can't read {file}: {error}", file => $file, error => $error)
 		);
+		return;
 	};
 	undef $t_load;
 
 
 	# Fill the widgets
-	$self->set_title($self->conf->app_name . ' - ' . $file);
-	
+	$self->set_title($file);
+	$self->load_document($document);
+
+
+	# Show the timers
+	$timer->stop();
+	if ($document) {
+		my $format = __n(
+			"Document loaded in %.3f second",
+			"Document loaded in %.3f seconds",
+			int($timer->elapsed),
+		);
+		$self->statusbar->displayf($format, $timer->elapsed);
+	}
+	else {
+		# Invoke the time elapsed this way the value is not printed to the console
+		$timer->elapsed;
+	}
+}
+
+
+=head2 load_document
+
+Load a new document into the application. The document will be parsed and
+displayed in the window.
+
+Parameters:
+
+=over
+
+=item * $document
+
+The document to load.
+
+=back
+
+=cut
+
+sub load_document {
+	# Arguments
+	my ($self, $document) = @_;
+
 	my ($node, $namespaces) = $document ? ($document->documentNode, $document->namespaces) : (undef, {});
 	
 	# Update the text widget
@@ -282,25 +323,22 @@ sub load_file {
 		push @namespaces, [$prefix, $uri];
 	}
 	@{ $self->namespaces_view->{data} } = @namespaces;
-
-
-	# Show the timers
-	$timer->stop();
-	if ($document) {
-		my $format = __n(
-			"Document loaded in %.3f second",
-			"Document loaded in %.3f seconds",
-			int($timer->elapsed),
-		);
-		$self->statusbar->displayf($format, $timer->elapsed);
-	}
-	else {
-		# Invoke the time elapsed this way the value is not printed to the console
-		$timer->elapsed;
-	}
-
-	return;
 }
+
+
+
+sub set_title {
+	my $self = shift;
+	my ($short) = @_;
+	
+	my $title = $self->conf->app_name;
+	if ($short) {
+		$title .= ' - ' . $short;
+	}
+	
+	$self->SUPER::set_title($title);
+}
+
 
 
 =head2 set_xpath
