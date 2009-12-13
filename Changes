@@ -1,9 +1,14 @@
 Changelog for Xacobeo.
 
 
+0.12 Sun Dec 13 10:46:15 CET 2009
+	- GUI rewrote by hand, no more glade.
+	- Less dependencies: Englis, Gtk2::GladeXML, Class::Accessor::Fast.
+
+
 0.11 Mon Nov 23 20:57:30 CET 2009
 	- Expand the first level by default
-	- Unit test fixes: error messages changed in libxml 2.7.3 (patch by Jozef Kutej)
+	- Unit test fixes: error messages changed in libxml 2.7.3 (patch by Jozef Kutej).
 
 
 0.10 Tue Nov 17 22:08:35 CET 2009
