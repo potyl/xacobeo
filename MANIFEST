@@ -1,5 +1,7 @@
 bin/xacobeo
 Changes
+examples/cliboard.plugin
+examples/Xacobeo/Ex/ClipboardLoad.pm
 inc/MyBuilder.pm
 lib/Xacobeo.pm
 lib/Xacobeo/Accessors.pm
