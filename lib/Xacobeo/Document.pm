@@ -81,6 +81,26 @@ sub new {
 }
 
 
+=head2 empty
+
+Returns an empty document.
+
+=cut
+
+sub empty {
+	my ($class) = @_;
+
+	my $self = bless {}, ref($class) || $class;
+	my ($source, $type) = (undef, 'empty');
+	$self->source($source);
+	$self->type($type);
+
+	$self->_load_document($source, $type);
+
+	return $self;
+}
+
+
 =head2 source
 
 The source of the document: most likely a file path or an URI.
@@ -206,6 +226,9 @@ sub _load_document {
 	}
 	elsif ($type eq 'html') {
 		$document_node = $parser->parse_html_file($source);
+	}
+	elsif ($type eq 'empty') {
+		$document_node = XML::LibXML->createDocument;
 	}
 	else {
 		croak __x("Unsupported document type {type}", type => $type);
