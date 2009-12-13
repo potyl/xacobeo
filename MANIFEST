@@ -3,10 +3,12 @@ Changes
 inc/MyBuilder.pm
 lib/Xacobeo.pm
 lib/Xacobeo/Accessors.pm
+lib/Xacobeo/App.pm
 lib/Xacobeo/Conf.pm
 lib/Xacobeo/Document.pm
 lib/Xacobeo/Error.pm
 lib/Xacobeo/I18n.pm
+lib/Xacobeo/Plugin.pm
 lib/Xacobeo/Timer.pm
 lib/Xacobeo/UI/DomView.pm
 lib/Xacobeo/UI/SourceView.pm
