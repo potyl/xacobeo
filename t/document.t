@@ -39,7 +39,7 @@ sub main {
 
 
 sub test_without_namespaces {
-	my $document = Xacobeo::Document->new_from_file_from_file("$FOLDER/xorg.xml", 'xml');
+	my $document = Xacobeo::Document->new_from_file("$FOLDER/xorg.xml", 'xml');
 	isa_ok($document, 'Xacobeo::Document');
 	
 	is_deeply(
