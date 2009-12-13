@@ -12,6 +12,18 @@ clipboard.
 The plugin adds the entry I<Load from clipboard> under the I<File> main menu.
 The plugin can also be activated through the shortcut I<CTRL SHIFT L>.
 
+=head1 USAGE
+
+Copy the file examples/cliboard.plugin into $HOME/.config/xacobeo/plugins/ and
+add examples/Xacobeo into your PERL5LIB path.
+
+Or copy examples/Xacobeo/Ex/ClipboardLoad.pm somewhere and add the full path
+to the variable I<Script> in the file F<cliboard.plugin>. For instance if you
+copy the perl module to F<$HOME/.config/xacobeo/plugins/ and that your user name
+is I<me> then use:
+
+	Script=/home/me/.config/xacobeo/plugins/ClipboardLoad.pm
+
 =cut
 
 use Glib qw(TRUE FALSE);
