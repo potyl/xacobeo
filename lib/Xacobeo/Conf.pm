@@ -41,7 +41,7 @@ my $INSTANCE = __PACKAGE__->init();
 
 =head2 get_conf
 
-Returns the current configuration instance.This class is a singleton so there's
+Returns the current configuration instance. This class is a singleton so there's
 no constructor.
 
 =cut
