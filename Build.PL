@@ -25,7 +25,8 @@ my %requires = (
 	'Gtk2::SourceView2'      => 0,
 	'Locale::TextDomain'     => 0,
 	'parent'                 => 0,
-	'Gtk2::Ex::Entry::Pango' => '0.07'
+	'Gtk2::Ex::Entry::Pango' => '0.07',
+	'File::BaseDir'          => 0,
 );
 
 my %configure_requires = (
