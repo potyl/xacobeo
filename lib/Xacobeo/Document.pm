@@ -232,6 +232,7 @@ sub _construct_xml_parser {
 	$parser->line_numbers(1);
 	$parser->recover_silently(1);
 	$parser->complete_attributes(0);
+	$parser->expand_entities(0);
 
 	return $parser;
 }
