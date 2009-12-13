@@ -445,32 +445,9 @@ sub _create_menu {
 
 	my $ui = Gtk2::UIManager->new();
 	$ui->insert_action_group($actions, 0);
-	$ui->add_ui_from_string(<<'__UI__');
-<ui>
-	<menubar name='MenuBar'>
 
-		<menu action='FileMenu'>
-			<menuitem action='FileOpen'/>
-			<placeholder name="FilePlaceholder_1"/>
-
-			<separator/>
-
-			<placeholder name="FilePlaceholder_2"/>
-			<menuitem action='FileQuit'/>
-		</menu>
-
-
-		<placeholder name="ExtraMenu"/>
-
-
-		<menu action='HelpMenu'>
-			<menuitem action='HelpAbout'/>
-		</menu>
-
-	</menubar>
-</ui>
-__UI__
-
+	my $file = $self->conf->share_file('xacobeo', 'xacobeo-ui.xml');
+	$ui->add_ui_from_file($file);
 	$self->add_accel_group($ui->get_accel_group);
 
 	return $ui->get_widget('/MenuBar');

@@ -25,6 +25,7 @@ README
 commands
 share/applications/xacobeo.desktop
 share/xacobeo/xacobeo.svg
+share/xacobeo/xacobeo-ui.xml
 share/pixmaps/xacobeo.png
 t/document.t
 t/Xacobeo-XS.t
