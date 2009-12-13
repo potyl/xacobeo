@@ -236,7 +236,7 @@ sub test_namespaces4 {
 		$document->namespaces(),
 		{
 			'urn:x-is-simple' => 'x',
-			'urn:m&n' => 'default',
+			'urn:m&#38;n'     => 'default',
 			@XML_NS,
 		},
 		"Extract 'sample.xml' namespaces"
