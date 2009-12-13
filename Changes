@@ -1,8 +1,9 @@
 Changelog for Xacobeo.
 
 
-0.12 Sun Dec 13 10:46:15 CET 2009
-	- GUI rewrote by hand, no more glade.
+0.12 Sun Dec 13 23:49:03 CET 2009
+	- Add a plugin system with a sample plugin.
+	- GUI rewritten by hand, no more glade.
 	- Less dependencies: Englis, Gtk2::GladeXML, Class::Accessor::Fast.
 
 
