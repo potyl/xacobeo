@@ -74,7 +74,7 @@ sub load_from_clipboard {
 	my $xml = $clipboard->wait_for_text;
 	return unless defined $xml;
 	
-	# load the temporary xml file
+	# Load the temporary xml file
 	my $document = Xacobeo::Document->new_from_string($xml, 'xml');
 	$window->set_title('clipboard');
 	$window->load_document($document);
@@ -87,10 +87,11 @@ __PACKAGE__->load();
 =head1 AUTHORS
 
 Emmanuel Rodriguez E<lt>potyl@cpan.orgE<gt>.
+Jozef Kutej E<lt>jkutej@cpan.orgE<gt>.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2008,2009 by Emmanuel Rodriguez.
+Copyright (C) 2008,2009 by Emmanuel Rodriguez, Jozef Kutej.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.8 or,
