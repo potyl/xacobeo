@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use blib;
-use lib '.';
+use lib 'lib';
 
 use Xacobeo::Conf;
 
