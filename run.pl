@@ -5,6 +5,7 @@ use warnings;
 
 use blib;
 use lib 'lib';
+use lib 'examples';
 
 use Xacobeo::Conf;
 
