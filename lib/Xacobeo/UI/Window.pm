@@ -169,7 +169,7 @@ sub callback_execute_xpath {
 	return unless $self->xpath_entry->is_valid;
 
 	my $xpath = $self->xpath_entry->get_text();
-	my $document = $self->source_view->document;
+	my $document = $self->source_view->document or return;
 
 	my $timer = Xacobeo::Timer->start();
 	my $result;
