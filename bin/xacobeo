@@ -83,11 +83,13 @@ use strict;
 use warnings;
 use open qw(:std :utf8);
 
+use Glib qw(TRUE FALSE);
 use Gtk2 qw(-init);
 
 use Pod::Usage;
 use Getopt::Long qw(:config auto_help);
 use XML::LibXML;
+use File::Spec::Functions;
 
 use Xacobeo;
 use Xacobeo::Conf;
@@ -110,7 +112,7 @@ sub main {
 		'html' => sub { $type = 'html' },
 		'version|v' => \$do_version,
 	) or pod2usage(2);
-	
+
 	if ($do_version) {
 		printf "Xacobeo version:      %8s\n", $Xacobeo::VERSION;
 		printf "Compiled with libxml: %8s\n", XML::LibXML::LIBXML_DOTTED_VERSION;
@@ -118,24 +120,87 @@ sub main {
 		printf "XML::LibXML version:  %8s\n", $XML::LibXML::VERSION;
 		return 0;
 	}
-	
+
 	# Create a new instance of this application
 	my $conf = Xacobeo::Conf->get_conf;
 	Xacobeo::I18n->init(xacobeo => $conf->share_dir('locale'));
 
-	my $xacobeo = Xacobeo::UI::Window->new();
-	
+	my $window = Xacobeo::UI::Window->new();
+
 	if (@ARGV) {
 		my ($source, $xpath) = @ARGV;
-		$xacobeo->load_file($source, $type);
-		$xacobeo->set_xpath($xpath) if defined $xpath;
+		$window->load_file($source, $type);
+		$window->set_xpath($xpath) if defined $xpath;
 	}
 
-	$xacobeo->signal_connect(destroy => sub { Gtk2->main_quit(); });
-	$xacobeo->show_all();
-	
+	$window->signal_connect(destroy => sub { Gtk2->main_quit(); });
+	$window->show_all();
+
+	load_plugins($window);
+
 	# Start the main loop
 	Gtk2->main();
-	
+
 	return 0;
+}
+
+
+sub load_plugins {
+	my ($window) = @_;
+
+	my $conf = Xacobeo::Conf->get_conf;
+
+	# Load plugins
+	foreach my $folder ($conf->plugin_folders) {
+		next unless -d $folder;
+		eval {
+
+			opendir my $handle, $folder or die $!;
+			while (my $entry = readdir $handle) {
+				next if $entry =~ /^\./;
+
+				my $file = catfile($folder, $entry);
+				next if -d $file or ! -e $file;
+
+				eval {
+					load_plugin($window, $file);
+					1;
+				} or do {
+					#FIXME translate the error messages
+					warn "Failed to load plugin $file; $@";
+				};
+			}
+			closedir $handle;
+			1;
+		} or do {
+			warn "Failed to scan folder $folder; $@";
+		};
+	}
+}
+
+sub load_plugin {
+	my ($window, $file) = @_;
+
+	my $keyfile = Glib::KeyFile->new();
+	$keyfile->load_from_file($file, 'none');
+
+	my $group = "Xacobeo Plugin";
+	if (! $keyfile->has_group($group)) {
+		die "File ]is not describing a Xacobeo plugin";
+	}
+
+	my $package = $keyfile->get_string($group, 'Package');
+	if (! $package) {
+		die "No package defined in plugin description file"
+	}
+
+	my $plugin = eval qq{require "$package";};
+	if ($@) {
+		die "Can't load $package; $@";
+	}
+	elsif (! $plugin) {
+		die "Package $package failed to return a plugin";
+	}
+
+	$plugin->init($window);
 }
