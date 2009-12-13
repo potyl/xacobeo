@@ -1,6 +1,6 @@
 ---
 name: Xacobeo
-version: 0.11
+version: 0.12
 author:
   - 'Emmanuel Rodriguez <potyl@cpan.org>'
 abstract: XPath (XML Path Language) visualizer.
@@ -22,6 +22,7 @@ requires:
   Data::Dumper: 0
   DynaLoader: 0
   Exporter: 0
+  File::BaseDir: 0
   File::Spec::Functions: 0
   FindBin: 0
   Getopt::Long: 0
@@ -48,7 +49,7 @@ build_requires:
 provides:
   Xacobeo:
     file: lib/Xacobeo.pm
-    version: 0.11
+    version: 0.12
   Xacobeo::Accessors:
     file: lib/Xacobeo/Accessors.pm
   Xacobeo::Conf:
