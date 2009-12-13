@@ -62,6 +62,7 @@ use Xacobeo::Accessors qw{
 	statusbar
 	xpath_entry
 	evaluate_button
+	ui_manager
 	conf
 };
 
@@ -444,6 +445,7 @@ sub _create_menu {
 	$actions->add_actions($active_entries, undef);
 
 	my $ui = Gtk2::UIManager->new();
+	$self->ui_manager($ui);
 	$ui->insert_action_group($actions, 0);
 
 	my $file = $self->conf->share_file('xacobeo', 'xacobeo-ui.xml');
@@ -543,4 +545,3 @@ it under the same terms as Perl itself, either Perl version 5.8.8 or,
 at your option, any later version of Perl 5 you may have available.
 
 =cut
-
