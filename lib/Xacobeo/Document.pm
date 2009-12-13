@@ -8,7 +8,7 @@ Xacobeo::Document - An XML document and its related information.
 
 	use Xacobeo::Document;
 	
-	my $document = Xacobeo::Document->new('file.xml', 'xml');
+	my $document = Xacobeo::Document->new_from_file('file.xml', 'xml');
 	
 	my $namespaces = $document->namespaces(); # Hashref
 	while (my ($uri, $prefix) = each %{ $namespaces }) {
@@ -54,9 +54,9 @@ use Xacobeo::Accessors qw{
 };
 
 
-=head2 new
+=head2 new_from_file
 
-Creates a new instance.
+Creates a new instance from a file (an URI should also be valid).
 
 Parameters:
 
@@ -65,17 +65,70 @@ Parameters:
 
 =cut
 
-sub new {
+sub new_from_file {
 	my ($class, $source, $type) = @_;
 	if (! (defined $source && defined $type)) {
-		croak 'Usage: ', __PACKAGE__, '->new($source, $type)'
+		croak 'Usage: ', __PACKAGE__, '->new_from_file($source, $type)'
+	}
+
+	# Parse the document
+	my $parser = _construct_xml_parser();
+	my $document_node;
+	if (! defined $type) {
+		croak __("Parameter 'type' must be defined");
+	}
+	elsif ($type eq 'xml') {
+		$document_node = $parser->parse_file($source);
+	}
+	elsif ($type eq 'html') {
+		$document_node = $parser->parse_html_file($source);
 	}
 
 	my $self = bless {}, ref($class) || $class;
 	$self->source($source);
 	$self->type($type);
 
-	$self->_load_document($source, $type);
+	$self->_init($document_node);
+
+	return $self;
+}
+
+
+=head2 new_from_string
+
+Creates a new instance from a string.
+
+Parameters:
+
+	$content: the contents of the document.
+	$type:    the type of document: C<xml> or C<html>.
+
+=cut
+
+sub new_from_string {
+	my ($class, $content, $type) = @_;
+	if (! (defined $content && defined $type)) {
+		croak 'Usage: ', __PACKAGE__, '->new_from_string($content, $type)'
+	}
+
+	# Parse the document
+	my $parser = _construct_xml_parser();
+	my $document_node;
+	if (! defined $type) {
+		croak __("Parameter 'type' must be defined");
+	}
+	elsif ($type eq 'xml') {
+		$document_node = $parser->parse_string($content);
+	}
+	elsif ($type eq 'html') {
+		$document_node = $parser->parse_html_string($content);
+	}
+
+	my $self = bless {}, ref($class) || $class;
+	$self->source('string');
+	$self->type($type);
+
+	$self->_init($document_node);
 
 	return $self;
 }
@@ -95,9 +148,30 @@ sub empty {
 	$self->source($source);
 	$self->type($type);
 
-	$self->_load_document($source, $type);
+	my $empty = XML::LibXML->createDocument();
+	$self->_init($empty);
 
 	return $self;
+}
+
+
+#
+# Finish the creation of a new instance.
+#
+sub _init {
+	my ($self, $document_node) = @_;
+
+	$self->documentNode($document_node);
+
+	# Find the namespaces
+	$self->namespaces(_get_all_namespaces($document_node));
+
+	# Create the XPath context
+	$self->xpath(
+		$self->_create_xpath_context()
+	);
+
+	return;
 }
 
 
@@ -205,45 +279,6 @@ sub get_prefixed_name {
 	}
 
 	return $name;
-}
-
-
-#
-# Loads the XML document. This method will also find the namespaces used in the
-# document.
-#
-sub _load_document {
-	my ($self, $source, $type) = @_;
-
-	# Parse the document
-	my $parser = _construct_xml_parser();
-	my $document_node;
-	if (! defined $type) {
-		croak __("Parameter 'type' must be defined");
-	}
-	elsif ($type eq 'xml') {
-		$document_node = $parser->parse_file($source);
-	}
-	elsif ($type eq 'html') {
-		$document_node = $parser->parse_html_file($source);
-	}
-	elsif ($type eq 'empty') {
-		$document_node = XML::LibXML->createDocument;
-	}
-	else {
-		croak __x("Unsupported document type {type}", type => $type);
-	}
-	$self->documentNode($document_node);
-
-	# Find the namespaces
-	$self->namespaces(_get_all_namespaces($document_node));
-
-	# Create the XPath context
-	$self->xpath(
-		$self->_create_xpath_context()
-	);
-
-	return;
 }
 
 

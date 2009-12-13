@@ -241,7 +241,7 @@ sub load_file {
 	my $t_load = Xacobeo::Timer->start(__('Load document'));
 	my $document;
 	eval {
-		$document = Xacobeo::Document->new($file, $type);
+		$document = Xacobeo::Document->new_from_file($file, $type);
 		1;
 	} or do {
 		my $error = $@;

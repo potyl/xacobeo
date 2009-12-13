@@ -14,7 +14,7 @@ Xacobeo::UI::SourceView - Text editor that displays XML.
 	$window->add($view);
 	
 	# Load a document
-	my $document = Xacobeo::Document->new($file, $type);
+	my $document = Xacobeo::Document->new_from_file($file, $type);
 	$view->set_document($document);
 	$view->load_node($document->documentNode);
 

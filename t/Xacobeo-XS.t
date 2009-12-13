@@ -36,7 +36,7 @@ sub tests {
 	foreach my $file ('sample.xml') {
 
 		my $filename = File::Spec->catfile($FindBin::Bin, File::Spec->updir, 'tests', $file);
-		my $document = Xacobeo::Document->new($filename, 'xml');
+		my $document = Xacobeo::Document->new_from_file($filename, 'xml');
 
 		$textview->set_document($document);
 		$textview->load_node($document->documentNode);
