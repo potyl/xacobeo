@@ -49,6 +49,7 @@ use Data::Dumper;
 use Glib qw(TRUE FALSE);
 use Gtk2;
 use Gtk2::Ex::Entry::Pango;
+
 use Xacobeo::Accessors qw(document valid);
 
 use Glib::Object::Subclass 'Gtk2::Ex::Entry::Pango' =>
@@ -61,11 +62,13 @@ use Glib::Object::Subclass 'Gtk2::Ex::Entry::Pango' =>
 	},
 ;
 
+
 sub INIT_INSTANCE {
 	my $self = shift;
 
 	$self->signal_connect('changed' => \&callback_changed);
 	$self->valid(FALSE);
+	$self->set_sensitive(FALSE);
 }
 
 
@@ -90,6 +93,7 @@ sub set_document {
 	my $self = shift;
 	my ($document) = @_;
 	$self->document($document);
+	$self->set_sensitive($document ? TRUE : FALSE);
 }
 
 
@@ -97,9 +101,11 @@ sub callback_changed {
 	my ($self) = @_;
 
 	my $xpath = $self->get_text;
+	my $document = $self->document;
+
 	my $is_valid = FALSE;
-	if ($xpath) {
-		$is_valid = $self->document->validate($xpath);
+	if ($document && $xpath) {
+		$is_valid = $document->validate($xpath);
 		if (! $is_valid) {
 			# Mark the XPath expression as wrong
 			my $escaped = Glib::Markup::escape_text($xpath);
