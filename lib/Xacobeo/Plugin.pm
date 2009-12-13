@@ -12,7 +12,9 @@ Xacobeo::Plugin - Parent class for all plugins.
 	use base 'Xacobeo::Plugin';
 	
 	sub init {
-		my ($self, $window) = @_;
+		my ($self, $xacobeo) = @_;
+		
+		my ($window) = $xacobeo->get_windows();
 		$window->statusbar->display("Plugin Loaded!");
 	}
 	
