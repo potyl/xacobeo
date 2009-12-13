@@ -29,12 +29,13 @@ use warnings;
 
 use FindBin;
 use File::Spec::Functions;
+use File::BaseDir;
 
 use Xacobeo::Accessors qw{
 	dir
 };
 
-
+my $XDG = File::BaseDir->new();
 my $INSTANCE = __PACKAGE__->init();
 
 
@@ -115,6 +116,24 @@ Returns the application's name.
 
 sub app_name {
 	return "Xacobeo";
+}
+
+
+=head2 plugin_folders
+
+Returns the folders that are scanned for plugins.
+
+=cut
+
+sub plugin_folders {
+	my $self = shift;
+use Data::Dumper;
+print Dumper([$XDG->config_home, $XDG->config_dirs]);
+	my %seen;
+	return map { $seen{$_}++ ? () : catdir($_, 'xacobeo', 'plugins') }
+		$XDG->config_home,
+		$XDG->config_dirs
+	;
 }
 
 
