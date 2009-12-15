@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-15 14:15+0100\n"
+"POT-Creation-Date: 2009-12-15 16:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,44 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: lib/Xacobeo/App.pm:151
+#, perl-brace-format
+msgid "Failed to load plugin described by {file}; {error}"
+msgstr ""
+
+#: lib/Xacobeo/App.pm:157
+#, perl-brace-format
+msgid "Failed to scan folder {folder}; {error}"
+msgstr ""
+
+#: lib/Xacobeo/App.pm:188
+msgid "File is not describing a Xacobeo plugin"
+msgstr ""
+
+#: lib/Xacobeo/App.pm:197
+#, perl-brace-format
+msgid "Error while load package {package}; {error}"
+msgstr ""
+
+#: lib/Xacobeo/App.pm:200
+#, perl-brace-format
+msgid "Package {package} failed to return a plugin"
+msgstr ""
+
+#: lib/Xacobeo/App.pm:208
+#, perl-brace-format
+msgid "Can't load script {script}; {error}"
+msgstr ""
+
+#: lib/Xacobeo/App.pm:211
+#, perl-brace-format
+msgid "Script {script} failed to return a plugin"
+msgstr ""
+
+#: lib/Xacobeo/App.pm:215
+msgid "File is missing the key Package or Script"
+msgstr ""
 
 #: lib/Xacobeo/UI/SourceView.pm:184
 msgid "Node is undef"
@@ -140,6 +178,10 @@ msgstr ""
 #: lib/Xacobeo/Timer.pm:151
 #, perl-format
 msgid "Time: %-20s %.4fs\n"
+msgstr ""
+
+#: lib/Xacobeo/Timer.pm:152
+msgid "Unnamed"
 msgstr ""
 
 #: lib/Xacobeo/Document.pm:78 lib/Xacobeo/Document.pm:118
