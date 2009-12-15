@@ -364,7 +364,7 @@ sub _get_all_namespaces {
 		if (not defined $prefix or exists $cleaned{$prefix}) {
 			# Assign a new prefix until unique
 			do {
-				$prefix = 'default' . ($index || '');
+				$prefix = 'ns' . ($index || '');
 				++$index;
 			} while (exists $cleaned{$prefix});
 		}
