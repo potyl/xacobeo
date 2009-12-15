@@ -52,6 +52,8 @@ provides:
     version: 0.12
   Xacobeo::Accessors:
     file: lib/Xacobeo/Accessors.pm
+  Xacobeo::App:
+    file: lib/Xacobeo/App.pm
   Xacobeo::Conf:
     file: lib/Xacobeo/Conf.pm
   Xacobeo::Document:
@@ -60,6 +62,8 @@ provides:
     file: lib/Xacobeo/Error.pm
   Xacobeo::I18n:
     file: lib/Xacobeo/I18n.pm
+  Xacobeo::Plugin:
+    file: lib/Xacobeo/Plugin.pm
   Xacobeo::Timer:
     file: lib/Xacobeo/Timer.pm
   Xacobeo::UI::DomView:
