@@ -100,7 +100,6 @@ sub new_window {
 	my $window = Xacobeo::UI::Window->new();
 	$window->show_all();
 
-	# FIXME Don't register a quit but count
 	$window->signal_connect(destroy => sub { $self->callback_destroy(@_); });
 	push @{ $self->{windows} }, $window;
 
