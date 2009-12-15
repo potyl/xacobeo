@@ -91,7 +91,7 @@ sub INIT_INSTANCE {
 	$self->_add_text_column($NODE_ID_VALUE, __('ID value'));
 	
 
-	$self->signal_connect(row_activated => \&callback_row_activated);
+	$self->signal_connect('row-activated' => \&callback_row_activated);
 }
 
 
