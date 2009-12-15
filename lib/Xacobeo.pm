@@ -72,7 +72,6 @@ at your option, any later version of Perl 5 you may have available.
 
 use strict;
 use warnings;
-use 5.006;
 
 our $VERSION = '0.12';
 
