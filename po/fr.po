@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xacobeo-i 18n\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-15 14:15+0100\n"
-"PO-Revision-Date: 2009-01-25 11:50+0100\n"
+"PO-Revision-Date: 2009-12-15 14:20+0100\n"
 "Last-Translator: Emmanuel Rodriguez <emmanuel.rodriguez@gmail.com>\n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -62,7 +62,7 @@ msgstr "Arbre DOM"
 
 #: lib/Xacobeo/UI/Window.pm:376
 msgid "Open file..."
-msgstr ""
+msgstr "Ouvrir fichier..."
 
 #: lib/Xacobeo/UI/Window.pm:419
 #, fuzzy, perl-brace-format
@@ -71,31 +71,31 @@ msgstr "À _propos de"
 
 #: lib/Xacobeo/UI/Window.pm:434
 msgid "Simple XPath viewer"
-msgstr ""
+msgstr "Simple visualiseur XPath"
 
 #: lib/Xacobeo/UI/Window.pm:457
 msgid "_Open"
-msgstr ""
+msgstr "_Ouvrir"
 
 #: lib/Xacobeo/UI/Window.pm:459
 msgid "Open a file"
-msgstr ""
+msgstr "Ouvrir un fichier"
 
 #: lib/Xacobeo/UI/Window.pm:465
 msgid "_Quit"
-msgstr ""
+msgstr "_Quitter"
 
 #: lib/Xacobeo/UI/Window.pm:467
 msgid "Quit"
-msgstr ""
+msgstr "Quitter"
 
 #: lib/Xacobeo/UI/Window.pm:475
 msgid "_About"
-msgstr ""
+msgstr "À _propos"
 
 #: lib/Xacobeo/UI/Window.pm:477
 msgid "About"
-msgstr ""
+msgstr "À propos"
 
 #: lib/Xacobeo/UI/Window.pm:501
 msgid "XPath:"
@@ -115,11 +115,11 @@ msgstr "Résultats"
 
 #: lib/Xacobeo/UI/Window.pm:556
 msgid "Prefix"
-msgstr ""
+msgstr "Préfixe"
 
 #: lib/Xacobeo/UI/Window.pm:557
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 #: lib/Xacobeo/UI/Window.pm:562
 msgid "Namespaces"
@@ -142,7 +142,8 @@ msgstr "ID valeur"
 msgid "Time: %-20s %.4fs\n"
 msgstr "Temps: %-20s %.4fs\n"
 
-#: lib/Xacobeo/Document.pm:78 lib/Xacobeo/Document.pm:118
+#: lib/Xacobeo/Document.pm:78
+#: lib/Xacobeo/Document.pm:118
 msgid "Parameter 'type' must be defined"
 msgstr "Le paramètre 'type' doit être défini"
 
@@ -158,17 +159,14 @@ msgstr "L'espace de noms {name} n'a pas d'URI d'associé"
 
 #~ msgid "Unsupported document type {type}"
 #~ msgstr "Le document type {type} n'est pas suporté"
-
 #~ msgid "Can't create widget {name} because method {function} is missing"
 #~ msgstr ""
 #~ "Imposible de créer le widget {name} parce que la méthode {function} n'est "
 #~ "pas définie"
-
 #~ msgid "_File"
 #~ msgstr "_Fichier"
-
 #~ msgid "_Help"
 #~ msgstr "Aid_e"
-
 #~ msgid "Copyright (C) 2008-2009 by Emmanuel Rodriguez."
 #~ msgstr "Copyright (C) 2008-2009 by Emmanuel Rodriguez."
+
