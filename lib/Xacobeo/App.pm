@@ -35,6 +35,7 @@ use warnings;
 
 use File::Spec::Functions;
 
+use Xacobeo::I18n;
 use Xacobeo::UI::Window;
 use Xacobeo::Accessors qw{
 	windows
@@ -148,14 +149,13 @@ sub load_plugins {
 					$self->load_plugin($file);
 					1;
 				} or do {
-					#FIXME translate the error messages
-					warn "Failed to load plugin $file; $@";
+					warn __x("Failed to load plugin described by {file}; {error}", file => $file, error => $@);
 				};
 			}
 			closedir $handle;
 			1;
 		} or do {
-			warn "Failed to scan folder $folder; $@";
+			warn __x("Failed to scan folder {folder}; {error}", folder => $folder, error => $@);
 		};
 	}
 }
@@ -184,9 +184,9 @@ sub load_plugin {
 	my $keyfile = Glib::KeyFile->new();
 	$keyfile->load_from_file($file, 'none');
 
-	my $group = "Xacobeo Plugin";
+	my $group = 'Xacobeo Plugin';
 	if (! $keyfile->has_group($group)) {
-		die "File is not describing a Xacobeo plugin";
+		die __("File is not describing a Xacobeo plugin");
 	}
 
 	my $plugin;
@@ -195,10 +195,10 @@ sub load_plugin {
 
 		$plugin = eval qq{require $package;};
 		if ($@) {
-			die "Can't load package $package; $@";
+			die __x("Error while load package {package}; {error}", package => $package, error => $@);
 		}
 		elsif (! $plugin) {
-			die "Package $package failed to return a plugin";
+			die __x("Package {package} failed to return a plugin", package => $package);
 		}
 	}
 	elsif ($keyfile->has_key($group, 'Script')) {
@@ -206,14 +206,14 @@ sub load_plugin {
 		$plugin = do $script;
 
 		if ($@) {
-			die "Can't load script $script; $@";
+			die __x("Can't load script {script}; {error}", script => $script, error => $@);
 		}
 		elsif (! $plugin) {
-			die "Script $script failed to return a plugin";
+			die __x("Script {script} failed to return a plugin", script => $script);
 		}
 	}
 	else {
-		die "File is missing a Package or a Script";
+		die __("File is missing a the key Package or Script");
 	}
 
 	$plugin->init($self);
