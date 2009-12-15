@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xacobeo-i 18n\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-15 16:50+0100\n"
-"PO-Revision-Date: 2009-12-15 16:57+0100\n"
+"PO-Revision-Date: 2009-12-15 17:02+0100\n"
 "Last-Translator: Emmanuel Rodriguez <emmanuel.rodriguez@gmail.com>\n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -41,9 +41,9 @@ msgid "Package {package} failed to return a plugin"
 msgstr "Le paquet {package} n'a pas retourné de plugin"
 
 #: lib/Xacobeo/App.pm:208
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Can't load script {script}; {error}"
-msgstr "Impossible de lire {file}: {error}"
+msgstr "Impossible de lire le script {script}: {error}"
 
 #: lib/Xacobeo/App.pm:211
 #, perl-brace-format
@@ -59,9 +59,8 @@ msgid "Node is undef"
 msgstr "Nœud est undef"
 
 #: lib/Xacobeo/UI/Window.pm:79
-#, fuzzy
 msgid "No document"
-msgstr "Chargement du document"
+msgstr "Pas de document"
 
 #: lib/Xacobeo/UI/Window.pm:186
 #, perl-format
@@ -103,9 +102,9 @@ msgid "Open file..."
 msgstr "Ouvrir fichier..."
 
 #: lib/Xacobeo/UI/Window.pm:419
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "About {name}"
-msgstr "À _propos de"
+msgstr "À propos de {name}"
 
 #: lib/Xacobeo/UI/Window.pm:434
 msgid "Simple XPath viewer"
@@ -190,9 +189,8 @@ msgid "Parameter 'type' must be defined"
 msgstr "Le paramètre 'type' doit être défini"
 
 #: lib/Xacobeo/Document.pm:220
-#, fuzzy
 msgid "Document node is missing"
-msgstr "Document chargé en %.3f seconde"
+msgstr "Le noeud du document est manquant"
 
 #: lib/Xacobeo/Document.pm:335
 #, perl-brace-format
