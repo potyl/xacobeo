@@ -212,7 +212,7 @@ sub load_plugin {
 		}
 	}
 	else {
-		die __("File is missing a the key Package or Script");
+		die __("File is missing the key Package or Script");
 	}
 
 	$plugin->init($self);
