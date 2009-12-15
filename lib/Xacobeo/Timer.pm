@@ -149,7 +149,7 @@ sub show {
 
 	my $name = $self->{name};
 	printf __("Time: %-20s %.4fs\n"),
-		(defined $name ? $name : 'Unnamed'),
+		(defined $name ? $name : __('Unnamed')),
 		$self->elapsed
 	;
 
