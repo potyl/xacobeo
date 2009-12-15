@@ -35,6 +35,7 @@ use warnings;
 
 use File::Spec::Functions;
 
+use Xacobeo::Conf;
 use Xacobeo::I18n;
 use Xacobeo::UI::Window;
 use Xacobeo::Accessors qw{
@@ -65,7 +66,7 @@ sub init {
 	my ($dir) = @_;
 
 	my $conf = Xacobeo::Conf->get_conf;
-	Xacobeo::I18n->init(xacobeo => $conf->share_dir('locale'));
+	Xacobeo::I18n->init($conf->share_dir('locale'));
 	
 	my $self = bless {}, ref($class) || $class;
 	$self->windows([]);

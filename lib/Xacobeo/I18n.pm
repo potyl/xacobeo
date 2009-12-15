@@ -9,7 +9,7 @@ Xacobeo::I18n - Utilities for internationalization (i18n).
 	# Initialize the i18n framework (done once)
 	use FindBin;
 	use Xacobeo::I18n;
-	Xacobeo::I18n->init(xacobeo => "$FindBin::Bin/../share/locale/");
+	Xacobeo::I18n->init("$FindBin::Bin/../share/locale/");
 	
 	
 	# Import the i18n utilities (used everywhere where i18n is needed)
@@ -52,7 +52,7 @@ our @EXPORT = qw(
 
 
 # The text domain of the application.
-my $DOMAIN = '';
+my $DOMAIN = 'xacobeo';
 
 
 
@@ -209,6 +209,18 @@ sub __xn {
 
 
 
+=head2 domain
+
+Returns the translation domain.
+
+=cut
+
+sub domain {
+	return $DOMAIN;
+}
+
+
+
 #
 # Replaces the place markers with their corresponding values.
 #
@@ -251,15 +263,11 @@ sub dngettext_utf8 {
 
 Initializes the i18n framework (gettext). Must be called in the fashion:
 
-	Xacobeo::I18n->init($domain, $folder);
+	Xacobeo::I18n->init($folder);
 
 Parameters:
 
 =over
-
-=item * $domain
-
-The name of the gettext domain (program's name).
 
 =item * $folder
 
@@ -272,10 +280,7 @@ has to be provided.
 =cut
 
 sub init {
-	my (undef, $domain, $folder) = @_;
-
-	# Remember the appication's domain
-	$DOMAIN = $domain;
+	my (undef, $folder) = @_;
 
 	textdomain($DOMAIN);
 	bindtextdomain($DOMAIN, $folder);
