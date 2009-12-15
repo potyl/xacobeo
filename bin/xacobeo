@@ -91,8 +91,6 @@ use Getopt::Long qw(:config auto_help);
 use XML::LibXML;
 
 use Xacobeo;
-use Xacobeo::Conf;
-use Xacobeo::I18n;
 use Xacobeo::App;
 
 
