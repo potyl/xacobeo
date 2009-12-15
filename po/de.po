@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-13 07:58+0100\n"
+"POT-Creation-Date: 2009-12-15 14:15+0100\n"
 "PO-Revision-Date: 2009-04-21 07:57+0200\n"
 "Last-Translator: Lars Dɪᴇᴄᴋᴏᴡ 迪拉斯 <daxim@cpan.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,107 +16,112 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: lib/Xacobeo/UI/SourceView.pm:183
+#: lib/Xacobeo/UI/SourceView.pm:184
 msgid "Node is undef"
 msgstr "Knoten ist undef"
 
-#: lib/Xacobeo/UI/Window.pm:185
+#: lib/Xacobeo/UI/Window.pm:79
+#, fuzzy
+msgid "No document"
+msgstr "Dokument laden"
+
+#: lib/Xacobeo/UI/Window.pm:186
 #, perl-format
 msgid "Found %d result in %0.3fs"
 msgid_plural "Found %d results in %0.3fs"
 msgstr[0] "%d Ergebnis in %0.3fs gefunden"
 msgstr[1] "%d Ergebnisse in %0.3fs gefunden"
 
-#: lib/Xacobeo/UI/Window.pm:190
+#: lib/Xacobeo/UI/Window.pm:191
 msgid "XPath query issued an error"
 msgstr "Fehler bei der XPath-Abfrage"
 
-#: lib/Xacobeo/UI/Window.pm:240
+#: lib/Xacobeo/UI/Window.pm:241
 msgid "Load document"
 msgstr "Dokument laden"
 
-#: lib/Xacobeo/UI/Window.pm:248
+#: lib/Xacobeo/UI/Window.pm:249
 #, perl-brace-format
 msgid "Can't read {file}: {error}"
 msgstr "{file} kann nicht gelesen werden: {error}"
 
-#: lib/Xacobeo/UI/Window.pm:260
-msgid "Syntax Highlight"
-msgstr "Syntaxhervorhebung"
-
-#: lib/Xacobeo/UI/Window.pm:269
-msgid "DOM Tree"
-msgstr "DOM-Baum"
-
-#: lib/Xacobeo/UI/Window.pm:290
+#: lib/Xacobeo/UI/Window.pm:265
 #, perl-format
 msgid "Document loaded in %.3f second"
 msgid_plural "Document loaded in %.3f seconds"
 msgstr[0] "Dokument wurde in %.3f Sekunde geladen"
 msgstr[1] "Dokument wurde in %.3f Sekunden geladen"
 
-#: lib/Xacobeo/UI/Window.pm:337
+#: lib/Xacobeo/UI/Window.pm:302
+msgid "Syntax Highlight"
+msgstr "Syntaxhervorhebung"
+
+#: lib/Xacobeo/UI/Window.pm:311
+msgid "DOM Tree"
+msgstr "DOM-Baum"
+
+#: lib/Xacobeo/UI/Window.pm:376
 msgid "Open file..."
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:380
+#: lib/Xacobeo/UI/Window.pm:419
 #, fuzzy, perl-brace-format
 msgid "About {name}"
 msgstr "Ü_ber Xacobeo"
 
-#: lib/Xacobeo/UI/Window.pm:395
+#: lib/Xacobeo/UI/Window.pm:434
 msgid "Simple XPath viewer"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:418
+#: lib/Xacobeo/UI/Window.pm:457
 msgid "_Open"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:420
+#: lib/Xacobeo/UI/Window.pm:459
 msgid "Open a file"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:426
+#: lib/Xacobeo/UI/Window.pm:465
 msgid "_Quit"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:428
+#: lib/Xacobeo/UI/Window.pm:467
 msgid "Quit"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:436
+#: lib/Xacobeo/UI/Window.pm:475
 msgid "_About"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:438
+#: lib/Xacobeo/UI/Window.pm:477
 msgid "About"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:484
+#: lib/Xacobeo/UI/Window.pm:501
 msgid "XPath:"
 msgstr "XPath:"
 
-#: lib/Xacobeo/UI/Window.pm:490
+#: lib/Xacobeo/UI/Window.pm:507
 msgid "XPath Expression..."
 msgstr "XPath-Ausdruck..."
 
-#: lib/Xacobeo/UI/Window.pm:495
+#: lib/Xacobeo/UI/Window.pm:512
 msgid "Evaluate"
 msgstr "Auswerten"
 
-#: lib/Xacobeo/UI/Window.pm:535
+#: lib/Xacobeo/UI/Window.pm:552
 msgid "Results"
 msgstr "Ergebnisse"
 
-#: lib/Xacobeo/UI/Window.pm:539
+#: lib/Xacobeo/UI/Window.pm:556
 msgid "Prefix"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:540
+#: lib/Xacobeo/UI/Window.pm:557
 msgid "URI"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:545
+#: lib/Xacobeo/UI/Window.pm:562
 msgid "Namespaces"
 msgstr "Namensräume"
 
@@ -137,23 +142,21 @@ msgstr "ID-Wert"
 msgid "Time: %-20s %.4fs\n"
 msgstr "Zeit: %-20s %.4fs\n"
 
-#: lib/Xacobeo/Document.pm:125
-msgid "Document node is missing"
-msgstr "Dokumentenknoten fehlt"
-
-#: lib/Xacobeo/Document.pm:201
+#: lib/Xacobeo/Document.pm:78 lib/Xacobeo/Document.pm:118
 msgid "Parameter 'type' must be defined"
 msgstr "Parameter 'type' muss definiert sein"
 
-#: lib/Xacobeo/Document.pm:210
-#, perl-brace-format
-msgid "Unsupported document type {type}"
-msgstr "Dokumententyp {type} wird nicht unterstützt"
+#: lib/Xacobeo/Document.pm:220
+msgid "Document node is missing"
+msgstr "Dokumentenknoten fehlt"
 
-#: lib/Xacobeo/Document.pm:276
+#: lib/Xacobeo/Document.pm:335
 #, perl-brace-format
 msgid "Namespace {name} has no URI"
 msgstr "Namensraum {name} hat keinen URI"
+
+#~ msgid "Unsupported document type {type}"
+#~ msgstr "Dokumententyp {type} wird nicht unterstützt"
 
 #~ msgid "Can't create widget {name} because method {function} is missing"
 #~ msgstr ""
