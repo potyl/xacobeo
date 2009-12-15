@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xacobeo-i 18n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-15 14:15+0100\n"
-"PO-Revision-Date: 2009-01-25 11:50+0100\n"
+"POT-Creation-Date: 2009-12-15 16:50+0100\n"
+"PO-Revision-Date: 2009-12-15 17:12+0100\n"
 "Last-Translator: Emmanuel Rodriguez <emmanuel.rodriguez@gmail.com>\n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -16,14 +16,51 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: lib/Xacobeo/App.pm:151
+#, perl-brace-format
+msgid "Failed to load plugin described by {file}; {error}"
+msgstr "Imposible de cargar el plugin descrito en le fichero {file}; {error}"
+
+#: lib/Xacobeo/App.pm:157
+#, perl-brace-format
+msgid "Failed to scan folder {folder}; {error}"
+msgstr "Imposible de leer la carpeta {folder}; {error}"
+
+#: lib/Xacobeo/App.pm:188
+msgid "File is not describing a Xacobeo plugin"
+msgstr "El fichier no describe un plugin de Xacobeo"
+
+#: lib/Xacobeo/App.pm:197
+#, perl-brace-format
+msgid "Error while load package {package}; {error}"
+msgstr "Error cargando el paquete {package}; {error}"
+
+#: lib/Xacobeo/App.pm:200
+#, perl-brace-format
+msgid "Package {package} failed to return a plugin"
+msgstr "El paquete {package} no consiguió devolver un plugin"
+
+#: lib/Xacobeo/App.pm:208
+#, perl-brace-format
+msgid "Can't load script {script}; {error}"
+msgstr "Imposible de leer {script}: {error}"
+
+#: lib/Xacobeo/App.pm:211
+#, perl-brace-format
+msgid "Script {script} failed to return a plugin"
+msgstr "El escripto {script} no consiguió devolver un plugin"
+
+#: lib/Xacobeo/App.pm:215
+msgid "File is missing the key Package or Script"
+msgstr "El fichero no tiene la llave Package or Script"
+
 #: lib/Xacobeo/UI/SourceView.pm:184
 msgid "Node is undef"
 msgstr "Nudo es undef"
 
 #: lib/Xacobeo/UI/Window.pm:79
-#, fuzzy
 msgid "No document"
-msgstr "Lectura del documento"
+msgstr "Sin documento"
 
 #: lib/Xacobeo/UI/Window.pm:186
 #, perl-format
@@ -62,40 +99,40 @@ msgstr "Arbol DOM"
 
 #: lib/Xacobeo/UI/Window.pm:376
 msgid "Open file..."
-msgstr ""
+msgstr "Abrir fichero..."
 
 #: lib/Xacobeo/UI/Window.pm:419
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "About {name}"
-msgstr "A_cerca de Xacobeo"
+msgstr "Acerca de {name}"
 
 #: lib/Xacobeo/UI/Window.pm:434
 msgid "Simple XPath viewer"
-msgstr ""
+msgstr "Simple interfaz para XPath"
 
 #: lib/Xacobeo/UI/Window.pm:457
 msgid "_Open"
-msgstr ""
+msgstr "_Abrir un fichero"
 
 #: lib/Xacobeo/UI/Window.pm:459
 msgid "Open a file"
-msgstr ""
+msgstr "Abrir un fichero"
 
 #: lib/Xacobeo/UI/Window.pm:465
 msgid "_Quit"
-msgstr ""
+msgstr "_Quitar"
 
 #: lib/Xacobeo/UI/Window.pm:467
 msgid "Quit"
-msgstr ""
+msgstr "Quitar"
 
 #: lib/Xacobeo/UI/Window.pm:475
 msgid "_About"
-msgstr ""
+msgstr "A_cerca"
 
 #: lib/Xacobeo/UI/Window.pm:477
 msgid "About"
-msgstr ""
+msgstr "Acerca"
 
 #: lib/Xacobeo/UI/Window.pm:501
 msgid "XPath:"
@@ -115,11 +152,11 @@ msgstr "Resultados"
 
 #: lib/Xacobeo/UI/Window.pm:556
 msgid "Prefix"
-msgstr ""
+msgstr "Prefijo"
 
 #: lib/Xacobeo/UI/Window.pm:557
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 #: lib/Xacobeo/UI/Window.pm:562
 msgid "Namespaces"
@@ -142,14 +179,18 @@ msgstr "ID valor"
 msgid "Time: %-20s %.4fs\n"
 msgstr "Tiempo: %-20s %.4fs\n"
 
-#: lib/Xacobeo/Document.pm:78 lib/Xacobeo/Document.pm:118
+#: lib/Xacobeo/Timer.pm:152
+msgid "Unnamed"
+msgstr "Sin nombre"
+
+#: lib/Xacobeo/Document.pm:78
+#: lib/Xacobeo/Document.pm:118
 msgid "Parameter 'type' must be defined"
 msgstr "El parametro 'type' tiene que estar definido"
 
 #: lib/Xacobeo/Document.pm:220
-#, fuzzy
 msgid "Document node is missing"
-msgstr "Documento leido en %.3f segundo"
+msgstr "Falta el nudo principal del documento"
 
 #: lib/Xacobeo/Document.pm:335
 #, perl-brace-format
@@ -158,17 +199,14 @@ msgstr "El espacio de nombre {name} no tiene URI"
 
 #~ msgid "Unsupported document type {type}"
 #~ msgstr "El typo de documento {type} no esta suportado"
-
 #~ msgid "Can't create widget {name} because method {function} is missing"
 #~ msgstr ""
 #~ "Imposible de crear el widget {name} porque la funcción {function} no "
 #~ "existe"
-
 #~ msgid "_File"
 #~ msgstr "_Archivo"
-
 #~ msgid "_Help"
 #~ msgstr "A_yuda"
-
 #~ msgid "Copyright (C) 2008-2009 by Emmanuel Rodriguez."
 #~ msgstr "Copyright (C) 2008-2009 by Emmanuel Rodriguez."
+
