@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-15 16:50+0100\n"
+"POT-Creation-Date: 2009-12-15 17:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,41 +17,41 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: lib/Xacobeo/App.pm:151
+#: lib/Xacobeo/App.pm:152
 #, perl-brace-format
 msgid "Failed to load plugin described by {file}; {error}"
 msgstr ""
 
-#: lib/Xacobeo/App.pm:157
+#: lib/Xacobeo/App.pm:158
 #, perl-brace-format
 msgid "Failed to scan folder {folder}; {error}"
 msgstr ""
 
-#: lib/Xacobeo/App.pm:188
+#: lib/Xacobeo/App.pm:189
 msgid "File is not describing a Xacobeo plugin"
 msgstr ""
 
-#: lib/Xacobeo/App.pm:197
+#: lib/Xacobeo/App.pm:198
 #, perl-brace-format
 msgid "Error while load package {package}; {error}"
 msgstr ""
 
-#: lib/Xacobeo/App.pm:200
+#: lib/Xacobeo/App.pm:201
 #, perl-brace-format
 msgid "Package {package} failed to return a plugin"
 msgstr ""
 
-#: lib/Xacobeo/App.pm:208
+#: lib/Xacobeo/App.pm:209
 #, perl-brace-format
 msgid "Can't load script {script}; {error}"
 msgstr ""
 
-#: lib/Xacobeo/App.pm:211
+#: lib/Xacobeo/App.pm:212
 #, perl-brace-format
 msgid "Script {script} failed to return a plugin"
 msgstr ""
 
-#: lib/Xacobeo/App.pm:215
+#: lib/Xacobeo/App.pm:216
 msgid "File is missing the key Package or Script"
 msgstr ""
 
@@ -135,31 +135,31 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:501
+#: lib/Xacobeo/UI/Window.pm:502
 msgid "XPath:"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:507
+#: lib/Xacobeo/UI/Window.pm:508
 msgid "XPath Expression..."
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:512
+#: lib/Xacobeo/UI/Window.pm:513
 msgid "Evaluate"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:552
+#: lib/Xacobeo/UI/Window.pm:553
 msgid "Results"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:556
+#: lib/Xacobeo/UI/Window.pm:557
 msgid "Prefix"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:557
+#: lib/Xacobeo/UI/Window.pm:558
 msgid "URI"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:562
+#: lib/Xacobeo/UI/Window.pm:563
 msgid "Namespaces"
 msgstr ""
 
