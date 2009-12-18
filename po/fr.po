@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xacobeo-i 18n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-18 19:22+0100\n"
+"POT-Creation-Date: 2009-12-18 20:05+0100\n"
 "PO-Revision-Date: 2009-12-15 17:02+0100\n"
 "Last-Translator: Emmanuel Rodriguez <emmanuel.rodriguez@gmail.com>\n"
 "Language-Team: English\n"
@@ -110,6 +110,14 @@ msgstr "À propos de {name}"
 msgid "Simple XPath viewer"
 msgstr "Simple visualiseur XPath"
 
+#: lib/Xacobeo/UI/Window.pm:449
+msgid "_File"
+msgstr "_Fichier"
+
+#: lib/Xacobeo/UI/Window.pm:450
+msgid "_Help"
+msgstr "Aid_e"
+
 #: lib/Xacobeo/UI/Window.pm:457
 msgid "_Open"
 msgstr "_Ouvrir"
@@ -203,12 +211,6 @@ msgstr "L'espace de noms {name} n'a pas d'URI d'associé"
 #~ msgstr ""
 #~ "Imposible de créer le widget {name} parce que la méthode {function} n'est "
 #~ "pas définie"
-
-#~ msgid "_File"
-#~ msgstr "_Fichier"
-
-#~ msgid "_Help"
-#~ msgstr "Aid_e"
 
 #~ msgid "Copyright (C) 2008-2009 by Emmanuel Rodriguez."
 #~ msgstr "Copyright (C) 2008-2009 by Emmanuel Rodriguez."

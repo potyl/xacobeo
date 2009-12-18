@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xacobeo-i 18n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-18 19:22+0100\n"
+"POT-Creation-Date: 2009-12-18 20:05+0100\n"
 "PO-Revision-Date: 2009-12-15 17:12+0100\n"
 "Last-Translator: Emmanuel Rodriguez <emmanuel.rodriguez@gmail.com>\n"
 "Language-Team: English\n"
@@ -110,6 +110,14 @@ msgstr "Acerca de {name}"
 msgid "Simple XPath viewer"
 msgstr "Simple interfaz para XPath"
 
+#: lib/Xacobeo/UI/Window.pm:449
+msgid "_File"
+msgstr "_Archivo"
+
+#: lib/Xacobeo/UI/Window.pm:450
+msgid "_Help"
+msgstr "A_yuda"
+
 #: lib/Xacobeo/UI/Window.pm:457
 msgid "_Open"
 msgstr "_Abrir un fichero"
@@ -203,12 +211,6 @@ msgstr "El espacio de nombre {name} no tiene URI"
 #~ msgstr ""
 #~ "Imposible de crear el widget {name} porque la funcción {function} no "
 #~ "existe"
-
-#~ msgid "_File"
-#~ msgstr "_Archivo"
-
-#~ msgid "_Help"
-#~ msgstr "A_yuda"
 
 #~ msgid "Copyright (C) 2008-2009 by Emmanuel Rodriguez."
 #~ msgstr "Copyright (C) 2008-2009 by Emmanuel Rodriguez."

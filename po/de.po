@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-18 19:22+0100\n"
+"POT-Creation-Date: 2009-12-18 20:05+0100\n"
 "PO-Revision-Date: 2009-04-21 07:57+0200\n"
 "Last-Translator: Lars Dɪᴇᴄᴋᴏᴡ 迪拉斯 <daxim@cpan.org>\n"
 "MIME-Version: 1.0\n"
@@ -111,6 +111,14 @@ msgstr "Ü_ber Xacobeo"
 msgid "Simple XPath viewer"
 msgstr ""
 
+#: lib/Xacobeo/UI/Window.pm:449
+msgid "_File"
+msgstr "_Datei"
+
+#: lib/Xacobeo/UI/Window.pm:450
+msgid "_Help"
+msgstr "_Hilfe"
+
 #: lib/Xacobeo/UI/Window.pm:457
 msgid "_Open"
 msgstr ""
@@ -204,12 +212,6 @@ msgstr "Namensraum {name} hat keinen URI"
 #~ msgstr ""
 #~ "Widget {name} konnte nicht erzeugt werden, weil die Funktion {function} "
 #~ "fehlt"
-
-#~ msgid "_File"
-#~ msgstr "_Datei"
-
-#~ msgid "_Help"
-#~ msgstr "_Hilfe"
 
 #~ msgid "Copyright (C) 2008-2009 by Emmanuel Rodriguez."
 #~ msgstr "Copyright (C) 2008-2009, Emmanuel Rodriguez"
