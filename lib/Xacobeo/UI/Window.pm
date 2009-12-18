@@ -446,8 +446,8 @@ sub _create_menu {
 	# This entries are always active
 	my $active_entries = [
 		# Top level
-		[ 'FileMenu',  undef, "_File" ],
-		[ 'HelpMenu',  undef, "_Help" ],
+		[ 'FileMenu',  undef, __("_File") ],
+		[ 'HelpMenu',  undef, __("_Help") ],
 
 
 		# Entries (name, stock id, label, accelerator, tooltip, callback)
