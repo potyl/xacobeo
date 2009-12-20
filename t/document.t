@@ -133,7 +133,7 @@ sub test_namespaces1 {
 			'http://www.inkscape.org/namespaces/inkscape'        => 'inkscape',
 			'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' => 'sodipodi',
 			'http://www.w3.org/1999/xlink'                       => 'xlink',
-			'http://www.w3.org/2000/svg'                         => 'default',
+			'http://www.w3.org/2000/svg'                         => 'ns',
 			@XML_NS,
 		},
 		'SVG namespaces'
@@ -142,12 +142,12 @@ sub test_namespaces1 {
 	my $got;
 	
 	# Find a existing node set
-	$got = $document->find('//default:text');
+	$got = $document->find('//ns:text');
 	is($got->size, 12, 'Count for SVG text elements');
 
 
 	# Get some text strings
-	$got = $document->find('//default:text/default:tspan/text()');
+	$got = $document->find('//ns:text/ns:tspan/text()');
 	is_deeply(
 		[ map { $_->nodeValue } $got->get_nodelist ],
 		[
@@ -169,7 +169,7 @@ sub test_namespaces1 {
 
 	
 	# Mix various namespaces
-	$got = $document->find('//default:svg/default:metadata/rdf:RDF/cc:Work/dc:type');
+	$got = $document->find('//ns:svg/ns:metadata/rdf:RDF/cc:Work/dc:type');
 	is_deeply(
 		[ map { $_->toString } $got->get_nodelist ],
 		[
@@ -187,7 +187,7 @@ sub test_namespaces2 {
 	is_deeply(
 		$document->namespaces(),
 		{
-			'http://www.w3.org/1999/xhtml' => 'default',
+			'http://www.w3.org/1999/xhtml' => 'ns',
 			@XML_NS,
 		},
 		'Beers namespaces'
@@ -196,7 +196,7 @@ sub test_namespaces2 {
 	my $got;
 	
 	# Find the table header
-	$got = $document->find('//default:th/default:td[count(.//node()) = 1]/text()');
+	$got = $document->find('//ns:th/ns:td[count(.//node()) = 1]/text()');
 	is_deeply(
 		[ map { $_->data } $got->get_nodelist ],
 		[ qw(Name Origin Description) ],
@@ -205,7 +205,7 @@ sub test_namespaces2 {
 
 
 	# Try to find all nodes in the default namespace
-	$got = $document->find('//default:*');
+	$got = $document->find('//ns:*');
 	is($got->size, 9, "Got 9 in the default namespace");
 }
 
@@ -236,7 +236,7 @@ sub test_namespaces4 {
 		$document->namespaces(),
 		{
 			'urn:x-is-simple' => 'x',
-			'urn:m&#38;n'     => 'default',
+			'urn:m&#38;n'     => 'ns',
 			@XML_NS,
 		},
 		"Extract 'sample.xml' namespaces"
@@ -248,7 +248,7 @@ sub test_namespaces4 {
 	$got = $document->find('//*');
 	is($got->size, 11, "Find all elements");
 	
-	$got = $document->find('//default:*');
+	$got = $document->find('//ns:*');
 	is($got->size, 1, "Find all elements in the default namespace");
 	is($got->[0]->nodeName, 'no-content');
 	
@@ -268,8 +268,8 @@ sub test_namespaces5 {
 			'http://www.example.org/a' => 'a',
 			'http://www.example.org/b' => 'b',
 			'http://www.example.org/c' => 'c',
-			'http://www.example.org/x' => 'default',
-			'http://www.example.org/y' => 'default1',
+			'http://www.example.org/x' => 'ns',
+			'http://www.example.org/y' => 'ns1',
 			@XML_NS,
 		},
 		"Extract 'namespaces.xml' namespaces"
@@ -297,16 +297,16 @@ sub test_namespaces5 {
 	is($got->size, 1, "Find all elements in the namespace 'c'");
 	is($got->[0]->nodeName, 'c:tag');
 	
-	$got = $document->find('//default:*');
-	is($got->size, 2, "Find all elements in the default namespace");
+	$got = $document->find('//ns:*');
+	is($got->size, 2, "Find all elements in the 1st default namespace");
 	is($got->[0]->nodeName, 'g1');
 	
-	$got = $document->find('//default1:*');
-	is($got->size, 2, "Find all elements in the default1 namespace");
+	$got = $document->find('//ns1:*');
+	is($got->size, 2, "Find all elements in the 2nd default namespace");
 	is_deeply(
 		[ map { $_->nodeName }  $got->get_nodelist ],
 		[ qw(g2 b) ],
-		"Match element names for namespace 'default1'"
+		"Match element names for namespace 'ns1'"
 	);
 }
 

@@ -9,7 +9,7 @@
 ]>
 <doc xmlns:x="urn:x-is-simple">
 	<target x:Href="http://www.afp.com/dtd/AFPCatalog.xml"/>
-	<default:no-content xmlns:default="urn:m&#38;n"/>
+	<ns:no-content xmlns:ns="urn:m&#38;n"/>
 <!-- A comment in the code -->
 	<p entity="there&apos;s an &entity; here &amp; here are double quotes &quot;">there's an &entity; here &amp; here are double quotes "</p>
 	<p>20011022</p>
