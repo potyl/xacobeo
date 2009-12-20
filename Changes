@@ -1,6 +1,12 @@
 Changelog for Xacobeo.
 
 
+0.13 Sun Dec 20 20:08:36 CET 2009
+	- Issue 36: l10n of strings Prefix and URI missing.
+	- Issue 37: l10n es fr wrong for msgid 12 "Document node is missing".
+	- Issue 34: l10n of desktop entry.
+
+
 0.12 Sun Dec 13 23:49:03 CET 2009
 	- GUI rewritten by hand, no more glade.
 	- Less dependencies: Englis, Gtk2::GladeXML, Class::Accessor::Fast.
