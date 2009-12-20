@@ -2,9 +2,9 @@ Changelog for Xacobeo.
 
 
 0.12 Sun Dec 13 23:49:03 CET 2009
-	- Add a plugin system with a sample plugin.
 	- GUI rewritten by hand, no more glade.
 	- Less dependencies: Englis, Gtk2::GladeXML, Class::Accessor::Fast.
+	- Add an experimental plugin system with a sample plugin.
 	- The default namespace for namesapces without a prefix is now 'ns'.
 	- More text translated.
 
