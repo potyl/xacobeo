@@ -92,21 +92,84 @@ sub INIT_INSTANCE {
 	
 
 	$self->signal_connect('row-activated' => \&callback_row_activated);
+	$self->signal_connect('button-press-event' => \&callback_button_press_event);
 }
 
 
 #
-# Transform the signal 'row-activated' into 'node-selected'
+# Transform the signal 'row-activated' into 'node-selected'.
 #
 sub callback_row_activated {
 	my ($self, $path) = @_;
+	my $node = $self->_path_to_node($path);
+	$self->signal_emit('node-selected' => $node);
+}
+
+
+sub do_show_popup_menu {
+	my ($self, $xpath, $event) = @_;
+
+	my $menu = Gtk2::Menu->new();
+
+	my $item = Gtk2::MenuItem->new_with_mnemonic(__("Copy path"));
+	$menu->append($item);
+	$item->signal_connect("activate", sub {$self->do_copy_xpath($xpath)});
+
+	$menu->show_all();
+	$menu->popup(undef, undef, undef, undef, $event->button, $event->time);
+}
+
+
+sub do_copy_xpath {
+	my $self = shift;
+	my ($xpath) = @_;
+
+	foreach my $selection qw(SELECTION_CLIPBOARD SELECTION_PRIMARY) {
+		my $clipboard = Gtk2::Clipboard->get(Gtk2::Gdk->$selection);
+		$clipboard->set_text($xpath);
+	}
+}
+
+
+#
+# Display a context menu for a given node when right clicking.
+#
+sub callback_button_press_event {
+	my ($self, $event) = @_;
+
+	return FALSE unless $event->button == 3;
+
+	my $path = $self->get_path_at_pos($event->x, $event->y) or return FALSE;
+
+	my $selection = $self->get_selection;
+	$selection->unselect_all();
+	$selection->select_path($path);
+
+	my $xpath = $self->_path_to_xpath($path);
+	$self->do_show_popup_menu($xpath, $event);
+
+	return TRUE;
+}
+
+
+sub _path_to_xpath {
+	my $self = shift;
+	my ($path) = @_;
 
 	my $model = $self->get_model;
 	my $iter = $model->get_iter($path);
 	my $xpath = $model->get($iter, $NODE_PATH);
+	return $xpath;
+}
 
+
+sub _path_to_node {
+	my $self = shift;
+	my ($path) = @_;
+
+	my $xpath = $self->_path_to_xpath($path);
 	my $node = $self->document->find($xpath)->[0];
-	$self->signal_emit('node-selected' => $node);
+	return $node;
 }
 
 
