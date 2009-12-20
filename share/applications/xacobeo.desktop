@@ -1,6 +1,8 @@
 [Desktop Entry]
 Version=1.0
 Name=Xacobeo XPath visualizer
+Name[es]=Xacobeo interfaz XPath
+Name[fr]=Xacobeo visualiseur XPath
 GenericName=Xacobeo XPath visualizer
 Comment=Build and execute XPath queries
 Exec=xacobeo
