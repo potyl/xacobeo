@@ -21,10 +21,5 @@
 		</menu>
 
 	</menubar>
-	
-	<popup name="DomViewPopup">
-		<menuitem action='DomViewCopyXPath'/>
-		<placeholder name="DomViewPlaceholder_1"/>
-	</popup>
 </ui>
 
