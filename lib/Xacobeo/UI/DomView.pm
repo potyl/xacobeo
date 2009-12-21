@@ -109,6 +109,7 @@ sub INIT_INSTANCE {
 	$self->menu($menu);
 
 	$self->signal_connect('row-activated' => \&callback_row_activated);
+	$self->signal_connect('popup-menu' => \&callback_popup_menu);
 	$self->signal_connect('button-press-event' => \&callback_button_press_event);
 }
 
@@ -156,12 +157,6 @@ sub callback_row_activated {
 }
 
 
-sub do_show_popup_menu {
-	my ($self, $event) = @_;
-	$self->menu->popup(undef, undef, undef, undef, $event->button, $event->time);
-}
-
-
 sub do_copy_xpath {
 	my $self = shift;
 
@@ -191,8 +186,18 @@ sub callback_button_press_event {
 	$selection->unselect_all();
 	$selection->select_path($path);
 
-	$self->do_show_popup_menu($event);
+	$self->menu->popup(undef, undef, undef, undef, $event->button, $event->time);
 
+	return TRUE;
+}
+
+
+#
+# Display a context menu for a given node when right clicking.
+#
+sub callback_popup_menu {
+	my ($self) = @_;
+	$self->menu->popup(undef, undef, undef, undef, 0, 0);
 	return TRUE;
 }
 
