@@ -86,18 +86,16 @@ sub INIT_INSTANCE {
 
 	$self->set_size_request(800, 600);
 
-
-	my $ui_manager = Gtk2::UIManager->new();
+	my $ui_manager = $self->_create_ui_manager();
 	$self->ui_manager($ui_manager);
-	my $file = $self->conf->share_file('xacobeo', 'xacobeo-ui.xml');
-	$ui_manager->add_ui_from_file($file);
 
 
 	# Build the window's widgets
 	my $vbox = Gtk2::VBox->new(FALSE, 0);
 	$self->add($vbox);
 
-	$vbox->pack_start($self->_create_menu, FALSE, FALSE, 0);
+	my $menu = $self->ui_manager->get_widget('/MenuBar');
+	$vbox->pack_start($menu, FALSE, FALSE, 0);
 	$vbox->pack_start($self->_create_search_bar, FALSE, TRUE, 0);
 	$vbox->pack_start($self->_create_main_content, TRUE, TRUE, 0);
 
@@ -446,7 +444,7 @@ sub do_show_about_dialog {
 }
 
 
-sub _create_menu {
+sub _create_ui_manager {
 	my $self = shift;
 
 	# This entries are always active
@@ -485,14 +483,18 @@ sub _create_menu {
 		],
 	];
 
+
+	my $ui_manager = Gtk2::UIManager->new();
+	my $file = $self->conf->share_file('xacobeo', 'xacobeo-ui.xml');
+	$ui_manager->add_ui_from_file($file);
+
 	my $actions = Gtk2::ActionGroup->new("Actions");
 	$actions->add_actions($active_entries, undef);
 
-	my $ui = $self->ui_manager;
-	$ui->insert_action_group($actions, 0);
-	$self->add_accel_group($ui->get_accel_group);
+	$ui_manager->insert_action_group($actions, 0);
+	$self->add_accel_group($ui_manager->get_accel_group);
 
-	return $ui->get_widget('/MenuBar');
+	return $ui_manager;
 }
 
 
@@ -526,7 +528,7 @@ sub _create_main_content {
 	my $hpaned = Gtk2::HPaned->new();
 
 	# Left part - Tree view
-	my $dom_view = Xacobeo::UI::DomView->new($self->ui_manager);
+	my $dom_view = Xacobeo::UI::DomView->new();
 	$self->dom_view($dom_view);
 	$hpaned->pack1(scrollify($dom_view, 200), FALSE, TRUE);
 

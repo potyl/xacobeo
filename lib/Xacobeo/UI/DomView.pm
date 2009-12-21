@@ -75,11 +75,9 @@ my $NODE_NAME     = $NODE_POS++;
 my $NODE_ID_NAME  = $NODE_POS++;
 my $NODE_ID_VALUE = $NODE_POS++;
 
-sub new {
-	my $class = shift;
-	my ($ui_manager) = @_;
 
-	my $self = $class->SUPER::new(ui_manager => $ui_manager);
+sub INIT_INSTANCE {
+	my $self = shift;
 
 	my $model = Gtk2::TreeStore->new(
 		'Glib::String', # Unique path to the node
@@ -104,16 +102,18 @@ sub new {
 	$self->_add_text_column($NODE_ID_VALUE, __('ID value'));
 	
 
-	$self->_build_popup_menu();
+	my $ui_manager = $self->_build_ui_manager();
+	$self->ui_manager($ui_manager);
+
+	my $menu = $ui_manager->get_widget('/DomViewPopup');
+	$self->menu($menu);
 
 	$self->signal_connect('row-activated' => \&callback_row_activated);
 	$self->signal_connect('button-press-event' => \&callback_button_press_event);
-
-	return $self;
 }
 
 
-sub _build_popup_menu {
+sub _build_ui_manager {
 	my $self = shift;
 
 	my $entries = [
@@ -131,10 +131,14 @@ sub _build_popup_menu {
 	my $actions = Gtk2::ActionGroup->new("DomViewActions");
 	$actions->add_actions($entries, undef);
 
-	my $ui_manager = $self->{ui_manager};
+	my $ui_manager = Gtk2::UIManager->new();
+	$self->ui_manager($ui_manager);
+	my $conf = Xacobeo::Conf->get_conf;
+	my $file = $conf->share_file('xacobeo', 'ui', 'dom-view.xml');
+	$ui_manager->add_ui_from_file($file);
+
 	$ui_manager->insert_action_group($actions, 0);
-	my $menu = $ui_manager->get_widget('/DomViewPopup');
-	$self->menu($menu);
+	return $ui_manager;
 }
 
 
