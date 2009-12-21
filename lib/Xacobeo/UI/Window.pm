@@ -485,7 +485,7 @@ sub _create_ui_manager {
 
 
 	my $ui_manager = Gtk2::UIManager->new();
-	my $file = $self->conf->share_file('xacobeo', 'xacobeo-ui.xml');
+	my $file = $self->conf->share_file('xacobeo', 'ui', 'window.xml');
 	$ui_manager->add_ui_from_file($file);
 
 	my $actions = Gtk2::ActionGroup->new("Actions");
