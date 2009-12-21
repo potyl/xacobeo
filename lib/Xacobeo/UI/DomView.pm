@@ -46,6 +46,7 @@ use Xacobeo::Accessors qw{
 	namespaces
 	ui_manager
 	menu
+	action_group
 };
 
 use Glib::Object::Subclass 'Gtk2::TreeView' =>
@@ -130,7 +131,9 @@ sub _build_ui_manager {
 	];
 
 	my $actions = Gtk2::ActionGroup->new("DomViewActions");
+	$self->action_group($actions);
 	$actions->add_actions($entries, undef);
+	$actions->set_sensitive(FALSE);
 
 	my $ui_manager = Gtk2::UIManager->new();
 	$self->ui_manager($ui_manager);
@@ -185,6 +188,7 @@ sub callback_button_press_event {
 	my $selection = $self->get_selection;
 	$selection->unselect_all();
 	$selection->select_path($path);
+	$self->action_group->set_sensitive(TRUE);
 
 	$self->menu->popup(undef, undef, undef, undef, $event->button, $event->time);
 
