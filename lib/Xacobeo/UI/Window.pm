@@ -87,6 +87,12 @@ sub INIT_INSTANCE {
 	$self->set_size_request(800, 600);
 
 
+	my $ui_manager = Gtk2::UIManager->new();
+	$self->ui_manager($ui_manager);
+	my $file = $self->conf->share_file('xacobeo', 'xacobeo-ui.xml');
+	$ui_manager->add_ui_from_file($file);
+
+
 	# Build the window's widgets
 	my $vbox = Gtk2::VBox->new(FALSE, 0);
 	$self->add($vbox);
@@ -482,12 +488,8 @@ sub _create_menu {
 	my $actions = Gtk2::ActionGroup->new("Actions");
 	$actions->add_actions($active_entries, undef);
 
-	my $ui = Gtk2::UIManager->new();
-	$self->ui_manager($ui);
+	my $ui = $self->ui_manager;
 	$ui->insert_action_group($actions, 0);
-
-	my $file = $self->conf->share_file('xacobeo', 'xacobeo-ui.xml');
-	$ui->add_ui_from_file($file);
 	$self->add_accel_group($ui->get_accel_group);
 
 	return $ui->get_widget('/MenuBar');
@@ -524,7 +526,7 @@ sub _create_main_content {
 	my $hpaned = Gtk2::HPaned->new();
 
 	# Left part - Tree view
-	my $dom_view = Xacobeo::UI::DomView->new();
+	my $dom_view = Xacobeo::UI::DomView->new($self->ui_manager);
 	$self->dom_view($dom_view);
 	$hpaned->pack1(scrollify($dom_view, 200), FALSE, TRUE);
 

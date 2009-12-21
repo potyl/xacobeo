@@ -44,9 +44,20 @@ use Xacobeo::XS;
 use Xacobeo::Accessors qw{
 	document
 	namespaces
+	ui_manager
+	menu
 };
 
 use Glib::Object::Subclass 'Gtk2::TreeView' =>
+	properties => [
+		Glib::ParamSpec->object(
+			'ui_manager',
+			'UI Manager',
+			"The UI Manager that provides the UI.",
+			'Gtk2::UIManager',
+			['readable', 'writable'],
+		),
+	],
 	signals => {
 		'node-selected' => {
 			flags       => ['run-last'],
@@ -64,9 +75,11 @@ my $NODE_NAME     = $NODE_POS++;
 my $NODE_ID_NAME  = $NODE_POS++;
 my $NODE_ID_VALUE = $NODE_POS++;
 
+sub new {
+	my $class = shift;
+	my ($ui_manager) = @_;
 
-sub INIT_INSTANCE {
-	my $self = shift;
+	my $self = $class->SUPER::new(ui_manager => $ui_manager);
 
 	my $model = Gtk2::TreeStore->new(
 		'Glib::String', # Unique path to the node
@@ -91,8 +104,37 @@ sub INIT_INSTANCE {
 	$self->_add_text_column($NODE_ID_VALUE, __('ID value'));
 	
 
+	$self->_build_popup_menu();
+
 	$self->signal_connect('row-activated' => \&callback_row_activated);
 	$self->signal_connect('button-press-event' => \&callback_button_press_event);
+
+	return $self;
+}
+
+
+sub _build_popup_menu {
+	my $self = shift;
+
+	my $entries = [
+		# Entries (name, stock id, label, accelerator, tooltip, callback)
+		[
+			'DomViewCopyXPath',
+			'gtk-copy',
+			__("_Copy XPath"),
+			undef,
+			__("Copy the node's XPath"),
+			sub { $self->do_copy_xpath() }
+		],
+	];
+
+	my $actions = Gtk2::ActionGroup->new("DomViewActions");
+	$actions->add_actions($entries, undef);
+
+	my $ui_manager = $self->{ui_manager};
+	$ui_manager->insert_action_group($actions, 0);
+	my $menu = $ui_manager->get_widget('/DomViewPopup');
+	$self->menu($menu);
 }
 
 
@@ -101,28 +143,28 @@ sub INIT_INSTANCE {
 #
 sub callback_row_activated {
 	my ($self, $path) = @_;
-	my $node = $self->_path_to_node($path);
+
+	my $model = $self->get_model;
+	my $iter = $model->get_iter($path);
+	my $xpath = $model->get($iter, $NODE_PATH);
+	my $node = $self->document->find($xpath)->[0];
 	$self->signal_emit('node-selected' => $node);
 }
 
 
 sub do_show_popup_menu {
-	my ($self, $xpath, $event) = @_;
-
-	my $menu = Gtk2::Menu->new();
-
-	my $item = Gtk2::MenuItem->new_with_mnemonic(__("Copy path"));
-	$menu->append($item);
-	$item->signal_connect("activate", sub {$self->do_copy_xpath($xpath)});
-
-	$menu->show_all();
-	$menu->popup(undef, undef, undef, undef, $event->button, $event->time);
+	my ($self, $event) = @_;
+	$self->menu->popup(undef, undef, undef, undef, $event->button, $event->time);
 }
 
 
 sub do_copy_xpath {
 	my $self = shift;
-	my ($xpath) = @_;
+
+	# Get the selected node and find its xpath
+	my $selection = $self->get_selection;
+	my ($model, $iter) = $selection->get_selected or return;
+	my $xpath = $model->get($iter, $NODE_PATH);
 
 	foreach my $selection qw(SELECTION_CLIPBOARD SELECTION_PRIMARY) {
 		my $clipboard = Gtk2::Clipboard->get(Gtk2::Gdk->$selection);
@@ -145,31 +187,9 @@ sub callback_button_press_event {
 	$selection->unselect_all();
 	$selection->select_path($path);
 
-	my $xpath = $self->_path_to_xpath($path);
-	$self->do_show_popup_menu($xpath, $event);
+	$self->do_show_popup_menu($event);
 
 	return TRUE;
-}
-
-
-sub _path_to_xpath {
-	my $self = shift;
-	my ($path) = @_;
-
-	my $model = $self->get_model;
-	my $iter = $model->get_iter($path);
-	my $xpath = $model->get($iter, $NODE_PATH);
-	return $xpath;
-}
-
-
-sub _path_to_node {
-	my $self = shift;
-	my ($path) = @_;
-
-	my $xpath = $self->_path_to_xpath($path);
-	my $node = $self->document->find($xpath)->[0];
-	return $node;
 }
 
 
