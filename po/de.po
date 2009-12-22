@@ -8,60 +8,59 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-18 20:05+0100\n"
-"PO-Revision-Date: 2009-04-21 07:57+0200\n"
+"PO-Revision-Date: 2009-12-23 00:43+0100\n"
 "Last-Translator: Lars Dɪᴇᴄᴋᴏᴡ 迪拉斯 <daxim@cpan.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 1.0\n"
 
 #: lib/Xacobeo/App.pm:152
 #, perl-brace-format
 msgid "Failed to load plugin described by {file}; {error}"
-msgstr ""
+msgstr "Konnte das in {file} beschriebene Plugin nicht laden; {error}"
 
 #: lib/Xacobeo/App.pm:158
 #, perl-brace-format
 msgid "Failed to scan folder {folder}; {error}"
-msgstr ""
+msgstr "Konnte Verzeichnis {folder} nicht abfragen; {error}"
 
 #: lib/Xacobeo/App.pm:189
 msgid "File is not describing a Xacobeo plugin"
-msgstr ""
+msgstr "Datei beschreibt kein Plugin für Xacobeo"
 
 #: lib/Xacobeo/App.pm:198
 #, perl-brace-format
 msgid "Error while load package {package}; {error}"
-msgstr ""
+msgstr "Fehler während des Ladens des Pakets {package}; {error}"
 
 #: lib/Xacobeo/App.pm:201
 #, perl-brace-format
 msgid "Package {package} failed to return a plugin"
-msgstr ""
+msgstr "Paket {package} lieferte kein Plugin zurück"
 
 #: lib/Xacobeo/App.pm:209
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Can't load script {script}; {error}"
-msgstr "{file} kann nicht gelesen werden: {error}"
+msgstr "Skript {script} kann nicht geladen werden; {error}"
 
 #: lib/Xacobeo/App.pm:212
 #, perl-brace-format
 msgid "Script {script} failed to return a plugin"
-msgstr ""
+msgstr "Script {script} lieferte kein Plugin zurück"
 
 #: lib/Xacobeo/App.pm:216
 msgid "File is missing the key Package or Script"
-msgstr ""
+msgstr "In der Datei fehlen die Schlüssel Package oder Script"
 
 #: lib/Xacobeo/UI/SourceView.pm:184
 msgid "Node is undef"
 msgstr "Knoten ist undef"
 
 #: lib/Xacobeo/UI/Window.pm:79
-#, fuzzy
 msgid "No document"
-msgstr "Dokument laden"
+msgstr "Kein Dokument"
 
 #: lib/Xacobeo/UI/Window.pm:186
 #, perl-format
@@ -100,16 +99,16 @@ msgstr "DOM-Baum"
 
 #: lib/Xacobeo/UI/Window.pm:376
 msgid "Open file..."
-msgstr ""
+msgstr "Datei öffnen…"
 
 #: lib/Xacobeo/UI/Window.pm:419
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "About {name}"
-msgstr "Ü_ber Xacobeo"
+msgstr "Über {name}"
 
 #: lib/Xacobeo/UI/Window.pm:434
 msgid "Simple XPath viewer"
-msgstr ""
+msgstr "Ein einfaches Anzeigeprogramm für XPath"
 
 #: lib/Xacobeo/UI/Window.pm:449
 msgid "_File"
@@ -121,27 +120,27 @@ msgstr "_Hilfe"
 
 #: lib/Xacobeo/UI/Window.pm:457
 msgid "_Open"
-msgstr ""
+msgstr "Ö_ffnen"
 
 #: lib/Xacobeo/UI/Window.pm:459
 msgid "Open a file"
-msgstr ""
+msgstr "Datei öffnen"
 
 #: lib/Xacobeo/UI/Window.pm:465
 msgid "_Quit"
-msgstr ""
+msgstr "Be_enden"
 
 #: lib/Xacobeo/UI/Window.pm:467
 msgid "Quit"
-msgstr ""
+msgstr "Beenden"
 
 #: lib/Xacobeo/UI/Window.pm:475
 msgid "_About"
-msgstr ""
+msgstr "Ü_ber"
 
 #: lib/Xacobeo/UI/Window.pm:477
 msgid "About"
-msgstr ""
+msgstr "Über"
 
 #: lib/Xacobeo/UI/Window.pm:501
 msgid "XPath:"
@@ -161,11 +160,11 @@ msgstr "Ergebnisse"
 
 #: lib/Xacobeo/UI/Window.pm:556
 msgid "Prefix"
-msgstr ""
+msgstr "Präfix"
 
 #: lib/Xacobeo/UI/Window.pm:557
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 #: lib/Xacobeo/UI/Window.pm:562
 msgid "Namespaces"
@@ -190,7 +189,7 @@ msgstr "Zeit: %-20s %.4fs\n"
 
 #: lib/Xacobeo/Timer.pm:152
 msgid "Unnamed"
-msgstr ""
+msgstr "Unbenannt"
 
 #: lib/Xacobeo/Document.pm:78 lib/Xacobeo/Document.pm:118
 msgid "Parameter 'type' must be defined"

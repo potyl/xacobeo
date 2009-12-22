@@ -2,7 +2,9 @@
 Version=1.0
 Name=Xacobeo
 GenericName=XPath visualizer
+GenericName[de]=Darstellung von XPath
 Comment=Build and execute XPath queries
+Comment[de]=XPath-Abfragen erstellen und ausführen
 Exec=xacobeo
 Icon=xacobeo
 Terminal=false
