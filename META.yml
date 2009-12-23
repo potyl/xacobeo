@@ -60,6 +60,8 @@ provides:
     file: lib/Xacobeo/Document.pm
   Xacobeo::Error:
     file: lib/Xacobeo/Error.pm
+  Xacobeo::GObject:
+    file: lib/Xacobeo/GObject.pm
   Xacobeo::I18n:
     file: lib/Xacobeo/I18n.pm
   Xacobeo::Plugin:
