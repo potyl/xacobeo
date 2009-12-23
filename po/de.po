@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-18 20:05+0100\n"
+"POT-Creation-Date: 2009-12-23 22:38+0100\n"
 "PO-Revision-Date: 2009-12-23 00:43+0100\n"
 "Last-Translator: Lars Dɪᴇᴄᴋᴏᴡ 迪拉斯 <daxim@cpan.org>\n"
 "MIME-Version: 1.0\n"
@@ -101,7 +101,7 @@ msgstr "DOM-Baum"
 msgid "Open file..."
 msgstr "Datei öffnen…"
 
-#: lib/Xacobeo/UI/Window.pm:419
+#: lib/Xacobeo/UI/Window.pm:423
 #, perl-brace-format
 msgid "About {name}"
 msgstr "Über {name}"
@@ -170,23 +170,23 @@ msgstr "URI"
 msgid "Namespaces"
 msgstr "Namensräume"
 
-#: lib/Xacobeo/UI/DomView.pm:91
+#: lib/Xacobeo/UI/DomView.pm:92
 msgid "Element"
 msgstr "Element"
 
-#: lib/Xacobeo/UI/DomView.pm:99
+#: lib/Xacobeo/UI/DomView.pm:100
 msgid "ID name"
 msgstr "ID-Name"
 
-#: lib/Xacobeo/UI/DomView.pm:102
+#: lib/Xacobeo/UI/DomView.pm:103
 msgid "ID value"
 msgstr "ID-Wert"
 
-#: lib/Xacobeo/UI/DomView.pm:124
+#: lib/Xacobeo/UI/DomView.pm:126
 msgid "_Copy XPath"
 msgstr ""
 
-#: lib/Xacobeo/UI/DomView.pm:126
+#: lib/Xacobeo/UI/DomView.pm:128
 msgid "Copy the node's XPath"
 msgstr ""
 
