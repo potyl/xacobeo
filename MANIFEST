@@ -9,6 +9,7 @@ lib/Xacobeo/App.pm
 lib/Xacobeo/Conf.pm
 lib/Xacobeo/Document.pm
 lib/Xacobeo/Error.pm
+lib/Xacobeo/GObject.pm
 lib/Xacobeo/I18n.pm
 lib/Xacobeo/Plugin.pm
 lib/Xacobeo/Timer.pm
@@ -33,6 +34,7 @@ share/pixmaps/xacobeo.png
 share/xacobeo/ui/window.xml
 share/xacobeo/ui/dom-view.xml
 t/document.t
+t/object.t
 t/Xacobeo-XS.t
 tests/beers.xml
 tests/SVG.svg
