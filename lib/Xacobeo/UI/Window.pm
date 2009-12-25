@@ -172,10 +172,11 @@ Xacobeo::GObject->register_package('Gtk2::Window' =>
 			['readable', 'writable'],
 		),
 
-		Glib::ParamSpec->scalar(
+		Glib::ParamSpec->object(
 			'conf',
 			"Configuration",
 			"A reference to the main configuration singleton",
+			'Xacobeo::Conf',
 			['readable', 'writable'],
 		),
 	],
