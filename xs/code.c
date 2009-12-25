@@ -847,6 +847,11 @@ static gchar* my_get_node_name_prefixed (xmlNode *node, HV *namespaces) {
 //
 static const gchar* my_get_uri_prefix (const xmlChar *uri, HV *namespaces) {
 
+	// Reset of the namespace to the default namespace
+	if (xmlStrEqual(uri, "")) {
+		return NULL;
+	}
+
 	// Get the prefix corresponding to the namespace
 	SV **svPtr = hv_fetch(namespaces, (gchar *) uri, xmlStrlen(uri), FALSE);
 	if (!svPtr) {
