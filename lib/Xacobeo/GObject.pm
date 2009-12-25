@@ -15,7 +15,7 @@ Xacobeo::GObject - Build GObjects easily.
 			Glib::ParamSpec->object(
 				'ui-manager',
 				'UI Manager',
-				"The UI Manager that provides the UI.",
+				"The UI Manager that provides the UI",
 				'Gtk2::UIManager',
 				['readable', 'writable'],
 			),

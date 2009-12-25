@@ -73,7 +73,7 @@ Xacobeo::GObject->register_package('Gtk2::TreeView' =>
 		Glib::ParamSpec->object(
 			'ui-manager',
 			"UI Manager",
-			"The UI Manager that provides the UI.",
+			"The UI Manager that provides the UI",
 			'Gtk2::UIManager',
 			['readable', 'writable'],
 		),
@@ -81,7 +81,7 @@ Xacobeo::GObject->register_package('Gtk2::TreeView' =>
 		Glib::ParamSpec->object(
 			'action-group',
 			"Action Group",
-			"The action group with context menu entries.",
+			"The action group with context menu entries",
 			'Gtk2::ActionGroup',
 			['readable', 'writable'],
 		),
@@ -89,7 +89,7 @@ Xacobeo::GObject->register_package('Gtk2::TreeView' =>
 		Glib::ParamSpec->object(
 			'menu',
 			"Context Menu",
-			"The context menu for the tree items.",
+			"The context menu for the tree items",
 			'Gtk2::ActionGroup',
 			['readable', 'writable'],
 		),
@@ -97,7 +97,7 @@ Xacobeo::GObject->register_package('Gtk2::TreeView' =>
 		Glib::ParamSpec->object(
 			'document',
 			"Document",
-			"The main document being displayed.",
+			"The main document being displayed",
 			'Xacobeo::Document',
 			['readable', 'writable'],
 		),
@@ -106,7 +106,7 @@ Xacobeo::GObject->register_package('Gtk2::TreeView' =>
 		Glib::ParamSpec->scalar(
 			'namespaces',
 			"Namespaces",
-			"The namespaces in the main document.",
+			"The namespaces in the main document",
 			['readable', 'writable'],
 		),
 	],
