@@ -50,9 +50,27 @@ use Glib qw(TRUE FALSE);
 use Gtk2;
 use Gtk2::Ex::Entry::Pango;
 
+use Xacobeo::GObject;
 use Xacobeo::Accessors qw(document valid);
 
-use Glib::Object::Subclass 'Gtk2::Ex::Entry::Pango' =>
+Xacobeo::GObject->register_package('Gtk2::Ex::Entry::Pango' =>
+	properties => [
+		Glib::ParamSpec->object(
+			'document',
+			"Document",
+			"The main document being displayed",
+			'Xacobeo::Document',
+			['readable', 'writable'],
+		),
+
+		Glib::ParamSpec->boolean(
+			'valid',
+			"Valid XPath",
+			"Indicates if the XPath expression is valid",
+			FALSE,
+			['readable', 'writable'],
+		),
+	],
 	signals => {
 		'xpath-changed' => {
 			flags       => ['run-last'],
@@ -60,14 +78,13 @@ use Glib::Object::Subclass 'Gtk2::Ex::Entry::Pango' =>
 			param_types => ['Glib::String',    'Glib::Boolean'],
 		},
 	},
-;
+);
 
 
 sub INIT_INSTANCE {
 	my $self = shift;
 
 	$self->signal_connect('changed' => \&callback_changed);
-	$self->valid(FALSE);
 	$self->set_sensitive(FALSE);
 }
 
