@@ -83,7 +83,7 @@ sub register_object {
 			
 			# The setter: $self->set_property($value)
 			define_method($class, "set_$key", sub {
-					$_[0]->set($name, $_[1]);
+				$_[0]->set($name, $_[1]);
 			});
 
 
@@ -91,7 +91,7 @@ sub register_object {
 			#   $value = $self->property;
 			#   $self->property($value);
 			define_method($class, $key, sub {
-					return @_ > 1 ? $_[0]{$key} = $_[1] : $_[0]{$key};
+				return @_ > 1 ? $_[0]{$key} = $_[1] : $_[0]{$key};
 			});
 		}
 	}
@@ -99,9 +99,33 @@ sub register_object {
 
 
 sub define_method {
-	my ($class, $method, $sub) = @_;
+	my ($class, $method, $code) = @_;
+	return if $class->can($method);
+
+	# Error handling that reports the error as hapenning on the caller
+	my $sub = sub {
+		my ($return, @return);
+		my $wantarray = wantarray;
+		eval {
+			if ($wantarray) {
+				@return = $code->(@_);
+			}
+			else {
+				$return = $code->(@_);
+			}
+			1;
+		} or do {
+			# Tell the caller that this is their fault and not ours
+			my $error = $@;
+			$error =~ s/ at .*? line \d+\.\n$//;
+			croak $error;
+		};
+
+		return $wantarray ? @return : $return;
+	};
+
 	no strict 'refs';
-	*{"${class}::${method}"} = $sub unless $class->can($method);
+	*{"${class}::${method}"} = $sub;
 }
 
 
