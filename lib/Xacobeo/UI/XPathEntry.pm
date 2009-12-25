@@ -83,6 +83,8 @@ Xacobeo::GObject->register_package('Gtk2::Ex::Entry::Pango' =>
 			['readable', 'writable'],
 		),
 	],
+
+	# FIXME perhaps this signal should be removed and the caller shoud connect to notify::is-valid
 	signals => {
 		'xpath-changed' => {
 			flags       => ['run-last'],
