@@ -69,7 +69,6 @@ use Data::Dumper;
 use Carp qw(croak);
 
 use Xacobeo::I18n;
-
 use Xacobeo::GObject;
 
 Xacobeo::GObject->register_package('Glib::Object' =>
