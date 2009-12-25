@@ -51,7 +51,6 @@ use Gtk2;
 use Gtk2::Ex::Entry::Pango;
 
 use Xacobeo::GObject;
-use Xacobeo::Accessors qw(document valid);
 
 Xacobeo::GObject->register_package('Gtk2::Ex::Entry::Pango' =>
 	properties => [
