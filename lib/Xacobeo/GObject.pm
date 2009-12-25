@@ -8,7 +8,9 @@ Xacobeo::GObject - Build GObjects easily.
 
 	package My::Widget;
 	
-	use Xacobeo::GObject 'Gtk2::Entry' =>
+	use Xacobeo::GObject;
+	
+	Xacobeo::GObject->register_package('Gtk2::Entry' =>
 		properties => [
 			Glib::ParamSpec->object(
 				'ui-manager',
@@ -18,7 +20,7 @@ Xacobeo::GObject - Build GObjects easily.
 				['readable', 'writable'],
 			),
 		],
-	;
+	);
 	
 	# Builtin constructor
 	my $widget = My::Widget->new();
@@ -49,10 +51,10 @@ use Carp;
 use Data::Dumper;
 
 
-sub import {
-	my ($self, $parent, %args) = @_;
+sub register_package {
+	my $self = shift;
 	my $class = caller;
-	$self->register_object($class, $parent, %args);
+	$self->register_object($class, @_);
 }
 
 
