@@ -848,7 +848,7 @@ static gchar* my_get_node_name_prefixed (xmlNode *node, HV *namespaces) {
 static const gchar* my_get_uri_prefix (const xmlChar *uri, HV *namespaces) {
 
 	// Reset of the namespace to the default namespace
-	if (xmlStrEqual(uri, "")) {
+	if (xmlStrEqual(uri, BAD_CAST "")) {
 		return NULL;
 	}
 
@@ -985,7 +985,7 @@ static MarkupTags* my_get_buffer_tags (GtkTextBuffer *buffer) {
 //
 static gchar* my_get_node_path (xmlNode *node) {
 	xmlChar *node_path = node ? xmlGetNodePath(node) : NULL;
-	gchar *path = g_strdup(node_path);
+	gchar *path = g_strdup((const gchar *) node_path);
 	xmlFree(node_path);
 	return path;
 }
