@@ -18,6 +18,50 @@ Xacobeo::UI::Window - Main window of Xacobeo.
 
 The application's main window. This widget is a L<Gtk2::Window>.
 
+=head1 PROPERTIES
+
+The following properties are defined:
+
+=head2 source-view
+
+The source view where the document's content is displayed.
+
+=head2 dom-view
+
+The widget displaying the results of a search
+
+=head2 results-view
+
+The UI Manager used by this widget.
+
+=head2 namespaces-view
+
+The widget displaying the namespaces of the current document.
+
+=head2 xpath-entry
+
+The entry where the XPath expresion will be edited.
+
+=head2 statusbar
+
+The window's statusbar.
+
+=head2 notebook
+
+The notbook widget at the bottom of the window.
+
+=head2 evaluate-button
+
+The button starting a search.
+
+=head2 conf
+
+A reference to the main configuration singleton.
+
+=head2 ui-manager
+
+The UI Manager used by this widget.
+
 =head1 METHODS
 
 The following methods are available:
@@ -43,9 +87,10 @@ use Xacobeo::UI::SourceView;
 use Xacobeo::UI::DomView;
 use Xacobeo::UI::Statusbar;
 use Xacobeo::UI::XPathEntry;
+use Xacobeo::Document;
+use Xacobeo::GObject;
 use Xacobeo::I18n;
 use Xacobeo::Timer;
-use Xacobeo::Document;
 use Xacobeo::Error;
 use Xacobeo::Utils qw{
 	isa_dom_nodelist
@@ -53,20 +98,96 @@ use Xacobeo::Utils qw{
 	scrollify
 };
 
-use Xacobeo::Accessors qw{
-	source_view
-	dom_view
-	results_view
-	namespaces_view
-	notebook
-	statusbar
-	xpath_entry
-	evaluate_button
-	ui_manager
-	conf
-};
 
-use Glib::Object::Subclass 'Gtk2::Window';
+Xacobeo::GObject->register_package('Gtk2::Window' =>
+	properties => [
+		Glib::ParamSpec->object(
+			'source-view',
+			"Source View",
+			"The source view where the document content is displayed",
+			'Xacobeo::UI::SourceView',
+			['readable', 'writable'],
+		),
+
+		Glib::ParamSpec->object(
+			'dom-view',
+			"DOM View",
+			"The DOM tree view where the document nodes are displayed",
+			'Xacobeo::UI::DomView',
+			['readable', 'writable'],
+		),
+
+		Glib::ParamSpec->object(
+			'results-view',
+			"Results View",
+			"The widget displaying the results of a search",
+			'Xacobeo::UI::SourceView',
+			['readable', 'writable'],
+		),
+
+		Glib::ParamSpec->scalar(
+			'namespaces-view',
+			"Namespaces View",
+			"The widget displaying the namespaces of the current document",
+			['readable', 'writable'],
+		),
+
+		Glib::ParamSpec->object(
+			'xpath-entry',
+			"XPath Entry",
+			"The entry where the XPath expresion will be edited",
+			'Xacobeo::UI::XPathEntry',
+			['readable', 'writable'],
+		),
+
+		Glib::ParamSpec->object(
+			'statusbar',
+			"Statusbar",
+			"The window's statusbar",
+			'Xacobeo::UI::Statusbar',
+			['readable', 'writable'],
+		),
+
+		Glib::ParamSpec->object(
+			'ui-manager',
+			"UI Manager",
+			"The UI Manager that provides the UI",
+			'Gtk2::UIManager',
+			['readable', 'writable'],
+		),
+
+		Glib::ParamSpec->object(
+			'notebook',
+			"Notebook",
+			"The notbook widget at the bottom of the window",
+			'Gtk2::Notebook',
+			['readable', 'writable'],
+		),
+
+		Glib::ParamSpec->object(
+			'evaluate-button',
+			"Evaluate Button",
+			"The button starting a search",
+			'Gtk2::Button',
+			['readable', 'writable'],
+		),
+
+		Glib::ParamSpec->scalar(
+			'conf',
+			"Configuration",
+			"A reference to the main configuration singleton",
+			['readable', 'writable'],
+		),
+	],
+
+	signals => {
+		'node-selected' => {
+			flags       => ['run-last'],
+			# Parameters:   Node
+			param_types => ['Glib::Scalar'],
+		},
+	},
+);
 
 
 sub INIT_INSTANCE {
