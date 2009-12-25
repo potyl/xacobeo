@@ -31,6 +31,19 @@ L<Gtk2::Ex::Entry::Pango>.
 The widget validates the text in realtime. In order to support validation for
 namespaces a document has to be set first.
 
+=head1 PROPERTIES
+
+The following properties are defined:
+
+=head2 document
+
+The document being displayed.
+
+=head2 valid
+
+Indicates if the XPath expression beind displayed is valid based on the current
+document.
+
 =head1 METHODS
 
 The following methods are available:
