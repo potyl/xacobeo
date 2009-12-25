@@ -17,6 +17,14 @@ Xacobeo::UI::Statusbar - Xacobeo's statusbar
 
 A simple statusbar. This widget is a L<Gtk2::Statusbar>.
 
+=head1 PROPERTIES
+
+The following properties are defined:
+
+=head2 context-id
+
+The context id for the default messages.
+
 =head1 METHODS
 
 The following methods are available:
@@ -35,20 +43,29 @@ use Data::Dumper;
 use Glib qw(TRUE FALSE);
 use Gtk2;
 
+use Xacobeo::GObject;
 
-use Xacobeo::Accessors qw{
-	context_id
-};
+Xacobeo::GObject->register_package('Gtk2::Statusbar' =>
+	properties => [
+		Glib::ParamSpec->scalar(
+			'context-id',
+			"Context ID",
+			"The context id for the default status messages",
+			['readable', 'writable', 'construct-only'],
+		),
+	],
+);
 
-use Glib::Object::Subclass 'Gtk2::Statusbar';
 
+sub new {
+	my $class = shift;
 
-sub INIT_INSTANCE {
-	my $self = shift;
+	my $self = $class->SUPER::new();
 
-	$self->context_id(
-		$self->get_context_id('default')
-	);
+	my $id = $self->get_context_id('default');
+	$self->context_id($id);
+
+	return $self;
 }
 
 
