@@ -66,10 +66,9 @@ use Xacobeo::I18n;
 use Xacobeo::XS;
 use Xacobeo::Document;
 
-use Xacobeo::Accessors qw{
-};
+use Xacobeo::GObject;
 
-use Xacobeo::GObject 'Gtk2::TreeView' =>
+Xacobeo::GObject->register_package('Gtk2::TreeView' =>
 	properties => [
 		Glib::ParamSpec->object(
 			'ui-manager',
@@ -119,7 +118,7 @@ use Xacobeo::GObject 'Gtk2::TreeView' =>
 			param_types => ['Glib::Scalar'],
 		},
 	},
-;
+);
 
 
 my $NODE_POS = 0;

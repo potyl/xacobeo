@@ -70,7 +70,9 @@ use Carp qw(croak);
 
 use Xacobeo::I18n;
 
-use Xacobeo::GObject 'Glib::Object' =>
+use Xacobeo::GObject;
+
+Xacobeo::GObject->register_package('Glib::Object' =>
 	properties => [
 		Glib::ParamSpec->scalar(
 			'source',
@@ -116,7 +118,7 @@ use Xacobeo::GObject 'Glib::Object' =>
 			param_types => ['Glib::Scalar'],
 		},
 	},
-;
+);
 
 
 =head2 new_from_file
