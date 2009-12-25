@@ -177,7 +177,7 @@ Xacobeo::GObject->register_package('Gtk2::Window' =>
 			"Configuration",
 			"A reference to the main configuration singleton",
 			'Xacobeo::Conf',
-			['readable', 'writable'],
+			['readable', 'writable', 'construct-only'],
 		),
 	],
 
@@ -191,21 +191,19 @@ Xacobeo::GObject->register_package('Gtk2::Window' =>
 );
 
 
-sub INIT_INSTANCE {
-	my $self = shift;
+sub new {
+	my $class = shift;
 
 	my $conf = Xacobeo::Conf->get_conf;
-	$self->conf($conf);
+	my $self = $class->SUPER::new(conf => $conf);
 
-	# Pimp a bit the window (title, icon
+	# Pimp a bit the window (title, icon, size)
 	$self->set_title(__("No document"));
-
 	$self->set_icon(
 		Gtk2::Gdk::Pixbuf->new_from_file(
 			$conf->share_file('pixmaps', 'xacobeo.png')
 		)
 	);
-
 	$self->set_size_request(800, 600);
 
 	my $ui_manager = $self->_create_ui_manager();
@@ -233,6 +231,8 @@ sub INIT_INSTANCE {
 	$self->_signal_connect(xpath_entry => 'activate', \&callback_execute_xpath);
 	$self->_signal_connect(evaluate_button => 'activate', \&callback_execute_xpath);
 	$self->_signal_connect(evaluate_button => 'clicked', \&callback_execute_xpath);
+
+	return $self;
 }
 
 
