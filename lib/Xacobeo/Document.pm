@@ -10,7 +10,7 @@ Xacobeo::Document - An XML document and its related information.
 	
 	my $document = Xacobeo::Document->new_from_file('file.xml', 'xml');
 	
-	my $namespaces = $document->namespaces(); # Hashref
+	my $namespaces = $document->get_namespaces(); # Hashref
 	while (my ($uri, $prefix) = each %{ $namespaces }) {
 		printf "%-5s: %s\n", $prefix, $uri;
 	}
@@ -25,8 +25,35 @@ Xacobeo::Document - An XML document and its related information.
 
 =head1 DESCRIPTION
 
-This package wraps an XML document with its corresponding meta information
+This class wraps an XML document with its corresponding meta information
 (namespaces, XPath context, document node, etc).
+
+It inherits from L<Glib::Object>.
+
+=head1 PROPERTIES
+
+The following properties are defined:
+
+=head2 source
+
+The source of the document. In most cases this will be a path or an URI pointing
+to the document.
+
+=head2 type
+
+The type of document 'xml' or 'html'.
+
+=head2 documentNode
+
+The document's main node (an instance of L<XML::LibXML::Node>).
+
+=head2 xpath
+
+The XPath conext to be used with the document.
+
+=head2 namespaces
+
+An hashref with the namespaces registered in the document.
 
 =head1 METHODS
 
@@ -41,17 +68,55 @@ use XML::LibXML qw(XML_XML_NS);
 use Data::Dumper;
 use Carp qw(croak);
 
-use Xacobeo::Utils qw(:dom);
-use Xacobeo::I18n qw(__ __x);
+use Xacobeo::I18n;
 
+use Xacobeo::GObject 'Glib::Object' =>
+	properties => [
+		Glib::ParamSpec->scalar(
+			'source',
+			"Document Source",
+			"The document's source",
+			['readable', 'writable', 'construct-only'],
+		),
 
-use Xacobeo::Accessors qw{
-	source
-	type
-	documentNode
-	xpath
-	namespaces
-};
+		# FIXME type should be an enum
+		Glib::ParamSpec->scalar(
+			'type',
+			"Document Type",
+			"The document's source",
+			['readable', 'writable', 'construct-only'],
+		),
+
+		Glib::ParamSpec->scalar(
+			'documentNode',
+			"Document Node",
+			"The document's main node",
+			['readable', 'writable'],
+		),
+
+		Glib::ParamSpec->scalar(
+			'xpath',
+			"XPath  context",
+			"The XPath context to be used for searching the document",
+			['readable', 'writable'],
+		),
+
+		Glib::ParamSpec->scalar(
+			'namespaces',
+			"Document namespaces",
+			"The namespaces used in the document",
+			['readable', 'writable'],
+		),
+	],
+
+	signals => {
+		'node-selected' => {
+			flags       => ['run-last'],
+			# Parameters:   Node
+			param_types => ['Glib::Scalar'],
+		},
+	},
+;
 
 
 =head2 new_from_file
@@ -84,11 +149,11 @@ sub new_from_file {
 		$document_node = $parser->parse_html_file($source);
 	}
 
-	my $self = bless {}, ref($class) || $class;
-	$self->source($source);
-	$self->type($type);
-
-	$self->_init($document_node);
+	my $self = $class->new(
+		source       => $source,
+		type         => $type,
+		documentNode => $document_node,
+	);
 
 	return $self;
 }
@@ -124,11 +189,11 @@ sub new_from_string {
 		$document_node = $parser->parse_html_string($content);
 	}
 
-	my $self = bless {}, ref($class) || $class;
-	$self->source('string');
-	$self->type($type);
-
-	$self->_init($document_node);
+	my $self = $class->new(
+		source       => 'string',
+		type         => $type,
+		documentNode => $document_node,
+	);
 
 	return $self;
 }
@@ -143,35 +208,36 @@ Returns an empty document.
 sub empty {
 	my ($class) = @_;
 
-	my $self = bless {}, ref($class) || $class;
-	my ($source, $type) = (undef, 'empty');
-	$self->source($source);
-	$self->type($type);
-
 	my $empty = XML::LibXML->createDocument();
-	$self->_init($empty);
+	my $self = $class->new(
+		source       => undef,
+		type         => 'empty',
+		documentNode => $empty,
+	);
 
 	return $self;
 }
 
 
 #
-# Finish the creation of a new instance.
+# Finish the creation of a new instance. This constructor shouldn't be called
+# by external code. Instead use one of the others builtin constructors.
 #
-sub _init {
-	my ($self, $document_node) = @_;
+sub new {
+	my $class = shift;
 
-	$self->documentNode($document_node);
+	my $self = $class->SUPER::new(@_);
 
 	# Find the namespaces
-	$self->namespaces(_get_all_namespaces($document_node));
+	my $document_node = $self->documentNode;
+	my $namespaces = _get_all_namespaces($document_node);
+	$self->namespaces($namespaces);
 
 	# Create the XPath context
-	$self->xpath(
-		$self->_create_xpath_context()
-	);
+	my $xpath_context = $self->_create_xpath_context();
+	$self->xpath($xpath_context);
 
-	return;
+	return $self;
 }
 
 
@@ -371,6 +437,7 @@ sub _get_all_namespaces {
 		$cleaned{$prefix} = $uri;
 		$namespaces->{$uri} = $prefix;
 	}
+
 	return $namespaces;
 }
 
