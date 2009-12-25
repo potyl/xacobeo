@@ -18,6 +18,14 @@ Xacobeo::Conf - Application's configuration.
 Utility class that provides a way for accessing all configuration parameters
 that are needed at runtime..
 
+=head1 PROPERTIES
+
+The following properties are defined:
+
+=head2 dir
+
+The root directory where the application has been installed.
+
 =head1 METHODS
 
 The following methods are available:
@@ -31,12 +39,21 @@ use FindBin;
 use File::Spec::Functions;
 use File::BaseDir;
 
-use Xacobeo::Accessors qw{
-	dir
-};
+use Xacobeo::GObject;
+
+Xacobeo::GObject->register_package('Glib::Object' =>
+	properties => [
+		Glib::ParamSpec->scalar(
+			'dir',
+			"Dir",
+			"The root folder of the application's installation",
+			['readable', 'writable', 'construct-only'],
+		),
+	],
+);
 
 my $XDG = File::BaseDir->new();
-my $INSTANCE = __PACKAGE__->init();
+my $INSTANCE;
 
 
 =head2 get_conf
@@ -57,10 +74,7 @@ sub init {
 	
 	$dir ||= find_app_folder();
 
-	my $self = bless {}, ref($class) || $class;
-	$self->dir($dir);
-	
-	$INSTANCE = $self;
+	$INSTANCE = $class->SUPER::new(dir => $dir);
 }
 
 
