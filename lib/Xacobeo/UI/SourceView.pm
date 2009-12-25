@@ -23,6 +23,16 @@ Xacobeo::UI::SourceView - Text editor that displays XML.
 The text editor widget that's used for displaying XML. This widget is a
 L<Gtk2::SourceView2::View>.
 
+=head1 PROPERTIES
+
+=head2 document
+
+The document being displayed.
+
+=head2 namespaces
+
+The namespaces registered in the document.
+
 =head1 METHODS
 
 The following methods are available:
