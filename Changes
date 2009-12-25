@@ -1,11 +1,13 @@
 Changelog for Xacobeo.
 
 
-0.13 Mon Dec 21 21:02:54 CET 2009
+0.13 Fri Dec 25 19:12:05 CET 2009
 	- Issue 40: create XPath expression from DOM.
 	- Issue 36: l10n of strings Prefix and URI missing.
 	- Issue 37: l10n es fr wrong for msgid 12 "Document node is missing".
 	- Issue 34: l10n of desktop entry.
+	- Fix a warning when an element resets the namespace declaration to the
+	  default namespace (xmlns="").
 
 
 0.12 Sun Dec 13 23:49:03 CET 2009
