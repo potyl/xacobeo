@@ -111,6 +111,7 @@ sub set_document {
 	my ($document) = @_;
 	$self->document($document);
 	$self->set_sensitive($document ? TRUE : FALSE);
+	# FIXME changing the document has to trigger a revalidation of the xpath expression
 }
 
 
