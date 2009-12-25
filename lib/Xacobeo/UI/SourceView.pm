@@ -53,13 +53,29 @@ use Xacobeo::Utils qw(
 );
 use Xacobeo::XS;
 use Xacobeo::I18n;
+use Xacobeo::Document;
+use Xacobeo::GObject;
 
-use Xacobeo::Accessors qw{
-	document
-	namespaces
-};
 
-use Glib::Object::Subclass 'Gtk2::SourceView2::View';
+Xacobeo::GObject->register_package('Gtk2::SourceView2::View' =>
+	properties => [
+		Glib::ParamSpec->object(
+			'document',
+			"Document",
+			"The main document being displayed.",
+			'Xacobeo::Document',
+			['readable', 'writable'],
+		),
+
+		# FIXME this property is redundant as we can use $self->document->namespaces
+		Glib::ParamSpec->scalar(
+			'namespaces',
+			"Namespaces",
+			"The namespaces in the main document.",
+			['readable', 'writable'],
+		),
+	],
+);
 
 
 # The tag table shared by all editors
