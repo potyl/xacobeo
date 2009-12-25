@@ -21,6 +21,30 @@ Xacobeo::UI::DomView - DOM tree view
 
 The application's main window. This widget is a L<Gtk2::TreeView>.
 
+=head1 PROPERTIES
+
+The following properties are defined:
+
+=head2 ui-manager
+
+The UI Manager used by this widget.
+
+=head2 action-group
+
+The action group that provides the values in the context menu.
+
+=head2 menu
+
+The context menu of the widget.
+
+=head2 document
+
+The document being displayed.
+
+=head2 namespaces
+
+The namespaces registered in the document.
+
 =head1 METHODS
 
 The following methods are available:
@@ -40,25 +64,54 @@ use Glib qw(TRUE FALSE);
 use Gtk2;
 use Xacobeo::I18n;
 use Xacobeo::XS;
+use Xacobeo::Document;
 
 use Xacobeo::Accessors qw{
-	document
-	namespaces
-	ui_manager
-	menu
-	action_group
 };
 
-use Glib::Object::Subclass 'Gtk2::TreeView' =>
+use Xacobeo::GObject 'Gtk2::TreeView' =>
 	properties => [
 		Glib::ParamSpec->object(
-			'ui_manager',
-			'UI Manager',
+			'ui-manager',
+			"UI Manager",
 			"The UI Manager that provides the UI.",
 			'Gtk2::UIManager',
 			['readable', 'writable'],
 		),
+
+		Glib::ParamSpec->object(
+			'action-group',
+			"Action Group",
+			"The action group with context menu entries.",
+			'Gtk2::ActionGroup',
+			['readable', 'writable'],
+		),
+
+		Glib::ParamSpec->object(
+			'menu',
+			"Context Menu",
+			"The context menu for the tree items.",
+			'Gtk2::ActionGroup',
+			['readable', 'writable'],
+		),
+
+		Glib::ParamSpec->object(
+			'document',
+			"Document",
+			"The main document being displayed.",
+			'Xacobeo::Document',
+			['readable', 'writable'],
+		),
+
+		# FIXME this property is redundant as we can use $self->document->namespaces
+		Glib::ParamSpec->scalar(
+			'namespaces',
+			"Namespaces",
+			"The namespaces in the main document.",
+			['readable', 'writable'],
+		),
 	],
+
 	signals => {
 		'node-selected' => {
 			flags       => ['run-last'],
@@ -188,6 +241,7 @@ sub callback_button_press_event {
 	my $selection = $self->get_selection;
 	$selection->unselect_all();
 	$selection->select_path($path);
+
 	$self->action_group->set_sensitive(TRUE);
 
 	$self->menu->popup(undef, undef, undef, undef, $event->button, $event->time);
@@ -215,6 +269,7 @@ sub set_document {
 		$self->document ? $self->document->namespaces : undef
 	);
 }
+
 
 =head2 load_node
 
