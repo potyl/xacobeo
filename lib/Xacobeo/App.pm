@@ -23,6 +23,17 @@ Xacobeo::App - Application
 Instance to the main application. This singleton is used to manage the life-time
 of the application, its widgets (specially the main windows) and to setup the
 application.
+=head1 PROPERTIES
+
+The following properties are defined:
+
+=head2 conf
+
+A reference to the main configuration singleton.
+
+=head2 windows
+
+The windows available.
 
 =head1 METHODS
 
@@ -36,13 +47,29 @@ use warnings;
 use File::Spec::Functions;
 
 use Xacobeo::Conf;
+use Xacobeo::GObject;
 use Xacobeo::I18n;
 use Xacobeo::UI::Window;
-use Xacobeo::Accessors qw{
-	windows
-	conf
-};
 
+
+Xacobeo::GObject->register_package('Gtk2::Window' =>
+	properties => [
+		Glib::ParamSpec->scalar(
+			'windows',
+			"Windows",
+			"The windows openned so far",
+			['readable', 'writable', 'construct-only'],
+		),
+
+		Glib::ParamSpec->object(
+			'conf',
+			"Configuration",
+			"A reference to the main configuration singleton",
+			'Xacobeo::Conf',
+			['readable', 'writable', 'construct-only'],
+		),
+	],
+);
 
 
 my $INSTANCE = __PACKAGE__->init();
@@ -68,10 +95,11 @@ sub init {
 	my $conf = Xacobeo::Conf->get_conf;
 	Xacobeo::I18n->init($conf->share_dir('locale'));
 	
-	my $self = bless {}, ref($class) || $class;
-	$self->windows([]);
-	$self->conf($conf);
-	
+	my $self = $class->SUPER::new(
+		windows => [],
+		conf    => $conf,
+	);
+
 	$INSTANCE = $self;
 }
 
