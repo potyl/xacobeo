@@ -1003,6 +1003,7 @@ static gchar* my_get_node_path (xmlNode *origin, HV *namespaces) {
 
 		switch (node->type) {
 			case XML_DOCUMENT_NODE:
+			case XML_HTML_DOCUMENT_NODE:
 				g_string_append_c(gstring, '/');
 			break;
 
