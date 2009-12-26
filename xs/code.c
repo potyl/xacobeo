@@ -128,7 +128,7 @@ static const gchar* my_get_uri_prefix          (const xmlChar *uri, HV *namespac
 static void         my_render_buffer           (TextRenderCtx *xargs);
 static void         my_add_text_and_entity     (TextRenderCtx *xargs, GString *buffer, GtkTextTag *markup, const gchar *entity);
 static void         my_populate_tree_store     (TreeRenderCtx *xargs, xmlNode *node, GtkTreeIter *parent, gint pos);
-static gchar*       my_get_node_path           (xmlNode *node);
+static gchar*       my_get_node_path           (xmlNode *node, HV *namespaces);
 
 static void         my_XML_DOCUMENT_NODE       (TextRenderCtx *xargs, xmlNode *node);
 static void         my_XML_HTML_DOCUMENT_NODE  (TextRenderCtx *xargs, xmlNode *node);
@@ -214,7 +214,7 @@ static void my_populate_tree_store (TreeRenderCtx *xargs, xmlNode *node, GtkTree
 
 
 	gchar *node_name = my_get_node_name_prefixed(node, xargs->namespaces);
-	gchar *node_path = (node->type == XML_ELEMENT_NODE ? my_get_node_path(node) : NULL);
+	gchar *node_path = (node->type == XML_ELEMENT_NODE ? my_get_node_path(node, xargs->namespaces) : NULL);
 	
 	// Find out if the node has an attribute that's an ID
 	gboolean done = FALSE;
@@ -923,7 +923,7 @@ static void my_buffer_add (TextRenderCtx *xargs, GtkTextTag *tag, xmlNode *node,
 	// UTF-8 may encode one character as multiple bytes.
 	glong end = xargs->buffer_pos + g_utf8_strlen(content, -1);
 
-	gchar *path = node ? my_get_node_path(node) : NULL;
+	gchar *path = node ? my_get_node_path(node, xargs->namespaces) : NULL;
 
 	// Apply the markup if there's a tag
 	if (tag) {
@@ -983,9 +983,47 @@ static MarkupTags* my_get_buffer_tags (GtkTextBuffer *buffer) {
 //
 // This function returns a string that has to be freed with g_free().
 //
-static gchar* my_get_node_path (xmlNode *node) {
-	xmlChar *node_path = node ? xmlGetNodePath(node) : NULL;
-	gchar *path = g_strdup((const gchar *) node_path);
-	xmlFree(node_path);
+static gchar* my_get_node_path (xmlNode *origin, HV *namespaces) {
+
+	if (origin == NULL) {
+		return NULL;
+	}
+
+	// Reverse the path to the node (from top to bottom)
+	GSList *list = NULL;
+	for (xmlNode *iter = origin; iter; iter = iter->parent) {
+		list = g_slist_prepend(list, iter);
+	}
+
+	// Build the path to the node
+	GString *gstring = g_string_sized_new(32);
+	gboolean use_separator = FALSE;
+	for (GSList *iter = list; iter; iter = iter->next) {
+		xmlNode *node = (xmlNode *) iter->data;
+
+		switch (node->type) {
+			case XML_DOCUMENT_NODE:
+				g_string_append_c(gstring, '/');
+			break;
+
+			case XML_ELEMENT_NODE:
+					if (use_separator) {
+						g_string_append_c(gstring, '/');
+					}
+					else {
+						use_separator = TRUE;
+					}
+					// FIXME inspect the sibling of each node to make sure that the node is
+					//       unique otherwise we will generate a path that matches multiple
+					//       nodes.
+					gchar *name = my_get_node_name_prefixed(node, namespaces);
+					g_string_append(gstring, name);
+					g_free(name);
+			break;
+		}
+	}
+	g_slist_free(list);
+	gchar *path = g_string_free(gstring, FALSE);
+	g_print("New: %s\n", path);
 	return path;
 }
