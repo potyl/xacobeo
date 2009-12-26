@@ -20,6 +20,27 @@ functions are much faster than their Perl counterpart.
 
 The following class methods are available:
 
+=cut
+
+use 5.006;
+use strict;
+use warnings;
+
+use parent qw(DynaLoader);
+use Gtk2;
+use XML::LibXML;
+
+use Exporter 'import';
+our @EXPORT_OK = qw(
+	xacobeo_populate_gtk_text_buffer
+	xacobeo_populate_gtk_tree_store
+);
+
+
+sub dl_load_flags {return 0x01}
+
+
+
 =head2 load_text_buffer
 
 Populates a L<Gtk2::TextBuffer> with the contents of an L<XML::LibXML::Node>.
@@ -46,6 +67,16 @@ The namespaces declared in the document. Must be an hash ref where the keys are
 the URIs and the values the prefixes of the namespaces.
 
 =back
+
+=cut
+
+sub load_text_buffer {
+	my $class = shift;
+	my ($buffer, $node, $namespaces) = @_;
+	xacobeo_populate_gtk_text_buffer($buffer, $node, $namespaces);
+}
+
+
 
 =head2 load_tree_store
 
@@ -75,35 +106,65 @@ the URIs and the values the prefixes of the namespaces.
 
 =cut
 
-use 5.006;
-use strict;
-use warnings;
-
-use parent qw(DynaLoader);
-use Gtk2;
-use XML::LibXML;
-
-use Exporter 'import';
-our @EXPORT_OK = qw(
-	xacobeo_populate_gtk_text_buffer
-	xacobeo_populate_gtk_tree_store
-);
-
-
-sub dl_load_flags {return 0x01}
-
-
-sub load_text_buffer {
-	my $class = shift;
-	my ($buffer, $node, $namespaces) = @_;
-	xacobeo_populate_gtk_text_buffer($buffer, $node, $namespaces);
-}
-
-
 sub load_tree_store {
 	my $class = shift;
 	my ($store, $node, $namespaces) = @_;
 	xacobeo_populate_gtk_tree_store($store, $node, $namespaces);
+}
+
+
+
+=head2 get_node_mark
+
+Returns a unique identifier for the given node.
+
+Parameters:
+
+=over
+
+=item * $node
+
+The node. Must be an instance of L<XML::LibXML::Node>.
+
+=back
+
+=cut
+
+sub get_node_mark {
+	my $class = shift;
+	my ($node) = @_;
+	xacobeo_get_node_mark($node);
+}
+
+
+
+=head2 get_node_path
+
+Returns a unique XPath path for the given L<XML::LibXML::Node>. The path will
+use node names using the right prefixes.
+
+Parameters:
+
+=over
+
+=item * $node
+
+The node for which the path has to be computed. Must be an instance of
+L<XML::LibXML::Node>.
+
+=item $namespaces
+
+The namespaces declared in the document. Must be an hash ref where the keys are
+the URIs and the values the prefixes of the namespaces.
+
+=back
+
+=cut
+
+sub get_node_path {
+	my $class = shift;
+	my ($node, $namespaces) = @_;
+	xacobeo_get_node_path($node, $namespaces);
 }
 
 

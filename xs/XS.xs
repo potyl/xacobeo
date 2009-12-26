@@ -25,3 +25,14 @@ xacobeo_populate_gtk_tree_store(store, node, namespaces)
 	GtkTreeStore  *store
 	xmlNodePtr    node
 	HV            *namespaces
+
+
+gchar*
+xacobeo_get_node_path(node, namespaces)
+	xmlNodePtr    node
+	HV            *namespaces
+
+
+gchar*
+xacobeo_get_node_mark(node)
+	xmlNodePtr    node

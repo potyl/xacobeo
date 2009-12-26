@@ -122,7 +122,7 @@ Xacobeo::GObject->register_package('Gtk2::TreeView' =>
 
 
 my $NODE_POS = 0;
-my $NODE_PATH     = $NODE_POS++;
+my $NODE_DATA     = $NODE_POS++;
 my $NODE_ICON     = $NODE_POS++;
 my $NODE_NAME     = $NODE_POS++;
 my $NODE_ID_NAME  = $NODE_POS++;
@@ -133,7 +133,7 @@ sub INIT_INSTANCE {
 	my $self = shift;
 
 	my $model = Gtk2::TreeStore->new(
-		'Glib::String', # Unique path to the node
+		'Glib::Scalar', # A reference to the XML::LibXML::Node
 		'Glib::String', # The icon to use (ex: 'gtk-directory')
 		'Glib::String', # The name of the Element
 		'Glib::String', # The name of the ID field
@@ -206,8 +206,7 @@ sub callback_row_activated {
 
 	my $model = $self->get_model;
 	my $iter = $model->get_iter($path);
-	my $xpath = $model->get($iter, $NODE_PATH);
-	my $node = $self->document->find($xpath)->[0];
+	my $node = $model->get($iter, $NODE_DATA);
 	$self->signal_emit('node-selected' => $node);
 }
 
@@ -218,7 +217,8 @@ sub do_copy_xpath {
 	# Get the selected node and find its xpath
 	my $selection = $self->get_selection;
 	my ($model, $iter) = $selection->get_selected or return;
-	my $xpath = $model->get($iter, $NODE_PATH);
+	my $node = $model->get($iter, $NODE_DATA);
+	my $xpath = Xacobeo::XS->get_node_path($node, $self->namespaces);
 
 	foreach my $selection qw(SELECTION_CLIPBOARD SELECTION_PRIMARY) {
 		my $clipboard = Gtk2::Clipboard->get(Gtk2::Gdk->$selection);

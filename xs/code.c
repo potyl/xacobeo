@@ -96,7 +96,7 @@ typedef struct _ApplyTag {
 	GtkTextTag *tag;
 	gsize      start;
 	gsize      end;
-	gchar      *path;
+	gchar      *name;
 } ApplyTag;
 
 
@@ -132,7 +132,6 @@ static const gchar* my_get_uri_prefix          (const xmlChar *uri, HV *namespac
 static void         my_render_buffer           (TextRenderCtx *xargs);
 static void         my_add_text_and_entity     (TextRenderCtx *xargs, GString *buffer, GtkTextTag *markup, const gchar *entity);
 static void         my_populate_tree_store     (TreeRenderCtx *xargs, xmlNode *node, GtkTreeIter *parent, gint pos);
-static gchar*       my_get_node_path           (xmlNode *node, HV *namespaces);
 
 static void         my_XML_DOCUMENT_NODE       (TextRenderCtx *xargs, xmlNode *node);
 static void         my_XML_HTML_DOCUMENT_NODE  (TextRenderCtx *xargs, xmlNode *node);
@@ -218,7 +217,12 @@ static void my_populate_tree_store (TreeRenderCtx *xargs, xmlNode *node, GtkTree
 
 
 	gchar *node_name = my_get_node_name_prefixed(node, xargs->namespaces);
-	gchar *node_path = (node->type == XML_ELEMENT_NODE ? my_get_node_path(node, xargs->namespaces) : NULL);
+	SV *sv = NULL;
+	if (xargs->namespaces) {
+		// This part is optional because the C main wrapper used for testing can't
+		// deal with the creation of an SV.
+		sv = PmmNodeToSv(node, xargs->proxy);
+	}
 
 	// Find out if the node has an attribute that's an ID
 	gboolean done = FALSE;
@@ -238,7 +242,7 @@ static void my_populate_tree_store (TreeRenderCtx *xargs, xmlNode *node, GtkTree
 				xargs->store, &iter, parent, pos,
 
 				DOM_COL_ICON,         ICON_ELEMENT,
-				DOM_COL_XML_PATH,     node_path,
+				DOM_COL_XML_POINTER,  sv,
 				DOM_COL_ELEMENT_NAME, node_name,
 
 				// Add the columns ID_NAME and ID_VALUE
@@ -260,14 +264,13 @@ static void my_populate_tree_store (TreeRenderCtx *xargs, xmlNode *node, GtkTree
 			xargs->store, &iter, parent, pos,
 
 			DOM_COL_ICON,         ICON_ELEMENT,
-			DOM_COL_XML_PATH,     node_path,
+			DOM_COL_XML_POINTER,  sv,
 			DOM_COL_ELEMENT_NAME, node_name,
 
 			-1
 		);
 	}
 	g_free(node_name);
-	g_free(node_path);
 
 
 	// Do the children
@@ -396,18 +399,18 @@ static void my_render_buffer (TextRenderCtx *xargs) {
 		gtk_text_buffer_get_iter_at_offset(xargs->buffer, &iter_start, to_apply->start);
 		gtk_text_buffer_get_iter_at_offset(xargs->buffer, &iter_end, to_apply->end);
 
-		if (to_apply->path) {
+		if (to_apply->name) {
 			gchar *name;
 
-			name = g_strjoin("|", to_apply->path, "start", NULL);
+			name = g_strjoin("|", to_apply->name, "start", NULL);
 			gtk_text_buffer_create_mark(xargs->buffer, name, &iter_start, TRUE);
 			g_free(name);
 
-			name = g_strjoin("|", to_apply->path, "end", NULL);
+			name = g_strjoin("|", to_apply->name, "end", NULL);
 			gtk_text_buffer_create_mark(xargs->buffer, name, &iter_end, FALSE);
 			g_free(name);
 
-			g_free(to_apply->path);
+			g_free(to_apply->name);
 		}
 
 		// This is the bottleneck of the function. On the #gedit IRC channel it was
@@ -927,7 +930,7 @@ static void my_buffer_add (TextRenderCtx *xargs, GtkTextTag *tag, xmlNode *node,
 	// UTF-8 may encode one character as multiple bytes.
 	glong end = xargs->buffer_pos + g_utf8_strlen(content, -1);
 
-	gchar *path = node ? my_get_node_path(node, xargs->namespaces) : NULL;
+	gchar *name = node ? xacobeo_get_node_mark(node) : NULL;
 
 	// Apply the markup if there's a tag
 	if (tag) {
@@ -935,7 +938,7 @@ static void my_buffer_add (TextRenderCtx *xargs, GtkTextTag *tag, xmlNode *node,
 			.tag   = tag,
 			.start = xargs->buffer_pos,
 			.end   = end,
-			.path  = path,
+			.name  = name,
 		};
 		g_array_append_val(xargs->tags, to_apply);
 	}
@@ -987,7 +990,7 @@ static MarkupTags* my_get_buffer_tags (GtkTextBuffer *buffer) {
 //
 // This function returns a string that has to be freed with g_free().
 //
-static gchar* my_get_node_path (xmlNode *origin, HV *namespaces) {
+gchar* xacobeo_get_node_path (xmlNode *origin, HV *namespaces) {
 
 	if (origin == NULL) {
 		return NULL;
@@ -1055,6 +1058,10 @@ static gchar* my_get_node_path (xmlNode *origin, HV *namespaces) {
 					}
 
 			break;
+
+			default:
+				WARN("Unknown XML type %d for %s", node->type, node->name);
+			break;
 		}
 	}
 
@@ -1063,4 +1070,14 @@ static gchar* my_get_node_path (xmlNode *origin, HV *namespaces) {
 	g_string_free(gstring, TRUE);
 
 	return path;
+}
+
+
+//
+// Returns a unique identifier for a give node.
+//
+// This function returns a string that has to be freed with g_free().
+//
+gchar* xacobeo_get_node_mark (xmlNode *node) {
+	return g_strdup_printf("%p", (void *)node);
 }
