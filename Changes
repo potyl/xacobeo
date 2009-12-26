@@ -1,7 +1,9 @@
 Changelog for Xacobeo.
 
 
-0.13 Fri Dec 25 19:12:05 CET 2009
+0.13 Sat Dec 26 20:52:23 CET 2009
+	- Issue 47: Double clicking on a DomView node can fail to select the right
+	  node.
 	- Issue 40: create XPath expression from DOM.
 	- Issue 36: l10n of strings Prefix and URI missing.
 	- Issue 37: l10n es fr wrong for msgid 12 "Document node is missing".
