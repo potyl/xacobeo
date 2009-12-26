@@ -95,12 +95,10 @@ sub init {
 	my $conf = Xacobeo::Conf->get_conf;
 	Xacobeo::I18n->init($conf->share_dir('locale'));
 	
-	my $self = $class->SUPER::new(
+	$INSTANCE = $class->SUPER::new(
 		windows => [],
 		conf    => $conf,
 	);
-
-	$INSTANCE = $self;
 }
 
 
