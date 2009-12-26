@@ -95,7 +95,7 @@ int main (int argc, char **argv) {
 // Creates the main widgets and prepares them for displaying. This function
 // returns the GtkTextView casted as a GtkWidget.
 //
-static void my_create_widgets (GtkTextView **prt_textview, GtkTreeView **prt_treeview) {
+static void my_create_widgets (GtkTextView **ptr_textview, GtkTreeView **ptr_treeview) {
 	
 	// The main widgets
 	GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -118,8 +118,8 @@ static void my_create_widgets (GtkTextView **prt_textview, GtkTreeView **prt_tre
 
 
 	// Set the return values
-	*prt_textview = GTK_TEXT_VIEW(textview);
-	*prt_treeview = GTK_TREE_VIEW(treeview);
+	*ptr_textview = GTK_TEXT_VIEW(textview);
+	*ptr_treeview = GTK_TREE_VIEW(treeview);
 }
 
 
