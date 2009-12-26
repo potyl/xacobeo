@@ -129,8 +129,10 @@ static void my_create_widgets (GtkTextView **ptr_textview, GtkTreeView **ptr_tre
 //
 static GtkWidget* my_create_textview (void) {
 	// Prepare the text view
-	GtkWidget *textview = gtk_text_view_new();
-	GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview));
+	GtkTextTagTable *table = gtk_text_tag_table_new();
+	GtkTextBuffer *buffer = gtk_text_buffer_new(table);
+	GtkWidget *textview = gtk_text_view_new_with_buffer(buffer);
+
 	my_create_buffer_tags(buffer);
 
 	gtk_widget_set_size_request(textview, 600, 400);
