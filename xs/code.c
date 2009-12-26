@@ -27,6 +27,10 @@ do { \
 	g_free(content); \
 } while (FALSE)
 
+#define ELEMENT_MATCH(a, b) (a)->type == XML_ELEMENT_NODE \
+	&& xmlStrEqual((a)->name, (b)->name) \
+	&& (a)->ns == (b)->ns
+
 // The icon type to use for an element
 #define ICON_ELEMENT "gtk-directory"
 
@@ -1014,18 +1018,49 @@ static gchar* my_get_node_path (xmlNode *origin, HV *namespaces) {
 					else {
 						use_separator = TRUE;
 					}
-					// FIXME inspect the sibling of each node to make sure that the node is
-					//       unique otherwise we will generate a path that matches multiple
-					//       nodes.
 					gchar *name = my_get_node_name_prefixed(node, namespaces);
 					g_string_append(gstring, name);
 					g_free(name);
+
+
+					// Check if the node has siblings with the same name and namespace. If
+					// yes then we must add an offset to the xpath expression.
+
+					// Look for previous sibling with the same name.
+					int similar = 0;
+					for (xmlNode *sibling = node->prev; sibling; sibling = sibling->prev) {
+						if (ELEMENT_MATCH(sibling, node)) {
+							++similar;
+						}
+					}
+
+					if (similar == 0) {
+						// No previous sibling, but maybe we are the first in the incoming
+						// list! Let's scan on the other direction
+						for (xmlNode *sibling = node->next; sibling; sibling = sibling->next) {
+							if (ELEMENT_MATCH(sibling, node)) {
+								similar = 1;
+								break;
+							}
+						}
+					}
+					else {
+						// XPath starts its indexex at 1 instead of 0
+						++similar;
+					}
+
+					if (similar) {
+						// The node name is not unique we must add an index
+						g_string_append_printf(gstring, "[%d]", similar);
+					}
+
 			break;
 		}
 	}
+
 	g_slist_free(list);
 	gchar *path = g_strdup(gstring->str);
 	g_string_free(gstring, TRUE);
-	g_print("New: %s\n", path);
+
 	return path;
 }
