@@ -149,7 +149,7 @@ static GtkWidget* my_create_treeview (void) {
 	// Prepre the tree view
 	GtkWidget *treeview = gtk_tree_view_new();
 	GtkTreeStore *store = gtk_tree_store_new(5,
-		G_TYPE_POINTER, 
+		G_TYPE_STRING, 
 		G_TYPE_STRING,
 		G_TYPE_STRING,
 		G_TYPE_STRING,
