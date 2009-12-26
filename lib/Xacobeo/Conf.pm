@@ -53,7 +53,7 @@ Xacobeo::GObject->register_package('Glib::Object' =>
 );
 
 my $XDG = File::BaseDir->new();
-my $INSTANCE;
+my $INSTANCE = __PACKAGE__->init();
 
 
 =head2 get_conf
