@@ -180,14 +180,6 @@ Xacobeo::GObject->register_package('Gtk2::Window' =>
 			['readable', 'writable', 'construct-only'],
 		),
 	],
-
-	signals => {
-		'node-selected' => {
-			flags       => ['run-last'],
-			# Parameters:   Node
-			param_types => ['Glib::Scalar'],
-		},
-	},
 );
 
 

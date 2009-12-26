@@ -109,14 +109,6 @@ Xacobeo::GObject->register_package('Glib::Object' =>
 			['readable', 'writable'],
 		),
 	],
-
-	signals => {
-		'node-selected' => {
-			flags       => ['run-last'],
-			# Parameters:   Node
-			param_types => ['Glib::Scalar'],
-		},
-	},
 );
 
 
