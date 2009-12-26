@@ -1024,7 +1024,8 @@ static gchar* my_get_node_path (xmlNode *origin, HV *namespaces) {
 		}
 	}
 	g_slist_free(list);
-	gchar *path = g_string_free(gstring, FALSE);
+	gchar *path = g_strdup(gstring->str);
+	g_string_free(gstring, TRUE);
 	g_print("New: %s\n", path);
 	return path;
 }
