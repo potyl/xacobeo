@@ -1,7 +1,7 @@
 Changelog for Xacobeo.
 
 
-0.13 Sat Dec 26 20:52:23 CET 2009
+0.13 Sun Dec 27 15:55:39 CET 2009
 	- Issue 47: Double clicking on a DomView node can fail to select the right
 	  node.
 	- Issue 40: create XPath expression from DOM.
@@ -10,6 +10,7 @@ Changelog for Xacobeo.
 	- Issue 34: l10n of desktop entry.
 	- Fix a warning when an element resets the namespace declaration to the
 	  default namespace (xmlns="").
+	- Core objects are now descendents of Glib::Objects.
 
 
 0.12 Sun Dec 13 23:49:03 CET 2009
