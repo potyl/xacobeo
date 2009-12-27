@@ -217,39 +217,14 @@ sub new {
 
 
 	# Connect the signals
-	$self->_signal_connect(dom_view => 'node-selected');
-	$self->_signal_connect(xpath_entry => 'xpath-changed');
+	$self->auto_connect(dom_view => 'node-selected');
+	$self->auto_connect(xpath_entry => 'xpath-changed');
 
-	$self->_signal_connect(xpath_entry => 'activate', \&callback_execute_xpath);
-	$self->_signal_connect(evaluate_button => 'activate', \&callback_execute_xpath);
-	$self->_signal_connect(evaluate_button => 'clicked', \&callback_execute_xpath);
+	$self->auto_connect(xpath_entry => 'activate', \&callback_execute_xpath);
+	$self->auto_connect(evaluate_button => 'activate', \&callback_execute_xpath);
+	$self->auto_connect(evaluate_button => 'clicked', \&callback_execute_xpath);
 
 	return $self;
-}
-
-
-#
-# Helper for connecting signals easily.
-#
-# Args:
-#   $object:   the name of object that will fire the signal
-#   $signal:   the name of the signal
-#   $callback: the callback to connect, if no callback is provided then
-#              "callback_$signal" will be used instead (Optional).
-#
-sub _signal_connect {
-	my $self = shift;
-	my ($object, $signal, $callback) = @_;
-
-	if (! $callback) {
-		# Build the callback's name based on the signal name
-		my $name = "callback_$signal";
-		$name =~ tr/-/_/;
-		$callback = $self->can($name) or croak "Can't find callback: $name";
-	}
-
-
-	$self->{$object}->signal_connect($signal => sub { $self->$callback(@_); });
 }
 
 
