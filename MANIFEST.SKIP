@@ -18,3 +18,4 @@
 ^debian/
 ^po/.*[.]po~$
 ^run[.]pl$
+^[.]valgrind$
