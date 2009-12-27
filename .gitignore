@@ -9,3 +9,4 @@ po/*.po~
 target/
 xs/*.o
 Xacobeo-*.tar.gz
+main
