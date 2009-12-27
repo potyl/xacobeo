@@ -7,7 +7,9 @@ use Test::More tests => 10;
 use Data::Dumper;
 
 use Gtk2 '-init';
-use Xacobeo::GObject 'Gtk2::Entry' =>
+use Xacobeo::GObject;
+
+Xacobeo::GObject->register_package( 'Gtk2::Entry' =>
 	properties => [
 		Glib::ParamSpec->object(
 			'ui-manager',
@@ -17,7 +19,8 @@ use Xacobeo::GObject 'Gtk2::Entry' =>
 			['readable', 'writable'],
 		),
 	],
-;
+);
+
 
 exit main();
 
