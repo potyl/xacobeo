@@ -174,6 +174,14 @@ sub _build_ui_manager {
 	my $entries = [
 		# Entries (name, stock id, label, accelerator, tooltip, callback)
 		[
+			'DomViewSelectNode',
+			'gtk-jump-to',
+			__("_Jump to"),
+			undef,
+			__("Show the node"),
+			sub { $self->do_select_node() }
+		],
+		[
 			'DomViewCopyXPath',
 			'gtk-copy',
 			__("_Copy XPath"),
@@ -194,8 +202,11 @@ sub _build_ui_manager {
 	my $ui_string = <<'__XML__';
 <ui>
 	<popup name="DomViewPopup">
-		<menuitem action='DomViewCopyXPath'/>
+		<menuitem action='DomViewSelectNode'/>
 		<placeholder name="DomViewPlaceholder_1"/>
+		<separator/>
+		<menuitem action='DomViewCopyXPath'/>
+		<placeholder name="DomViewPlaceholder_2"/>
 	</popup>
 </ui>
 __XML__
@@ -222,16 +233,31 @@ sub callback_row_activated {
 sub do_copy_xpath {
 	my $self = shift;
 
-	# Get the selected node and find its xpath
-	my $selection = $self->get_selection;
-	my ($model, $iter) = $selection->get_selected or return;
-	my $node = $model->get($iter, $NODE_DATA);
+	my $node = $self->get_selected_node or return;
 	my $xpath = Xacobeo::XS->get_node_path($node, $self->namespaces);
 
 	foreach my $selection qw(SELECTION_CLIPBOARD SELECTION_PRIMARY) {
 		my $clipboard = Gtk2::Clipboard->get(Gtk2::Gdk->$selection);
 		$clipboard->set_text($xpath);
 	}
+}
+
+
+sub do_select_node {
+	my $self = shift;
+
+	my $node = $self->get_selected_node or return;
+	$self->signal_emit('node-selected' => $node);
+}
+
+
+sub get_selected_node {
+	my $self = shift;
+	# Get the selected node and find its xpath
+	my $selection = $self->get_selection;
+	my ($model, $iter) = $selection->get_selected or return;
+	my $node = $model->get($iter, $NODE_DATA);
+	return $node;
 }
 
 
