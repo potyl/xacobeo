@@ -145,7 +145,7 @@ all: main xs
 
 .PHONY: leaks
 leaks: main
-	valgrind --tool=memcheck --leak-check=full --show-reachable=yes --trace-children=yes --suppressions=.valgrind ./main $(FILE) quit
+	valgrind --tool=memcheck --leak-check=full --show-reachable=yes --trace-children=yes --suppressions=.valgrind ./main --quit $(FILE)
 
 
 .PHONY: clean

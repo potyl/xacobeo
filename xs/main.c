@@ -33,6 +33,7 @@ int main (int argc, char **argv) {
 	gboolean no_xml    = FALSE;
 	gboolean no_source = FALSE;
 	gboolean no_dom    = FALSE;
+	gboolean quit      = FALSE;
 
 	// Parse the arguments
 	gtk_init(&argc, &argv);
@@ -41,6 +42,7 @@ int main (int argc, char **argv) {
 		{ "no-xml",    'X', 0, G_OPTION_ARG_NONE, &no_xml,    "Don't load the XML document", NULL },
 		{ "no-source", 'S', 0, G_OPTION_ARG_NONE, &no_source, "Don't show the XML source", NULL },
 		{ "no-dom",    'D', 0, G_OPTION_ARG_NONE, &no_dom,    "Don't show the DOM tree", NULL },
+		{ "quit",      'q', 0, G_OPTION_ARG_NONE, &quit,      "Quit as soon as the proram is ready", NULL },
 		{ NULL, 0, 0, G_OPTION_ARG_NONE, NULL, NULL, NULL  },
 	};
 
@@ -54,8 +56,8 @@ int main (int argc, char **argv) {
 		return 1;
 	}
 
-	if (argc < 2) {
-		ERROR("Usage: %s file [quit]\n", argv[0]);
+	if (argc < 1) {
+		ERROR("Usage: %s file\n", argv[0]);
 		return 1;
 	}
 	char *filename = argv[1];
@@ -99,7 +101,7 @@ int main (int argc, char **argv) {
 	
 
 	// If we just want to time the execution time we don't need an event loop
-	if (! (argc > 2 && strcmp("quit", argv[2]) == 0) ) {
+	if (!quit) {
 		// Main event loop
 		INFO("Starting main loop");
 		gtk_main();
