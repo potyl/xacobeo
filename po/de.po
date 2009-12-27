@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-27 17:29+0100\n"
+"POT-Creation-Date: 2009-12-27 17:43+0100\n"
 "PO-Revision-Date: 2009-12-23 00:43+0100\n"
 "Last-Translator: Lars Dɪᴇᴄᴋᴏᴡ 迪拉斯 <daxim@cpan.org>\n"
 "MIME-Version: 1.0\n"
@@ -142,31 +142,31 @@ msgstr "Ü_ber"
 msgid "About"
 msgstr "Über"
 
-#: lib/Xacobeo/UI/Window.pm:594
+#: lib/Xacobeo/UI/Window.pm:618
 msgid "XPath:"
 msgstr "XPath:"
 
-#: lib/Xacobeo/UI/Window.pm:600
+#: lib/Xacobeo/UI/Window.pm:624
 msgid "XPath Expression..."
 msgstr "XPath-Ausdruck..."
 
-#: lib/Xacobeo/UI/Window.pm:605
+#: lib/Xacobeo/UI/Window.pm:629
 msgid "Evaluate"
 msgstr "Auswerten"
 
-#: lib/Xacobeo/UI/Window.pm:645
+#: lib/Xacobeo/UI/Window.pm:669
 msgid "Results"
 msgstr "Ergebnisse"
 
-#: lib/Xacobeo/UI/Window.pm:649
+#: lib/Xacobeo/UI/Window.pm:673
 msgid "Prefix"
 msgstr "Präfix"
 
-#: lib/Xacobeo/UI/Window.pm:650
+#: lib/Xacobeo/UI/Window.pm:674
 msgid "URI"
 msgstr "URI"
 
-#: lib/Xacobeo/UI/Window.pm:655
+#: lib/Xacobeo/UI/Window.pm:679
 msgid "Namespaces"
 msgstr "Namensräume"
 

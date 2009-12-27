@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-27 17:29+0100\n"
+"POT-Creation-Date: 2009-12-27 17:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -143,31 +143,31 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:594
+#: lib/Xacobeo/UI/Window.pm:618
 msgid "XPath:"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:600
+#: lib/Xacobeo/UI/Window.pm:624
 msgid "XPath Expression..."
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:605
+#: lib/Xacobeo/UI/Window.pm:629
 msgid "Evaluate"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:645
+#: lib/Xacobeo/UI/Window.pm:669
 msgid "Results"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:649
+#: lib/Xacobeo/UI/Window.pm:673
 msgid "Prefix"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:650
+#: lib/Xacobeo/UI/Window.pm:674
 msgid "URI"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:655
+#: lib/Xacobeo/UI/Window.pm:679
 msgid "Namespaces"
 msgstr ""
 
