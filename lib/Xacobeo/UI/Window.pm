@@ -574,8 +574,32 @@ sub _create_ui_manager {
 
 
 	my $ui_manager = Gtk2::UIManager->new();
-	my $file = $self->conf->share_file('xacobeo', 'ui', 'window.xml');
-	$ui_manager->add_ui_from_file($file);
+	my $ui_string = <<'__XML__';
+<ui>
+	<menubar name='MenuBar'>
+
+		<menu action='FileMenu'>
+			<menuitem action='FileOpen'/>
+			<placeholder name="FilePlaceholder_1"/>
+
+			<separator/>
+
+			<placeholder name="FilePlaceholder_2"/>
+			<menuitem action='FileQuit'/>
+		</menu>
+
+
+		<placeholder name="ExtraMenu"/>
+
+
+		<menu action='HelpMenu'>
+			<menuitem action='HelpAbout'/>
+		</menu>
+
+	</menubar>
+</ui>
+__XML__
+	$ui_manager->add_ui_from_string($ui_string);
 
 	my $actions = Gtk2::ActionGroup->new("Actions");
 	$actions->add_actions($active_entries, undef);

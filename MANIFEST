@@ -31,7 +31,6 @@ commands
 share/applications/xacobeo.desktop
 share/xacobeo/xacobeo.svg
 share/pixmaps/xacobeo.png
-share/xacobeo/ui/window.xml
 t/document.t
 t/object.t
 t/Xacobeo-XS.t
