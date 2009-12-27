@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-27 17:57+0100\n"
+"POT-Creation-Date: 2009-12-27 20:37+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -171,23 +171,31 @@ msgstr ""
 msgid "Namespaces"
 msgstr ""
 
-#: lib/Xacobeo/UI/DomView.pm:144
+#: lib/Xacobeo/UI/DomView.pm:145
 msgid "Element"
 msgstr ""
 
-#: lib/Xacobeo/UI/DomView.pm:152
+#: lib/Xacobeo/UI/DomView.pm:153
 msgid "ID name"
 msgstr ""
 
-#: lib/Xacobeo/UI/DomView.pm:155
+#: lib/Xacobeo/UI/DomView.pm:156
 msgid "ID value"
 msgstr ""
 
-#: lib/Xacobeo/UI/DomView.pm:178
+#: lib/Xacobeo/UI/DomView.pm:179
+msgid "_Jump to"
+msgstr ""
+
+#: lib/Xacobeo/UI/DomView.pm:181
+msgid "Show the node"
+msgstr ""
+
+#: lib/Xacobeo/UI/DomView.pm:187
 msgid "_Copy XPath"
 msgstr ""
 
-#: lib/Xacobeo/UI/DomView.pm:180
+#: lib/Xacobeo/UI/DomView.pm:189
 msgid "Copy the node's XPath"
 msgstr ""
 

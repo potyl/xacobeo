@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xacobeo-i 18n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-27 17:57+0100\n"
-"PO-Revision-Date: 2009-12-15 17:12+0100\n"
+"POT-Creation-Date: 2009-12-27 20:37+0100\n"
+"PO-Revision-Date: 2009-12-27 20:42+0100\n"
 "Last-Translator: Emmanuel Rodriguez <emmanuel.rodriguez@gmail.com>\n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -170,25 +170,33 @@ msgstr "URI"
 msgid "Namespaces"
 msgstr "Espacios de nombres"
 
-#: lib/Xacobeo/UI/DomView.pm:144
+#: lib/Xacobeo/UI/DomView.pm:145
 msgid "Element"
 msgstr "Elemento"
 
-#: lib/Xacobeo/UI/DomView.pm:152
+#: lib/Xacobeo/UI/DomView.pm:153
 msgid "ID name"
 msgstr "ID nombre"
 
-#: lib/Xacobeo/UI/DomView.pm:155
+#: lib/Xacobeo/UI/DomView.pm:156
 msgid "ID value"
 msgstr "ID valor"
 
-#: lib/Xacobeo/UI/DomView.pm:178
-msgid "_Copy XPath"
-msgstr ""
+#: lib/Xacobeo/UI/DomView.pm:179
+msgid "_Jump to"
+msgstr "Enseñar"
 
-#: lib/Xacobeo/UI/DomView.pm:180
+#: lib/Xacobeo/UI/DomView.pm:181
+msgid "Show the node"
+msgstr "Enseñar el nudo"
+
+#: lib/Xacobeo/UI/DomView.pm:187
+msgid "_Copy XPath"
+msgstr "Copiar XPath"
+
+#: lib/Xacobeo/UI/DomView.pm:189
 msgid "Copy the node's XPath"
-msgstr ""
+msgstr "Copiar el XPath del nudo"
 
 #: lib/Xacobeo/Timer.pm:151
 #, perl-format
@@ -199,7 +207,8 @@ msgstr "Tiempo: %-20s %.4fs\n"
 msgid "Unnamed"
 msgstr "Sin nombre"
 
-#: lib/Xacobeo/Document.pm:136 lib/Xacobeo/Document.pm:176
+#: lib/Xacobeo/Document.pm:136
+#: lib/Xacobeo/Document.pm:176
 msgid "Parameter 'type' must be defined"
 msgstr "El parametro 'type' tiene que estar definido"
 
@@ -214,11 +223,10 @@ msgstr "El espacio de nombre {name} no tiene URI"
 
 #~ msgid "Unsupported document type {type}"
 #~ msgstr "El typo de documento {type} no esta suportado"
-
 #~ msgid "Can't create widget {name} because method {function} is missing"
 #~ msgstr ""
 #~ "Imposible de crear el widget {name} porque la funcción {function} no "
 #~ "existe"
-
 #~ msgid "Copyright (C) 2008-2009 by Emmanuel Rodriguez."
 #~ msgstr "Copyright (C) 2008-2009 by Emmanuel Rodriguez."
+
