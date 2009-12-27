@@ -30,20 +30,42 @@ static xmlDoc*            my_parse_document     (const gchar *filename);
 
 int main (int argc, char **argv) {
 
+	gboolean no_xml    = FALSE;
+	gboolean no_source = FALSE;
+	gboolean no_dom    = FALSE;
+
 	// Parse the arguments
 	gtk_init(&argc, &argv);
-	
+
+	GOptionEntry entries[] = {
+		{ "no-xml",    'X', 0, G_OPTION_ARG_NONE, &no_xml,    "Don't load the XML document", NULL },
+		{ "no-source", 'S', 0, G_OPTION_ARG_NONE, &no_source, "Don't show the XML source", NULL },
+		{ "no-dom",    'D', 0, G_OPTION_ARG_NONE, &no_dom,    "Don't show the DOM tree", NULL },
+		{ NULL, 0, 0, G_OPTION_ARG_NONE, NULL, NULL, NULL  },
+	};
+
+	GError *error = NULL;
+	GOptionContext *context = g_option_context_new("- memory profiling");
+	g_option_context_add_main_entries(context, entries, NULL);
+	g_option_context_add_group(context, gtk_get_option_group(TRUE));
+	if (!g_option_context_parse(context, &argc, &argv, &error)) {
+		ERROR("option parsing failed: %s", error->message);
+		g_error_free(error);
+		return 1;
+	}
+
 	if (argc < 2) {
-		g_printf("Usage: %s file [quit]\n", argv[0]);
+		ERROR("Usage: %s file [quit]\n", argv[0]);
 		return 1;
 	}
 	char *filename = argv[1];
 
+
 	// Load the XML document
 	DEBUG("Reading file %s", filename);
-	xmlDoc *document = my_parse_document(filename);
-	if (document == NULL) {
-		g_printf("Failed to parse %s\n", filename);
+	xmlDoc *document = !no_xml ? my_parse_document(filename) : NULL;
+	if (!no_xml && document == NULL) {
+		ERROR("Failed to parse %s", filename);
 		return 1;
 	}
 	INFO("Read file %s", filename);
@@ -58,7 +80,7 @@ int main (int argc, char **argv) {
 	// Fill the TextView (it's faster to remove the buffer and to put it back)
 	GtkTextBuffer *buffer = gtk_text_view_get_buffer(textview);
 	gtk_text_view_set_buffer(textview, NULL);
-	xacobeo_populate_gtk_text_buffer(buffer, (xmlNode *) document, NULL);
+	if (!no_source) xacobeo_populate_gtk_text_buffer(buffer, (xmlNode *) document, NULL);
 	gtk_text_view_set_buffer(textview, buffer);
 
 	// Scroll to the beginning of the text
@@ -69,11 +91,11 @@ int main (int argc, char **argv) {
 	GtkTreeStore *store = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
 	gtk_tree_view_set_model(treeview, NULL);
 	gtk_tree_store_clear(store);
-	xacobeo_populate_gtk_tree_store(store, (xmlNode *) document, NULL);
+	if (!no_dom) xacobeo_populate_gtk_tree_store(store, (xmlNode *) document, NULL);
 	gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(store));
 
 	INFO("Freeing XML document");
-	xmlFreeDoc(document);
+	if (document) xmlFreeDoc(document);
 	
 
 	// If we just want to time the execution time we don't need an event loop
@@ -89,6 +111,7 @@ int main (int argc, char **argv) {
 	INFO("End of program");
 	return 0;
 }
+
 
 
 //
