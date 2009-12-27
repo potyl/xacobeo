@@ -19,7 +19,7 @@ my @XML_NS = (XML_XML_NS() => 'xml');
 my $LibXML_VERSION = XML::LibXML::LIBXML_RUNTIME_VERSION;
 
 
-exit main();
+exit main() unless caller;
 
 
 sub main {

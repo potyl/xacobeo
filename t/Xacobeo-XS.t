@@ -20,7 +20,7 @@ use File::Slurp qw(slurp);
 use Encode 'decode';
 
 
-exit tests();
+exit tests() unless caller;
 
 
 sub tests {

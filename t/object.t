@@ -22,7 +22,7 @@ Xacobeo::GObject->register_package( 'Gtk2::Entry' =>
 );
 
 
-exit main();
+exit main() unless caller;
 
 
 sub main {
