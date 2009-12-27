@@ -95,37 +95,8 @@ sub register_object {
 			define_method($class, $key, sub {
 				return @_ > 1 ? $_[0]{$key} = $_[1] : $_[0]{$key};
 			});
-
-
-			# Provide the helper auto_connect which makes it easier to connect signals
-			define_method($class, "auto_connect", \&_signal_connect);
 		}
 	}
-}
-
-
-#
-# Helper for connecting signals easily.
-#
-# Args:
-#   $object:   the name of object that will fire the signal
-#   $signal:   the name of the signal
-#   $callback: the callback to connect, if no callback is provided then
-#              "callback_$signal" will be used instead (Optional).
-#
-sub _signal_connect {
-	my $self = shift;
-	my ($object, $signal, $callback) = @_;
-
-	if (! $callback) {
-		# Build the callback's name based on the signal name
-		my $name = "callback_$signal";
-		$name =~ tr/-/_/;
-		$callback = $self->can($name) or croak "Can't find callback: $name";
-	}
-
-
-	$self->{$object}->signal_connect($signal => sub { $self->$callback(@_); });
 }
 
 

@@ -229,6 +229,31 @@ sub new {
 
 
 #
+# Helper for connecting signals easily.
+#
+# Args:
+#   $object:   the name of object that will fire the signal
+#   $signal:   the name of the signal
+#   $callback: the callback to connect, if no callback is provided then
+#              "callback_$signal" will be used instead (Optional).
+#
+sub auto_connect {
+	my $self = shift;
+	my ($object, $signal, $callback) = @_;
+
+	if (! $callback) {
+		# Build the callback's name based on the signal name
+		my $name = "callback_$signal";
+		$name =~ tr/-/_/;
+		$callback = $self->can($name) or croak "Can't find callback: $name";
+	}
+
+
+	$self->{$object}->signal_connect($signal => sub { $self->$callback(@_); });
+}
+
+
+#
 # Display the selected node in the source view and in the results view. The
 # selection is made from the tree view and we receive selected node that has to
 # be displayed.
