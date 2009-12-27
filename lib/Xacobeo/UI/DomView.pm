@@ -189,9 +189,16 @@ sub _build_ui_manager {
 
 	my $ui_manager = Gtk2::UIManager->new();
 	$self->ui_manager($ui_manager);
-	my $conf = Xacobeo::Conf->get_conf;
-	my $file = $conf->share_file('xacobeo', 'ui', 'dom-view.xml');
-	$ui_manager->add_ui_from_file($file);
+
+	my $ui_string = <<'__XML__';
+<ui>
+	<popup name="DomViewPopup">
+		<menuitem action='DomViewCopyXPath'/>
+		<placeholder name="DomViewPlaceholder_1"/>
+	</popup>
+</ui>
+__XML__
+	$ui_manager->add_ui_from_string($ui_string);
 
 	$ui_manager->insert_action_group($actions, 0);
 	return $ui_manager;
