@@ -140,8 +140,9 @@ sub INIT_INSTANCE {
 		'Glib::String', # The value of the ID field
 	);
 	$self->set_model($model);
+	$self->set_fixed_height_mode(TRUE);
 
-	my $column = $self->_add_text_column($NODE_NAME, __('Element'));
+	my $column = $self->_add_text_column($NODE_NAME, __('Element'), 150);
 
 	# Icon
 	my $node_icon = Gtk2::CellRendererPixbuf->new();
@@ -149,10 +150,10 @@ sub INIT_INSTANCE {
 	$column->set_attributes($node_icon, 'stock-id' => $NODE_ICON);
 
 	# Node attribute name (ID attribute)
-	$self->_add_text_column($NODE_ID_NAME, __('ID name'));
+	$self->_add_text_column($NODE_ID_NAME, __('ID name'), 75);
 
 	# Node attribute value (ID attribute)
-	$self->_add_text_column($NODE_ID_VALUE, __('ID value'));
+	$self->_add_text_column($NODE_ID_VALUE, __('ID value'), 75);
 	
 
 	my $ui_manager = $self->_build_ui_manager();
@@ -323,7 +324,7 @@ sub load_node {
 #
 sub _add_text_column {
 	my $self = shift;
-	my ($field, $title) = @_;
+	my ($field, $title, $width) = @_;
 
 	my $cell = Gtk2::CellRendererText->new();
 	my $column = Gtk2::TreeViewColumn->new();
@@ -331,7 +332,8 @@ sub _add_text_column {
 
 	$column->set_title($title);
 	$column->set_resizable(TRUE);
-	$column->set_sizing('autosize');
+	$column->set_sizing('fixed');
+	$column->set_fixed_width($width);
 	$column->set_attributes($cell, text => $field);
 
 	$self->append_column($column);
