@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-27 17:43+0100\n"
+"POT-Creation-Date: 2009-12-27 17:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,111 +63,111 @@ msgstr ""
 msgid "No document"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:279
+#: lib/Xacobeo/UI/Window.pm:304
 #, perl-format
 msgid "Found %d result in %0.3fs"
 msgid_plural "Found %d results in %0.3fs"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/Xacobeo/UI/Window.pm:284
+#: lib/Xacobeo/UI/Window.pm:309
 msgid "XPath query issued an error"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:334
+#: lib/Xacobeo/UI/Window.pm:359
 msgid "Load document"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:342
+#: lib/Xacobeo/UI/Window.pm:367
 #, perl-brace-format
 msgid "Can't read {file}: {error}"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:358
+#: lib/Xacobeo/UI/Window.pm:383
 #, perl-format
 msgid "Document loaded in %.3f second"
 msgid_plural "Document loaded in %.3f seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/Xacobeo/UI/Window.pm:395
+#: lib/Xacobeo/UI/Window.pm:420
 msgid "Syntax Highlight"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:404
+#: lib/Xacobeo/UI/Window.pm:429
 msgid "DOM Tree"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:469
+#: lib/Xacobeo/UI/Window.pm:494
 msgid "Open file..."
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:512
+#: lib/Xacobeo/UI/Window.pm:537
 #, perl-brace-format
 msgid "About {name}"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:527
+#: lib/Xacobeo/UI/Window.pm:552
 msgid "Simple XPath viewer"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:542
+#: lib/Xacobeo/UI/Window.pm:567
 msgid "_File"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:543
+#: lib/Xacobeo/UI/Window.pm:568
 msgid "_Help"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:550
+#: lib/Xacobeo/UI/Window.pm:575
 msgid "_Open"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:552
+#: lib/Xacobeo/UI/Window.pm:577
 msgid "Open a file"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:558
+#: lib/Xacobeo/UI/Window.pm:583
 msgid "_Quit"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:560
+#: lib/Xacobeo/UI/Window.pm:585
 msgid "Quit"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:568
+#: lib/Xacobeo/UI/Window.pm:593
 msgid "_About"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:570
+#: lib/Xacobeo/UI/Window.pm:595
 msgid "About"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:618
+#: lib/Xacobeo/UI/Window.pm:643
 msgid "XPath:"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:624
+#: lib/Xacobeo/UI/Window.pm:649
 msgid "XPath Expression..."
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:629
+#: lib/Xacobeo/UI/Window.pm:654
 msgid "Evaluate"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:669
+#: lib/Xacobeo/UI/Window.pm:694
 msgid "Results"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:673
+#: lib/Xacobeo/UI/Window.pm:698
 msgid "Prefix"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:674
+#: lib/Xacobeo/UI/Window.pm:699
 msgid "URI"
 msgstr ""
 
-#: lib/Xacobeo/UI/Window.pm:679
+#: lib/Xacobeo/UI/Window.pm:704
 msgid "Namespaces"
 msgstr ""
 
