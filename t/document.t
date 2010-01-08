@@ -69,7 +69,13 @@ sub test_without_namespaces {
 	my $regex_syntax;
 	my $regex_func;
 
-	if ($LibXML_VERSION >= 20703) {
+	if ($LibXML_VERSION >= 20705) {
+		$regex_invalid = qr/^XPath error : Invalid expression/;
+		$regex_ns      = qr/^ error : xmlXPathCompiledEval: evaluation failed/;
+		$regex_syntax  = qr/^XPath error : Invalid predicate/;
+		$regex_func    = qr/^XPath error : Unregistered function/;
+	}
+	elsif ($LibXML_VERSION >= 20703) {
 		$regex_invalid = qr/^XPath error : Invalid expression/;
 		$regex_ns      = qr/^XPath error : Undefined namespace prefix/;
 		$regex_syntax  = qr/^XPath error : Invalid predicate/;
