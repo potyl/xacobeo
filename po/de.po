@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-27 20:37+0100\n"
+"POT-Creation-Date: 2010-04-11 12:48+0200\n"
 "PO-Revision-Date: 2009-12-23 00:43+0100\n"
 "Last-Translator: Lars Dɪᴇᴄᴋᴏᴡ 迪拉斯 <daxim@cpan.org>\n"
 "MIME-Version: 1.0\n"
@@ -174,14 +174,6 @@ msgstr "Namensräume"
 msgid "Element"
 msgstr "Element"
 
-#: lib/Xacobeo/UI/DomView.pm:153
-msgid "ID name"
-msgstr "ID-Name"
-
-#: lib/Xacobeo/UI/DomView.pm:156
-msgid "ID value"
-msgstr "ID-Wert"
-
 #: lib/Xacobeo/UI/DomView.pm:179
 msgid "_Jump to"
 msgstr ""
@@ -219,6 +211,12 @@ msgstr "Dokumentenknoten fehlt"
 #, perl-brace-format
 msgid "Namespace {name} has no URI"
 msgstr "Namensraum {name} hat keinen URI"
+
+#~ msgid "ID name"
+#~ msgstr "ID-Name"
+
+#~ msgid "ID value"
+#~ msgstr "ID-Wert"
 
 #~ msgid "Unsupported document type {type}"
 #~ msgstr "Dokumententyp {type} wird nicht unterstützt"

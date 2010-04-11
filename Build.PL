@@ -34,6 +34,7 @@ my %configure_requires = (
 	'ExtUtils::PkgConfig'   => 0,
 	'ExtUtils::ParseXS'     => 0,
 	'File::Spec::Functions' => 0,
+	
 	'File::Path'            => 0,
 	'Gtk2'                  => 0,
 );

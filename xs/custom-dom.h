@@ -24,21 +24,8 @@ enum
 } ;
 
 
-typedef struct _CustomRecord    CustomRecord;
 typedef struct _CustomDom       CustomDom;
 typedef struct _CustomDomClass  CustomDomClass;
-
-
-
-/* CustomRecord: this structure represents a row */
-
-struct _CustomRecord
-{
-  xmlNode  *node;
-
-  /* admin stuff used by the custom list model */
-  guint     pos;   /* pos within the array */
-};
 
 
 

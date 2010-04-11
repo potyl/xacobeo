@@ -7,6 +7,7 @@
 #include <gtk2perl.h>
 
 #include "code.h"
+#include "custom-dom.h"
 #include "libxml.h"
 
 
@@ -36,3 +37,14 @@ xacobeo_get_node_path(node, namespaces)
 gchar*
 xacobeo_get_node_mark(node)
 	xmlNodePtr    node
+
+
+GtkTreeModel*
+xacobeo_get_custom_dom(node)
+	xmlNodePtr node
+
+	CODE:
+		RETVAL = custom_dom_new(node);
+
+	OUTPUT:
+		RETVAL

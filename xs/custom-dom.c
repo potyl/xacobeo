@@ -392,7 +392,7 @@ custom_dom_get_value (GtkTreeModel *tree_model,
   switch(column)
   {
     case CUSTOM_DOM_COL_RECORD:
-      g_value_set_pointer(value, node);
+      g_value_set_string(value, "gtk-directory");
 		break;
 
 		case CUSTOM_DOM_COL_NAME:

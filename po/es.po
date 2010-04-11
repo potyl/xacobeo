@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xacobeo-i 18n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-27 20:37+0100\n"
+"POT-Creation-Date: 2010-04-11 12:48+0200\n"
 "PO-Revision-Date: 2009-12-27 20:42+0100\n"
 "Last-Translator: Emmanuel Rodriguez <emmanuel.rodriguez@gmail.com>\n"
 "Language-Team: English\n"
@@ -174,14 +174,6 @@ msgstr "Espacios de nombres"
 msgid "Element"
 msgstr "Elemento"
 
-#: lib/Xacobeo/UI/DomView.pm:153
-msgid "ID name"
-msgstr "ID nombre"
-
-#: lib/Xacobeo/UI/DomView.pm:156
-msgid "ID value"
-msgstr "ID valor"
-
 #: lib/Xacobeo/UI/DomView.pm:179
 msgid "_Jump to"
 msgstr "Enseñar"
@@ -207,8 +199,7 @@ msgstr "Tiempo: %-20s %.4fs\n"
 msgid "Unnamed"
 msgstr "Sin nombre"
 
-#: lib/Xacobeo/Document.pm:136
-#: lib/Xacobeo/Document.pm:176
+#: lib/Xacobeo/Document.pm:136 lib/Xacobeo/Document.pm:176
 msgid "Parameter 'type' must be defined"
 msgstr "El parametro 'type' tiene que estar definido"
 
@@ -221,12 +212,19 @@ msgstr "Falta el nudo principal del documento"
 msgid "Namespace {name} has no URI"
 msgstr "El espacio de nombre {name} no tiene URI"
 
+#~ msgid "ID name"
+#~ msgstr "ID nombre"
+
+#~ msgid "ID value"
+#~ msgstr "ID valor"
+
 #~ msgid "Unsupported document type {type}"
 #~ msgstr "El typo de documento {type} no esta suportado"
+
 #~ msgid "Can't create widget {name} because method {function} is missing"
 #~ msgstr ""
 #~ "Imposible de crear el widget {name} porque la funcción {function} no "
 #~ "existe"
+
 #~ msgid "Copyright (C) 2008-2009 by Emmanuel Rodriguez."
 #~ msgstr "Copyright (C) 2008-2009 by Emmanuel Rodriguez."
-

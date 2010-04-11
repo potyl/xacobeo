@@ -21,6 +21,7 @@ BEGIN {
 use base 'Module::Build';
 use File::Spec::Functions;
 use File::Path;
+use Gtk2::CodeGen;
 
 my $CFLAGS;
 my $LIBS;
@@ -30,10 +31,17 @@ my $XS_FILE;
 
 
 BEGIN {
+
 	# Automatically find the dependencies
 	my $package = ExtUtils::Depends->new('Xacobeo::XS', 'Gtk2');
 	$package->add_typemaps('libxml2-perl.typemap');
+	$package->add_typemaps('xacobeo.typemap');
 	my %config = $package->get_makefile_vars();
+
+	$package->install(
+		File::Spec->catfile('build', 'xacobeo-autogen.h'),
+		'xacobeo-perl.h',
+	);
 
 	# Add manually the libraries that don't provide typemaps
 	my %libxml = ExtUtils::PkgConfig->find('libxml-2.0');
@@ -127,10 +135,20 @@ sub ACTION_build {
 }
 
 
+sub ACTION_code {
+	my $self = shift;
+
+	print "Code gen\n";
+	Gtk2::CodeGen->parse_maps('xacobeo', input => [ 'maps' ]);
+
+	# Proceed normally
+	$self->SUPER::ACTION_code(@_);
+}
+
+
 # Transform the XS into a C file to our liking
 sub process_xs_files {
 	my $self = shift;
-
 	ExtUtils::ParseXS::process_file(
 		filename   => $XS_FILE,
 		prototypes => 0,

@@ -168,6 +168,12 @@ sub get_node_path {
 }
 
 
+sub get_custom_dom {
+	my $class = shift;
+	my ($node) = @_;
+	return xacobeo_get_custom_dom($node);
+}
+
 __PACKAGE__->bootstrap;
 
 
