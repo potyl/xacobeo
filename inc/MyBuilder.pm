@@ -21,7 +21,6 @@ BEGIN {
 use base 'Module::Build';
 use File::Spec::Functions;
 use File::Path;
-use Gtk2::CodeGen;
 
 my $CFLAGS;
 my $LIBS;
@@ -137,9 +136,6 @@ sub ACTION_build {
 
 sub ACTION_code {
 	my $self = shift;
-
-	print "Code gen\n";
-	Gtk2::CodeGen->parse_maps('xacobeo', input => [ 'maps' ]);
 
 	# Proceed normally
 	$self->SUPER::ACTION_code(@_);
