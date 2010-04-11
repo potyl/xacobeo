@@ -12,6 +12,8 @@
 
 MODULE = Xacobeo::XS		PACKAGE = Xacobeo::XS		
 
+BOOT:
+#include "register.xsh"
 
 void
 xacobeo_populate_gtk_text_buffer(buffer, node, namespaces)

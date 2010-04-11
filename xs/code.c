@@ -13,6 +13,7 @@
 #include "code.h"
 #include "logger.h"
 #include "libxml.h"
+#include "custom-dom.h"
 
 #include <string.h>
 

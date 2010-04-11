@@ -131,13 +131,13 @@ my $NODE_ID_VALUE = $NODE_POS++;
 
 sub INIT_INSTANCE {
 	my $self = shift;
-
+use Xacobeo::Custom::Dom;
 	my $model = Gtk2::TreeStore->new(
 		'Glib::Scalar', # A reference to the XML::LibXML::Node
 		'Glib::String', # The icon to use (ex: 'gtk-directory')
 		'Glib::String', # The name of the Element
-		'Glib::String', # The name of the ID field
-		'Glib::String', # The value of the ID field
+#		'Glib::String', # The name of the ID field
+#		'Glib::String', # The value of the ID field
 	);
 	$self->set_model($model);
 	$self->set_fixed_height_mode(TRUE);
@@ -149,11 +149,11 @@ sub INIT_INSTANCE {
 	$column->pack_start($node_icon, FALSE);
 	$column->set_attributes($node_icon, 'stock-id' => $NODE_ICON);
 
-	# Node attribute name (ID attribute)
-	$self->_add_text_column($NODE_ID_NAME, __('ID name'), 75);
-
-	# Node attribute value (ID attribute)
-	$self->_add_text_column($NODE_ID_VALUE, __('ID value'), 75);
+#	# Node attribute name (ID attribute)
+#	$self->_add_text_column($NODE_ID_NAME, __('ID name'), 75);
+#
+#	# Node attribute value (ID attribute)
+#	$self->_add_text_column($NODE_ID_VALUE, __('ID value'), 75);
 	
 
 	my $ui_manager = $self->_build_ui_manager();

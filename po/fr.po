@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xacobeo-i 18n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-27 20:37+0100\n"
+"POT-Creation-Date: 2010-04-10 16:39+0200\n"
 "PO-Revision-Date: 2009-12-27 20:40+0100\n"
 "Last-Translator: Emmanuel Rodriguez <emmanuel.rodriguez@gmail.com>\n"
 "Language-Team: English\n"
@@ -174,14 +174,6 @@ msgstr "Espace de noms"
 msgid "Element"
 msgstr "Element"
 
-#: lib/Xacobeo/UI/DomView.pm:153
-msgid "ID name"
-msgstr "ID nom"
-
-#: lib/Xacobeo/UI/DomView.pm:156
-msgid "ID value"
-msgstr "ID valeur"
-
 #: lib/Xacobeo/UI/DomView.pm:179
 msgid "_Jump to"
 msgstr "Aller vers"
@@ -207,8 +199,7 @@ msgstr "Temps: %-20s %.4fs\n"
 msgid "Unnamed"
 msgstr "Sans nom"
 
-#: lib/Xacobeo/Document.pm:136
-#: lib/Xacobeo/Document.pm:176
+#: lib/Xacobeo/Document.pm:136 lib/Xacobeo/Document.pm:176
 msgid "Parameter 'type' must be defined"
 msgstr "Le paramètre 'type' doit être défini"
 
@@ -221,12 +212,19 @@ msgstr "Le noeud du document est manquant"
 msgid "Namespace {name} has no URI"
 msgstr "L'espace de noms {name} n'a pas d'URI d'associé"
 
+#~ msgid "ID name"
+#~ msgstr "ID nom"
+
+#~ msgid "ID value"
+#~ msgstr "ID valeur"
+
 #~ msgid "Unsupported document type {type}"
 #~ msgstr "Le document type {type} n'est pas suporté"
+
 #~ msgid "Can't create widget {name} because method {function} is missing"
 #~ msgstr ""
 #~ "Imposible de créer le widget {name} parce que la méthode {function} n'est "
 #~ "pas définie"
+
 #~ msgid "Copyright (C) 2008-2009 by Emmanuel Rodriguez."
 #~ msgstr "Copyright (C) 2008-2009 by Emmanuel Rodriguez."
-
