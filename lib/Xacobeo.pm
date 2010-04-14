@@ -73,7 +73,7 @@ at your option, any later version of Perl 5 you may have available.
 use strict;
 use warnings;
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 
 
 # A true value

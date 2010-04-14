@@ -1,6 +1,10 @@
 Changelog for Xacobeo.
 
 
+0.14 Wed Apr 14 20:33:05 CEST 2010
+	- Issue 49 in xacobeo: syntax and spelling Pod fixes.
+
+
 0.13 Sun Dec 27 15:55:39 CET 2009
 	- Issue 47: Double clicking on a DomView node can fail to select the right
 	  node.
