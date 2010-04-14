@@ -61,7 +61,7 @@ The text buffer to fill. Must be an instance of L<Gtk2::TextBuffer>.
 The node to display in the the text view. Must be an instance of
 L<XML::LibXML::Node>.
 
-=item $namespaces
+=item * $namespaces
 
 The namespaces declared in the document. Must be an hash ref where the keys are
 the URIs and the values the prefixes of the namespaces.
@@ -97,7 +97,7 @@ The text store to fill. Must be an instance of L<Gtk2::TreeStore>.
 The node to display in the the tree view. Must be an instance of
 L<XML::LibXML::Node>.
 
-=item $namespaces
+=item * $namespaces
 
 The namespaces declared in the document. Must be an hash ref where the keys are
 the URIs and the values the prefixes of the namespaces.
@@ -152,7 +152,7 @@ Parameters:
 The node for which the path has to be computed. Must be an instance of
 L<XML::LibXML::Node>.
 
-=item $namespaces
+=item * $namespaces
 
 The namespaces declared in the document. Must be an hash ref where the keys are
 the URIs and the values the prefixes of the namespaces.
