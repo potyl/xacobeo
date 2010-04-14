@@ -17,7 +17,7 @@ Xacobeo::Error - A simple wrapper over an error.
 =head1 DESCRIPTION
 
 This package provides a very simple, perhpaps too simple, error wrapper. This
-errors are ment to be used as exceptions.
+errors are meant to be used as exceptions.
 
 =head1 METHODS
 

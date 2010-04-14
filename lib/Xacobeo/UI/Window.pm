@@ -40,7 +40,7 @@ The widget displaying the namespaces of the current document.
 
 =head2 xpath-entry
 
-The entry where the XPath expresion will be edited.
+The entry where the XPath expression will be edited.
 
 =head2 statusbar
 
