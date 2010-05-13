@@ -5,18 +5,14 @@ Feel free to hack Xacobeo and to send patches. The application's code should be
 documented well enough for anyone to jump in and to have fun.
 
 The latest version of the code is available at:
-	http://code.google.com/p/xacobeo/source/browse/
+	http://github.com/potyl/xacobeo
 
 Xacobeo is mainly written in Perl and has some bits of XS (C functions) in order
 to improve its performance. Ideally all hacking should be done in Perl and C
 should be used as a last resort.
 
-The application relies heavily on Lib::LibXML and indirectly on libxml2. All XML
+The application relies heavily on XML::LibXML and indirectly on libxml2. All XML
 operations are performed through these libraries.
-
-The user interface is all written in Glade which means that hacking the GUI
-should be straight forward as it's all done through a GUI. That's right the
-application's GUI is done through another GUI.
 
 Xacobeo is translated into other languages through GNU's standard gettext
 mechanism (thanks to Locale::TextDomain). When adding code make sure that all
@@ -56,4 +52,3 @@ To clean your working folder:
 	./command clean
 
 The script 'commands' provides more utilities, make sure to peek at the file.
-
