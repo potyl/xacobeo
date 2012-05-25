@@ -63,6 +63,11 @@ sub new {
 sub ACTION_install {
 	my $self = shift;
 
+	# If we have more than one install base then take the last entry, otherwise
+	# we will install the application in ARRAY(0x1c577f8)/
+	my $install_base = $self->install_base;
+	$self->install_base($install_base->[-1]) if ref $install_base eq 'ARRAY';
+
 	# Make sure that 'share/' has an installation path
 	my $p = $self->{properties};
 	if (! exists $p->{install_path}{share}) {
