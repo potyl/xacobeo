@@ -8,7 +8,7 @@ use warnings;
 
 BEGIN {
 
-	foreach my $module qw(ExtUtils::Depends ExtUtils::PkgConfig ExtUtils::ParseXS) {
+	foreach my $module (qw(ExtUtils::Depends ExtUtils::PkgConfig ExtUtils::ParseXS)) {
 		eval "use $module";
 		if (my $error = $@) {
 			warn "Missing build dependency $module.";
