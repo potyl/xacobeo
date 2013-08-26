@@ -317,7 +317,7 @@ sub _create_tag_table {
 	);
 
 	# Make the boolean and number look a like
-	foreach my $name qw(boolean number) {
+	foreach my $name (qw(boolean number)) {
 		_add_tag($tag_table, $name =>
 			family     => 'Courier 10 Pitch',
 			foreground => 'black',

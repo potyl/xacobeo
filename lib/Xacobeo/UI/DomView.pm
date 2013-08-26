@@ -236,7 +236,7 @@ sub do_copy_xpath {
 	my $node = $self->get_selected_node or return;
 	my $xpath = Xacobeo::XS->get_node_path($node, $self->namespaces);
 
-	foreach my $selection qw(SELECTION_CLIPBOARD SELECTION_PRIMARY) {
+	foreach my $selection (qw(SELECTION_CLIPBOARD SELECTION_PRIMARY)) {
 		my $clipboard = Gtk2::Clipboard->get(Gtk2::Gdk->$selection);
 		$clipboard->set_text($xpath);
 	}
