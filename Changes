@@ -1,5 +1,9 @@
 Changelog for Xacobeo.
 
+0.15 Mon Aug 26 22:43:25 CEST 2013
+	- RT 88132: Don't use qw() without parenthesis (support perl 5.18).
+	- RT 88131: Add Keywords to the .desktop file.
+
 
 0.14 Wed Apr 14 20:33:05 CEST 2010
 	- Issue 49 in xacobeo: syntax and spelling Pod fixes.
