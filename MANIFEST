@@ -23,6 +23,7 @@ lib/Xacobeo/XS.pm
 Build.PL
 MANIFEST
 MANIFEST.SKIP
+META.json
 META.yml
 HACKING
 AUTHORS

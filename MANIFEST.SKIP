@@ -19,3 +19,5 @@
 ^po/.*[.]po~$
 ^run[.]pl$
 ^[.]valgrind$
+^MYMETA\.yml$
+^MYMETA\.json$
