@@ -12,6 +12,12 @@ xacobeo file [xpath]
 
 =head1 DESCRIPTION
 
+=for HTML
+<p>
+  <img src="https://raw.githubusercontent.com/potyl/xacobeo/master/examples/screenshot.png" style="max-width:100%;">
+</p>
+
+
 This program provides a simple graphical user interface (GUI) for executing
 XPath queries and seeing their results.
 
